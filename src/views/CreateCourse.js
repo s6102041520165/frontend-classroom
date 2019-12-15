@@ -10,13 +10,13 @@ class CreateCourse extends Component {
         <h1>Create Course</h1>
         <form autoComplete="off">
           <p>
-            <TextField id="name" style={{width:"80%"}} label="Course name" />
+            <TextField id="name" style={{ width: "80%" }} label="Course name" />
           </p>
           <p>
-            <TextField id="room" style={{width:"80%"}} label="Room" />
+            <TextField id="room" style={{ width: "80%" }} label="Room" />
           </p>
           <p>
-            <TextField id="title" style={{width:"80%"}} label="Title" />
+            <TextField id="title" style={{ width: "80%" }} label="Title" />
           </p>
           <p>
             <Button variant="contained" color="primary">
