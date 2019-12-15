@@ -20,8 +20,8 @@ class UpdateCourse extends Component {
                     </p>
                     <p>
                         <Button variant="contained" color="primary">
-                            Create course.
-            </Button>
+                            Update course.
+                        </Button>
                     </p>
                 </form>
 

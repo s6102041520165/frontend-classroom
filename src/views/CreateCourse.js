@@ -7,7 +7,7 @@ class CreateCourse extends Component {
   render() {
     return (
       <div>
-        <h1>Create Course</h1>
+        <h1>Update Course</h1>
         <form autoComplete="off">
           <p>
             <TextField id="name" style={{ width: "80%" }} label="Course name" />
