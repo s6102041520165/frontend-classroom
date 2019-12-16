@@ -1,6 +1,5 @@
+//Import module
 import { Route } from 'react-router-dom'
-import CreateCourse from "./views/CreateCourse";
-import UpdateCourse from "./views/UpdateCourse";
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
@@ -9,6 +8,14 @@ import Tab from '@material-ui/core/Tab';
 import HomeIcon from '@material-ui/icons/Home';
 import FavoriteIcon from '@material-ui/icons/Favorite';
 import PersonPinIcon from '@material-ui/icons/PersonPin';
+import { Link } from "react-router-dom";
+
+
+
+//Import screen
+import CreateCourse from "./views/CreateCourse";
+import UpdateCourse from "./views/UpdateCourse";
+import Home from "./views/Home";
 
 const useStyles = makeStyles({
   root: {
@@ -41,8 +48,8 @@ export default function App() {
           textColor="primary"
           aria-label="icon tabs example"
         >
-          <Tab icon={<HomeIcon />} href="/create-course" aria-label="Home" />
-          <Tab icon={<FavoriteIcon />} href="/favorite" aria-label="favorite" />
+          <Tab tab={<Link to="/"/>} icon={<HomeIcon />} aria-label="Home" />
+          <Tab tab={<Link to="/create-course"/>} icon={<FavoriteIcon />} aria-label="favorite" />
           <Tab icon={<PersonPinIcon />} aria-label="person" />
         </Tabs>
 
@@ -51,6 +58,7 @@ export default function App() {
       <div style={{ margin: 'auto', maxWidth: "800px", textAlign: 'center' }}>
         <Route path="/create-course" component={CreateCourse} />
         <Route path="/update-course" component={UpdateCourse} />
+        <Route path="/" component={Home} />
       </div>
     </div>
   );
