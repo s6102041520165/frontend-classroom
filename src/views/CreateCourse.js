@@ -1,6 +1,8 @@
 import React, { Component } from 'react'
 import Button from '@material-ui/core/Button';
 import TextField from "@material-ui/core/TextField";
+import axios from "axios";
+import request from "request";
 
 
 class CreateCourse extends Component {
@@ -12,39 +14,51 @@ class CreateCourse extends Component {
 
   handleChange = event => {
     this.setState({
-      name: event.target.value, 
+      name: event.target.value,
       section: event.target.value,
       title: event.target.value,
     });
 
-    //console.log(name)
+    //console.log(this.state.name)
   }
 
   handleSubmit = event => {
     event.preventDefault();
+    console.log(event)
 
     const classroom = {
       name: this.state.name,
       section: this.state.section,
       title: this.state.title,
     }
+    //console.log(classroom)
+    request.post(
+      {
+        url: "https://lineappbackend.herokuapp.com/webhook/course/create-course/",
+        body: classroom
+      },
+      (err, res, body) => {
+        console.log("status = " + body);
+      }
+    );
+
   }
   render() {
     return (
       <div>
-        <h1>Update Course</h1>
-        <form autoComplete="off">
+        <h1>Create Course</h1>
+        <form autoComplete="off" onSubmit={this.handleSubmit}>
           <p>
             <TextField id="name" onChange={this.handleChange} style={{ width: "80%" }} label="Course name" />
           </p>
           <p>
-            <TextField id="section" style={{ width: "80%" }} label="Room" />
+            <TextField id="section" onChange={this.handleChange} style={{ width: "80%" }} label="Room" />
           </p>
           <p>
-            <TextField id="title" style={{ width: "80%" }} label="Title" />
+            <TextField id="title" onChange={this.handleChange} style={{ width: "80%" }} label="Title" />
           </p>
           <p>
-            <Button variant="contained" color="primary">
+            <Button type="submit" variant="contained" color="primary">
               Create course.
             </Button>
           </p>
