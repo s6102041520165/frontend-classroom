@@ -35,10 +35,11 @@ class CreateCourse extends Component {
     request.post(
       {
         url: "https://lineappbackend.herokuapp.com/webhook/course/create-course/",
-        body: classroom
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(classroom)
       },
       (err, res, body) => {
-        console.log("status = " + body);
+        console.log("status = " + JSON.stringify(body));
       }
     );
 
