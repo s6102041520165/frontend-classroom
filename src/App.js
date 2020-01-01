@@ -1,5 +1,5 @@
 //Import module
-import { Route } from "react-router-dom";
+import { Route, Redirect } from "react-router-dom";
 import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Paper from "@material-ui/core/Paper";
@@ -17,6 +17,18 @@ import UpdateCourse from "./views/UpdateCourse";
 import Home from "./views/Home";
 import { increment } from "./reducers/actions";
 import { decrement } from "./reducers/actions";
+
+const fakeAuth = {
+  isAuthenticated: false,
+  authenticate(cb) {
+    this.isAuthenticated = true;
+    setTimeout(cb, 100);
+  },
+  signout(cb) {
+    this.isAuthenticated = false;
+    setTimeout(cb, 100);
+  }
+};
 
 const useStyles = makeStyles({
   root: {
@@ -74,13 +86,26 @@ const App = ({ message, counter, dispatch }) => {
         >
           Decrement
         </button>
-        <Route path="/create-course" component={CreateCourse} />
+        <PrivateRoute path="/create-course" component={CreateCourse} />
         <Route path="/update-course" component={UpdateCourse} />
         <Route path="/" component={Home} />
       </div>
     </div>
   );
 };
+
+const PrivateRoute = ({ component: Component, ...rest }) => (
+  <Route
+    {...rest}
+    render={props =>
+      fakeAuth.isAuthenticated === true ? (
+        <Component {...props} />
+      ) : (
+        <Redirect to="/login" />
+      )
+    }
+  />
+);
 
 const mapStateToProps = function(state) {
   return {
