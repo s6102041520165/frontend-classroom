@@ -2,7 +2,6 @@ import React, { Component } from "react";
 import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
 import Axios from "axios";
-import { GoogleLogin } from "react-google-login";
 
 class CreateCourse extends Component {
   state = {
@@ -11,9 +10,6 @@ class CreateCourse extends Component {
     title: ""
   };
 
-  responseGoogle = response => {
-    console.log(response);
-  };
 
   //Form name
   handleChangeName = event => {
@@ -90,16 +86,6 @@ class CreateCourse extends Component {
             <Button type="submit" variant="contained" color="primary">
               Create course.
             </Button>
-
-            <GoogleLogin
-              clientId="308789454611-isrob12j0f3l23meqnl8959lvdfgdg67.apps.googleusercontent.com"
-              buttonText="Login"
-              onSuccess={this.responseGoogle}
-              onFailure={this.responseGoogle}
-              cookiePolicy={"single_host_origin"}
-              scope="https://www.googleapis.com/auth/classroom.courses https://www.googleapis.com/auth/classroom.courses.readonly"
-              redirectUri="http://localhost:3000/create-course"
-            />
           </p>
         </form>
       </div>

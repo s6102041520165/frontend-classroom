@@ -10,6 +10,7 @@ import FavoriteIcon from "@material-ui/icons/Favorite";
 import PersonPinIcon from "@material-ui/icons/PersonPin";
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
+import { GoogleLogin } from "react-google-login";
 
 //Import screen
 import CreateCourse from "./views/CreateCourse";
@@ -41,6 +42,7 @@ const useStyles = makeStyles({
   }
 });
 
+//Main App
 const App = ({ message, counter, dispatch }) => {
   const classes = useStyles();
   const [value, setValue] = React.useState(0);
@@ -88,12 +90,18 @@ const App = ({ message, counter, dispatch }) => {
         </button>
         <PrivateRoute path="/create-course" component={CreateCourse} />
         <Route path="/update-course" component={UpdateCourse} />
+        <Route path="/login" component={Login} />
         <Route path="/" component={Home} />
       </div>
     </div>
   );
 };
 
+const responseGoogle = response => {
+  console.log(response);
+};
+
+//Check authorization
 const PrivateRoute = ({ component: Component, ...rest }) => (
   <Route
     {...rest}
@@ -104,6 +112,18 @@ const PrivateRoute = ({ component: Component, ...rest }) => (
         <Redirect to="/login" />
       )
     }
+  />
+);
+
+const Login = () => (
+  <GoogleLogin
+    clientId="308789454611-isrob12j0f3l23meqnl8959lvdfgdg67.apps.googleusercontent.com"
+    buttonText="Login"
+    onSuccess={responseGoogle}
+    onFailure={responseGoogle}
+    cookiePolicy={"single_host_origin"}
+    scope="https://www.googleapis.com/auth/classroom.courses https://www.googleapis.com/auth/classroom.courses.readonly"
+    redirectUri="http://localhost:3000/create-course"
   />
 );
 
