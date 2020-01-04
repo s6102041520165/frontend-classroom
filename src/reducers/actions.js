@@ -1,9 +1,10 @@
-export const increment = (score = 1) => ({
-  type: "INCREMENT",
-  score
+export const storeToken = (token = null) => ({
+  type: "STORE_TOKEN",
+  token
 });
 
-export const decrement = (score = -1) => ({
-  type: "DECREMENT",
-  score
+export const clearToken = (token = null) => ({
+  type: "CLEAR_TOKEN",
+  token
 });
+

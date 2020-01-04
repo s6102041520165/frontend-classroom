@@ -1,5 +1,5 @@
-//Import module
-import { Route, Redirect } from "react-router-dom";
+//Import modules
+import { Route } from "react-router-dom";
 import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Paper from "@material-ui/core/Paper";
@@ -10,26 +10,13 @@ import FavoriteIcon from "@material-ui/icons/Favorite";
 import PersonPinIcon from "@material-ui/icons/PersonPin";
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
-import { GoogleLogin } from "react-google-login";
+import Login from "./views/GoogleAuth";
 
-//Import screen
+//Import screens
 import CreateCourse from "./views/CreateCourse";
 import UpdateCourse from "./views/UpdateCourse";
 import Home from "./views/Home";
-import { increment } from "./reducers/actions";
-import { decrement } from "./reducers/actions";
-
-const fakeAuth = {
-  isAuthenticated: false,
-  authenticate(cb) {
-    this.isAuthenticated = true;
-    setTimeout(cb, 100);
-  },
-  signout(cb) {
-    this.isAuthenticated = false;
-    setTimeout(cb, 100);
-  }
-};
+import PrivateRoute from "./views/PrivateRoute";
 
 const useStyles = makeStyles({
   root: {
@@ -43,7 +30,7 @@ const useStyles = makeStyles({
 });
 
 //Main App
-const App = ({ message, counter, dispatch }) => {
+const App = ({ message, Tokens, dispatch }) => {
   const classes = useStyles();
   const [value, setValue] = React.useState(0);
 
@@ -73,64 +60,26 @@ const App = ({ message, counter, dispatch }) => {
         </Tabs>
       </Paper>
 
-      <div style={{ margin: "auto", maxWidth: "800px", textAlign: "center" }}>
-        <h1>Counter : {counter}</h1>
-        <button
-          onClick={() => dispatch(increment(1))}
-          className="button is-info"
-        >
-          Increment
-        </button>
-
-        <button
-          onClick={() => dispatch(decrement(1))}
-          className="button is-info"
-        >
-          Decrement
-        </button>
+      <div
+        style={{
+          margin: "auto",
+          maxWidth: "800px",
+          textAlign: "center"
+        }}
+      >
+        <Route exact path="/" component={Home} />
         <PrivateRoute path="/create-course" component={CreateCourse} />
-        <Route path="/update-course" component={UpdateCourse} />
+        <PrivateRoute path="/update-course" component={UpdateCourse} />
         <Route path="/login" component={Login} />
-        <Route path="/" component={Home} />
       </div>
     </div>
   );
 };
 
-const responseGoogle = response => {
-  console.log(response);
-};
-
-//Check authorization
-const PrivateRoute = ({ component: Component, ...rest }) => (
-  <Route
-    {...rest}
-    render={props =>
-      fakeAuth.isAuthenticated === true ? (
-        <Component {...props} />
-      ) : (
-        <Redirect to="/login" />
-      )
-    }
-  />
-);
-
-const Login = () => (
-  <GoogleLogin
-    clientId="308789454611-isrob12j0f3l23meqnl8959lvdfgdg67.apps.googleusercontent.com"
-    buttonText="Login"
-    onSuccess={responseGoogle}
-    onFailure={responseGoogle}
-    cookiePolicy={"single_host_origin"}
-    scope="https://www.googleapis.com/auth/classroom.courses https://www.googleapis.com/auth/classroom.courses.readonly"
-    redirectUri="http://localhost:3000/create-course"
-  />
-);
-
 const mapStateToProps = function(state) {
   return {
     message: "This is message from mapStateToProps",
-    counter: state.counters || 0
+    Tokens: state.tokens || null
   };
 };
 

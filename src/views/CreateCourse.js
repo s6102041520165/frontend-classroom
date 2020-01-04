@@ -52,7 +52,7 @@ class CreateCourse extends Component {
   };
   render() {
     return (
-      <div>
+      <div id="create-course">
         <h1>Create Course</h1>
         <form autoComplete="off" onSubmit={this.handleSubmit}>
           <p>

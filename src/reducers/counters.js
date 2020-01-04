@@ -1,10 +1,11 @@
-export default (state = 0, action) => {
+export default (state = null, action) => {
   switch (action.type) {
-    case "INCREMENT":
-      return state + action.score;
-    case "DECREMENT":
-      return state - action.score;
+    case "STORE_TOKEN":
+      return action.token;
+    case "CLEAR_TOKEN":
+      return null;
+  
     default:
       return state;
   }
-};
+}
