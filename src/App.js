@@ -1,6 +1,6 @@
 //Import modules
 import { Route } from "react-router-dom";
-import React from "react";
+import React, { useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Paper from "@material-ui/core/Paper";
 import Tabs from "@material-ui/core/Tabs";
@@ -10,13 +10,17 @@ import FavoriteIcon from "@material-ui/icons/Favorite";
 import PersonPinIcon from "@material-ui/icons/PersonPin";
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
-import Login from "./views/GoogleAuth";
+import Login from "./components/GoogleAuth";
 
 //Import screens
-import CreateCourse from "./views/CreateCourse";
-import UpdateCourse from "./views/UpdateCourse";
-import Home from "./views/Home";
-import PrivateRoute from "./views/PrivateRoute";
+import CreateCourse from "./components/CreateCourse";
+import UpdateCourse from "./components/UpdateCourse";
+import Home from "./components/Home";
+import PrivateRoute from "./components/PrivateRoute";
+import googleMapState from "./map-state/google-map-state";
+import { Button } from "@material-ui/core";
+
+const liff = window.liff;
 
 const useStyles = makeStyles({
   root: {
@@ -29,13 +33,51 @@ const useStyles = makeStyles({
   }
 });
 
+const initialState = {
+  name: "",
+  userLineId: "",
+  statusMessage: ""
+};
+
 //Main App
-const App = ({ message, Tokens, dispatch }) => {
+const App = ({ message, Tokens, dispatch, props }) => {
+  const [{ name, userLineId, statusMessage }, setState] = useState(
+    initialState
+  );
   const classes = useStyles();
   const [value, setValue] = React.useState(0);
 
   const handleChange = (event, newValue) => {
+    console.log(liff);
     setValue(newValue);
+  };
+
+  const sendMessage = () => {
+    liff
+      .sendMessage([
+        {
+          type: "text",
+          text: `Say Hi!`
+        }
+      ])
+      .then(() => {
+        liff.closeWindow();
+      });
+  };
+
+  const getProfile = () => {
+    liff.init(async () => {
+      let getProfile = await liff.getProfile();
+      setState({
+        name: getProfile.displayName,
+        userLineId: getProfile.userId,
+        statusMessage: getProfile.statusMessage
+      });
+    });
+  };
+
+  const closeLIFF = () => {
+    liff.closeWindow();
   };
 
   return (
@@ -67,6 +109,9 @@ const App = ({ message, Tokens, dispatch }) => {
           textAlign: "center"
         }}
       >
+        <p>{name}</p>
+        <p>{userLineId}</p>
+        <Button onClick={getProfile}>Get Profile</Button>
         <Route exact path="/" component={Home} />
         <PrivateRoute path="/create-course" component={CreateCourse} />
         <PrivateRoute path="/update-course" component={UpdateCourse} />
@@ -76,12 +121,5 @@ const App = ({ message, Tokens, dispatch }) => {
   );
 };
 
-const mapStateToProps = function(state) {
-  return {
-    message: "This is message from mapStateToProps",
-    Tokens: state.tokens || null
-  };
-};
-
-const AppWithConnect = connect(mapStateToProps)(App);
+const AppWithConnect = connect(googleMapState)(App);
 export default AppWithConnect;

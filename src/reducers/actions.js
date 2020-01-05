@@ -3,8 +3,8 @@ export const storeToken = (token = null) => ({
   token
 });
 
-export const clearToken = (token = null) => ({
-  type: "CLEAR_TOKEN",
-  token
+export const storeGoogleId = (googleId = null) => ({
+  type: "STORE_GOOGLE_ID",
+  googleId
 });
 

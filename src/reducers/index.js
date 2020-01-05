@@ -1,6 +1,7 @@
-import { combineReducers } from 'redux'
-import tokens from './counters'
+import { combineReducers } from "redux";
+import { token, googleId } from "./google";
 
 export default combineReducers({
-  tokens
-})
+  token,
+  googleId
+});

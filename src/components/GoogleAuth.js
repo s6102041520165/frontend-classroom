@@ -1,8 +1,11 @@
-import { storeToken } from "../reducers/actions";
+import { storeToken, storeGoogleId } from "../reducers/actions";
 import React from "react";
 import GoogleLogin from "react-google-login";
 import { connect } from "react-redux";
-import { Route, Redirect } from "react-router-dom";
+import { Redirect, Route, Link, Router } from "react-router-dom";
+import { Button } from "@material-ui/core";
+import googleMapState from "../map-state/google-map-state";
+import { render } from "@testing-library/react";
 //import { Route, Redirect } from "react-router-dom";
 
 //Callback uri function
@@ -10,7 +13,14 @@ const onFailLogin = res => {
   console.log(res);
 };
 
-const App = ({ component: Component, message, Tokens, dispatch, ...rest }) => (
+const App = ({
+  component: Component,
+  message,
+  Tokens,
+  GoogleId,
+  dispatch,
+  ...rest
+}) => (
   <GoogleLogin
     clientId="308789454611-isrob12j0f3l23meqnl8959lvdfgdg67.apps.googleusercontent.com"
     buttonText="Login"
@@ -18,6 +28,16 @@ const App = ({ component: Component, message, Tokens, dispatch, ...rest }) => (
       //console.log(Tokens);
       //Save response to reducer state
       dispatch(storeToken(res.accessToken));
+      dispatch(storeGoogleId(res.googleId));
+      render (
+        <Button
+          style={{ margin: "auto" }}
+          href="/create-course"
+          variant="contained"
+        >
+          Goto Create Course
+        </Button>
+      );
     }}
     onFailure={onFailLogin}
     cookiePolicy={"single_host_origin"}
@@ -27,12 +47,7 @@ const App = ({ component: Component, message, Tokens, dispatch, ...rest }) => (
   />
 );
 
-const mapStateToProps = function(state) {
-  return {
-    message: "This is message from mapStateToProps",
-    Tokens: state.tokens || null
-  };
-};
 
-const AppWithConnect = connect(mapStateToProps)(App);
+
+const AppWithConnect = connect(googleMapState)(App);
 export default AppWithConnect;
