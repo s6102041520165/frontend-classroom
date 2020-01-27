@@ -15,6 +15,9 @@ import Login from "./components/GoogleAuth";
 //Import screens
 import CreateCourse from "./components/CreateCourse";
 import UpdateCourse from "./components/UpdateCourse";
+import invitation from "./components/invitation";
+import courses from "./components/Courses";
+
 import Home from "./components/Home";
 import PrivateRoute from "./components/PrivateRoute";
 import googleMapState from "./map-state/google-map-state";
@@ -48,7 +51,7 @@ const App = ({ message, Tokens, dispatch, props }) => {
   const [value, setValue] = React.useState(0);
 
   const handleChange = (event, newValue) => {
-    console.log(liff);
+    console.log(event);
     setValue(newValue);
   };
 
@@ -92,9 +95,9 @@ const App = ({ message, Tokens, dispatch, props }) => {
           textColor="primary"
           aria-label="icon tabs example"
         >
-          <Tab tab={<Link to="/" />} icon={<HomeIcon />} aria-label="Home" />
+          <Tab icon={<HomeIcon />} to='/' component={Link} aria-label="Home" />
           <Tab
-            tab={<Link to="/create-course" />}
+            to='/create-course' component={Link}
             icon={<FavoriteIcon />}
             aria-label="favorite"
           />
@@ -109,12 +112,12 @@ const App = ({ message, Tokens, dispatch, props }) => {
           textAlign: "center"
         }}
       >
-        <p>{name}</p>
-        <p>{userLineId}</p>
-        <Button onClick={getProfile}>Get Profile</Button>
-        <Route exact path="/" component={Home} />
+        <PrivateRoute exact path="/" component={courses} />
         <PrivateRoute path="/create-course" component={CreateCourse} />
         <PrivateRoute path="/update-course" component={UpdateCourse} />
+        <PrivateRoute path="/invitation" component={invitation} />
+        <PrivateRoute path="/student" component={invitation} />
+        <PrivateRoute path="/courses" component={courses} />
         <Route path="/login" component={Login} />
       </div>
     </div>
