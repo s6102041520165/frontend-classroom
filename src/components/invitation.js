@@ -1,20 +1,14 @@
-import React, { Component, useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
 import axios from "axios";
 import { connect } from "react-redux";
 import googleMapState from "../map-state/google-map-state";
-import FlatList from "flatlist-react";
 import Select from "react-select";
 import {
   FormControl,
   InputLabel,
-  MenuItem,
   makeStyles,
-  ListItem,
-  List,
-  ListItemText,
-  Divider
 } from "@material-ui/core";
 
 const initialState = {
@@ -37,15 +31,6 @@ const useStyles = makeStyles(theme => ({
     backgroundColor: theme.palette.background.paper
   }
 }));
-
-const renderPerson = (course, idx) => {
-  console.log(idx);
-  return (
-    <MenuItem key={course.id} value={course.id}>
-      {course.name}
-    </MenuItem>
-  );
-};
 
 const Invitation = ({ message, Tokens, GoogleId, dispatch }) => {
   const [courses, setCourses] = useState("");

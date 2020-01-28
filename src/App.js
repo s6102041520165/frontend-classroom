@@ -1,16 +1,27 @@
 //Import modules
 import { Route } from "react-router-dom";
 import React, { useState } from "react";
-import { makeStyles } from "@material-ui/core/styles";
-import Paper from "@material-ui/core/Paper";
-import Tabs from "@material-ui/core/Tabs";
-import Tab from "@material-ui/core/Tab";
-import HomeIcon from "@material-ui/icons/Home";
-import FavoriteIcon from "@material-ui/icons/Favorite";
-import PersonPinIcon from "@material-ui/icons/PersonPin";
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
-import Login from "./components/GoogleAuth";
+import clsx from "clsx";
+import { makeStyles, useTheme } from "@material-ui/core/styles";
+import Drawer from "@material-ui/core/Drawer";
+import CssBaseline from "@material-ui/core/CssBaseline";
+import AppBar from "@material-ui/core/AppBar";
+import Toolbar from "@material-ui/core/Toolbar";
+import List from "@material-ui/core/List";
+import Typography from "@material-ui/core/Typography";
+import Divider from "@material-ui/core/Divider";
+import IconButton from "@material-ui/core/IconButton";
+import MenuIcon from "@material-ui/icons/Menu";
+import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
+import ChevronRightIcon from "@material-ui/icons/ChevronRight";
+import ListItem from "@material-ui/core/ListItem";
+import ListItemIcon from "@material-ui/core/ListItemIcon";
+import ListItemText from "@material-ui/core/ListItemText";
+import InboxIcon from "@material-ui/icons/MoveToInbox";
+import MailIcon from "@material-ui/icons/Mail";
+
 
 //Import screens
 import CreateCourse from "./components/CreateCourse";
@@ -21,39 +32,97 @@ import courses from "./components/Courses";
 import Home from "./components/Home";
 import PrivateRoute from "./components/PrivateRoute";
 import googleMapState from "./map-state/google-map-state";
-import { Button } from "@material-ui/core";
+import Login from "./components/GoogleAuth";
+import getCourse from "./components/Course";
 
+// Line Frontend Framework Init
 const liff = window.liff;
 
-const useStyles = makeStyles({
-  root: {
-    flexGrow: 1,
-    maxWidth: "100%"
-  },
-  container: {
-    maxWidth: 800,
-    margin: "auto"
-  }
-});
+//ความกว้างเมนู
+const drawerWidth = 240;
 
+//Initial state
 const initialState = {
   name: "",
   userLineId: "",
   statusMessage: ""
 };
 
-//Main App
-const App = ({ message, Tokens, dispatch, props }) => {
+const useStyles = makeStyles(theme => ({
+  root: {
+    display: "flex"
+  },
+  appBar: {
+    transition: theme.transitions.create(["margin", "width"], {
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.leavingScreen
+    })
+  },
+  appBarShift: {
+    width: `calc(100% - ${drawerWidth}px)`,
+    marginLeft: drawerWidth,
+    transition: theme.transitions.create(["margin", "width"], {
+      easing: theme.transitions.easing.easeOut,
+      duration: theme.transitions.duration.enteringScreen
+    })
+  },
+  menuButton: {
+    marginRight: theme.spacing(2)
+  },
+  hide: {
+    display: "none"
+  },
+  drawer: {
+    width: drawerWidth,
+    flexShrink: 0
+  },
+  drawerPaper: {
+    width: drawerWidth
+  },
+  drawerHeader: {
+    display: "flex",
+    alignItems: "center",
+    padding: theme.spacing(0, 1),
+    ...theme.mixins.toolbar,
+    justifyContent: "flex-end"
+  },
+  content: {
+    flexGrow: 1,
+    padding: theme.spacing(3),
+    transition: theme.transitions.create("margin", {
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.leavingScreen
+    }),
+    marginLeft: -drawerWidth
+  },
+  contentShift: {
+    transition: theme.transitions.create("margin", {
+      easing: theme.transitions.easing.easeOut,
+      duration: theme.transitions.duration.enteringScreen
+    }),
+    marginLeft: 0
+  },
+}));
+
+const navbar = ["/", "/create-course", "/invitation"];
+
+function App({ message, Tokens, dispatch, props }) {
   const [{ name, userLineId, statusMessage }, setState] = useState(
     initialState
   );
   const classes = useStyles();
-  const [value, setValue] = React.useState(0);
+  const theme = useTheme();
+  const [open, setOpen] = React.useState(false);
+  
 
-  const handleChange = (event, newValue) => {
-    console.log(event);
-    setValue(newValue);
+  const handleDrawerOpen = () => {
+    setOpen(true);
   };
+
+  const handleDrawerClose = () => {
+    setOpen(false);
+  };
+
 
   const sendMessage = () => {
     liff
@@ -84,45 +153,89 @@ const App = ({ message, Tokens, dispatch, props }) => {
   };
 
   return (
-    <div>
-      <Paper square className={classes.root}>
-        <Tabs
-          className={classes.container}
-          value={value}
-          onChange={handleChange}
-          variant="fullWidth"
-          indicatorColor="primary"
-          textColor="primary"
-          aria-label="icon tabs example"
-        >
-          <Tab icon={<HomeIcon />} to='/' component={Link} aria-label="Home" />
-          <Tab
-            to='/create-course' component={Link}
-            icon={<FavoriteIcon />}
-            aria-label="favorite"
-          />
-          <Tab icon={<PersonPinIcon />} aria-label="person" />
-        </Tabs>
-      </Paper>
-
-      <div
-        style={{
-          margin: "auto",
-          maxWidth: "800px",
-          textAlign: "center"
+    <div className={classes.root}>
+      <CssBaseline />
+      <AppBar
+        position="fixed"
+        className={clsx(classes.appBar, {
+          [classes.appBarShift]: open
+        })}
+      >
+        <Toolbar>
+          <IconButton
+            color="inherit"
+            aria-label="open drawer"
+            onClick={handleDrawerOpen}
+            edge="start"
+            className={clsx(classes.menuButton, open && classes.hide)}
+          >
+            <MenuIcon />
+          </IconButton>
+          <Typography variant="h6" noWrap>
+            Line Classroom
+          </Typography>
+        </Toolbar>
+      </AppBar>
+      <Drawer
+        className={classes.drawer}
+        variant="persistent"
+        anchor="left"
+        open={open}
+        classes={{
+          paper: classes.drawerPaper
         }}
       >
-        <PrivateRoute exact path="/" component={courses} />
-        <PrivateRoute path="/create-course" component={CreateCourse} />
-        <PrivateRoute path="/update-course" component={UpdateCourse} />
-        <PrivateRoute path="/invitation" component={invitation} />
-        <PrivateRoute path="/student" component={invitation} />
-        <PrivateRoute path="/courses" component={courses} />
-        <Route path="/login" component={Login} />
-      </div>
+        <div className={classes.drawerHeader}>
+          <IconButton onClick={handleDrawerClose}>
+            {theme.direction === "ltr" ? (
+              <ChevronLeftIcon />
+            ) : (
+              <ChevronRightIcon />
+            )}
+          </IconButton>
+        </div>
+        
+        <Divider />
+        <List>
+          {["Home", "Create Course", "Invitation"].map((text, index) => {
+            return (
+              <ListItem button key={text} to={navbar[index]} component={Link}>
+                <ListItemIcon>
+                  {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
+                </ListItemIcon>
+                <ListItemText primary={text} />
+              </ListItem>
+            );
+          })}
+        </List>
+      </Drawer>
+      <main
+        className={clsx(classes.content, {
+          [classes.contentShift]: open
+        })}
+      >
+        <div className={classes.drawerHeader} />
+        <div
+          style={{
+            margin: "auto",
+            maxWidth: "90%",
+            textAlign: "center"
+          }}
+        >
+          <PrivateRoute exact path="/" component={courses} />
+          <PrivateRoute path="/create-course" component={CreateCourse} />
+          <PrivateRoute path="/update-course" component={UpdateCourse} />
+          <PrivateRoute path="/invitation" component={invitation} />
+          <PrivateRoute path="/student" component={invitation} />
+          <PrivateRoute path="/courses" component={courses} />
+          <PrivateRoute path="/course/:id" component={getCourse} />
+          <Route path="/login" component={Login} />
+        </div>
+      </main>
     </div>
   );
-};
+}
+  
 
 const AppWithConnect = connect(googleMapState)(App);
 export default AppWithConnect;

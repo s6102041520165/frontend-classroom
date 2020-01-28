@@ -13,15 +13,16 @@ import configureStore from "./stores";
 // created store on "stores/index.js" file
 const { store, persistor } = configureStore();
 
-const AppWithRouter = () => (
+function AppWithRouter (){
+	return(
   <Provider store={store}>
     <BrowserRouter>
       <PersistGate loading={null} persistor={persistor}>
         <App />
       </PersistGate>
     </BrowserRouter>
-  </Provider>
-);
+  </Provider>);
+}
 
 ReactDOM.render(<AppWithRouter />, document.getElementById("root"));
 
