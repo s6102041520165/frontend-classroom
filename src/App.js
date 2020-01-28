@@ -29,7 +29,6 @@ import UpdateCourse from "./components/UpdateCourse";
 import invitation from "./components/invitation";
 import courses from "./components/Courses";
 
-import Home from "./components/Home";
 import PrivateRoute from "./components/PrivateRoute";
 import googleMapState from "./map-state/google-map-state";
 import Login from "./components/GoogleAuth";
