@@ -3,11 +3,9 @@ import axios from "axios";
 import { connect } from "react-redux";
 import googleMapState from "../map-state/google-map-state";
 import FlatList from "flatlist-react";
-import Select from "react-select";
 import {
   MenuItem,
   makeStyles,
-  Menu,
   MenuList,
   Paper,
 } from "@material-ui/core";
@@ -16,11 +14,7 @@ import { Link } from "react-router-dom";
 import SpeedDial from '@material-ui/lab/SpeedDial';
 import SpeedDialIcon from '@material-ui/lab/SpeedDialIcon';
 import SpeedDialAction from '@material-ui/lab/SpeedDialAction';
-import FileCopyIcon from '@material-ui/icons/FileCopyOutlined';
 import SaveIcon from '@material-ui/icons/Save';
-import PrintIcon from '@material-ui/icons/Print';
-import ShareIcon from '@material-ui/icons/Share';
-import FavoriteIcon from '@material-ui/icons/Favorite';
 
 
 const initialState = {
@@ -49,13 +43,11 @@ const useStyles = makeStyles(theme => ({
   },
    exampleWrapper: {
     position: 'relative',
-    marginTop: theme.spacing(3),
-    height: 380,
   },
   speedDial: {
-    position: 'absolute',
+    position: 'fixed',
     '&.MuiSpeedDial-directionUp, &.MuiSpeedDial-directionLeft': {
-      bottom: theme.spacing(2),
+      bottom: theme.spacing(5),
       right: theme.spacing(2),
     },
     '&.MuiSpeedDial-directionDown, &.MuiSpeedDial-directionRight': {

@@ -87,7 +87,7 @@ const useStyles = makeStyles(theme => ({
   },
   content: {
     flexGrow: 1,
-    padding: theme.spacing(3),
+    padding: theme.spacing(1),
     transition: theme.transitions.create("margin", {
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.leavingScreen
@@ -121,6 +121,7 @@ function App({ message, Tokens, dispatch, props }) {
   const handleDrawerClose = () => {
     setOpen(false);
   };
+
 
 
   const sendMessage = () => {
@@ -217,7 +218,7 @@ function App({ message, Tokens, dispatch, props }) {
         <div
           style={{
             margin: "auto",
-            maxWidth: "90%",
+            maxWidth: "80%",
             textAlign: "center"
           }}
         >
