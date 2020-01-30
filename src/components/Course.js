@@ -57,7 +57,7 @@ const useStyles = makeStyles(theme => ({
       left: theme.spacing(2)
     }
   },
-  cardContent{
+  cardContent: {
     height: 200,
   },
 }));
