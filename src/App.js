@@ -25,6 +25,7 @@ import MailIcon from "@material-ui/icons/Mail";
 
 //Import screens
 import CreateCourse from "./components/CreateCourse";
+import CreateCourseWork from "./components/CreateCourseWork";
 import UpdateCourse from "./components/UpdateCourse";
 import invitation from "./components/invitation";
 import courses from "./components/Courses";
@@ -224,6 +225,7 @@ function App({ message, Tokens, dispatch, props }) {
         >
           <PrivateRoute exact path="/" component={courses} />
           <PrivateRoute path="/create-course" component={CreateCourse} />
+          <PrivateRoute path="/create-course/:courseId" component={CreateCourseWork} />
           <PrivateRoute path="/update-course" component={UpdateCourse} />
           <PrivateRoute path="/invitation" component={invitation} />
           <PrivateRoute path="/student" component={invitation} />
