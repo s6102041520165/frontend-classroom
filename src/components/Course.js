@@ -65,10 +65,6 @@ const useStyles = makeStyles(theme => ({
  },
 }));
 
-const actions = [
-  { icon: <AssignmentIcon />, name: 'Create Course', uri: '/create-course' },
-];
-
 const Course = ({ message, Tokens, GoogleId, dispatch }) => {
   let { id } = useParams();
   const [courseWork, setCourseWork] = useState("");
@@ -86,6 +82,10 @@ const Course = ({ message, Tokens, GoogleId, dispatch }) => {
   const clearState = () => {
     setCourseWork(null);
   };
+
+  const actions = [
+    { icon: <AssignmentIcon />, name: 'Create Assignment', uri: `/create-assignment/${courseWork.courseId}` },
+  ];
 
   const classes = useStyles();
   const bull = <span className={classes.bullet}>•</span>;
