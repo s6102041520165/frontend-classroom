@@ -8,12 +8,9 @@ import Card from "@material-ui/core/Card";
 import CardActions from "@material-ui/core/CardActions";
 import CardContent from "@material-ui/core/CardContent";
 import Typography from "@material-ui/core/Typography";
-import AssignmentIcon from '@material-ui/icons/Assignment';
-import SpeedDialIcon from '@material-ui/lab/SpeedDialIcon';
-import {
-  makeStyles,
-  Button
-} from "@material-ui/core";
+import AssignmentIcon from "@material-ui/icons/Assignment";
+import SpeedDialIcon from "@material-ui/lab/SpeedDialIcon";
+import { makeStyles, Button, Grid } from "@material-ui/core";
 import SpeedDial from "@material-ui/lab/SpeedDial";
 import SpeedDialAction from "@material-ui/lab/SpeedDialAction";
 
@@ -46,25 +43,25 @@ const useStyles = makeStyles(theme => ({
     marginBottom: 12
   },
   exampleWrapper: {
-   position: 'relative',
- },
- speedDial: {
-   position: 'fixed',
-   '&.MuiSpeedDial-directionUp, &.MuiSpeedDial-directionLeft': {
-     bottom: theme.spacing(5),
-     right: theme.spacing(2),
-   },
-   '&.MuiSpeedDial-directionDown, &.MuiSpeedDial-directionRight': {
-     top: theme.spacing(2),
-     left: theme.spacing(2),
-   },
- },
+    position: "relative"
+  },
+  speedDial: {
+    position: "fixed",
+    "&.MuiSpeedDial-directionUp, &.MuiSpeedDial-directionLeft": {
+      bottom: theme.spacing(5),
+      right: theme.spacing(2)
+    },
+    "&.MuiSpeedDial-directionDown, &.MuiSpeedDial-directionRight": {
+      top: theme.spacing(2),
+      left: theme.spacing(2)
+    }
+  }
 }));
 
 const Course = ({ message, Tokens, GoogleId, dispatch }) => {
   let { id } = useParams();
   const [courseWork, setCourseWork] = useState("");
-  const [direction, setDirection] = React.useState('up');
+  const [direction, setDirection] = React.useState("up");
   const [openDial, setOpenDial] = React.useState(false);
   const [hidden, setHidden] = React.useState(false);
   useEffect(() => {
@@ -80,7 +77,11 @@ const Course = ({ message, Tokens, GoogleId, dispatch }) => {
   };
 
   const actions = [
-    { icon: <AssignmentIcon />, name: 'Create Assignment', uri: `/create-assignment/${id}` },
+    {
+      icon: <AssignmentIcon />,
+      name: "Create Assignment",
+      uri: `/create-assignment/${id}`
+    }
   ];
 
   const classes = useStyles();
@@ -123,43 +124,46 @@ const Course = ({ message, Tokens, GoogleId, dispatch }) => {
   };
   //Speed Dial Ending
 
-
   const handleSubmit = async e => {
     e.preventDefault();
   };
 
   const renderCourse = (courseWork, idx) => {
     return (
-      <Card className={classes.card}>
-        <CardContent>
-          <Typography
-            className={classes.title}
-            color="textSecondary"
-            gutterBottom
-          >
-            Max Points: {courseWork.maxPoints}
-          </Typography>
-          <Typography variant="h5" component="h2">
-            {courseWork.title}
-          </Typography>
-        </CardContent>
-        <CardActions>
-          <Button
-            to={`/course/${courseWork.courseId}/details/${courseWork.id}`}
-            component={Link}
-            variant="contained" 
-            color="primary"
-          >
-            Details
-          </Button>
-        </CardActions>
-      </Card>
+      <Grid item xs={3}>
+        <Card className={classes.card}>
+          <CardContent>
+            <Typography
+              className={classes.title}
+              color="textSecondary"
+              gutterBottom
+            >
+              Max Points: {courseWork.maxPoints}
+            </Typography>
+            <Typography variant="h5" component="h2">
+              {courseWork.title}
+            </Typography>
+          </CardContent>
+          <CardActions style={{margin:'auto'}}>
+            <Button
+              to={`/course/${courseWork.courseId}/details/${courseWork.id}`}
+              component={Link}
+              variant="contained"
+              color="primary"
+            >
+              Details
+            </Button>
+          </CardActions>
+        </Card>
+      </Grid>
     );
   };
 
   return (
     <div id="course">
-      <FlatList list={courseWork} renderItem={renderCourse} />
+      <Grid container spacing={3}>
+        <FlatList list={courseWork} renderItem={renderCourse} />
+      </Grid>
       <div className={classes.exampleWrapper}>
         <SpeedDial
           ariaLabel="Options"
