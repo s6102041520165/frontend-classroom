@@ -56,7 +56,10 @@ const useStyles = makeStyles(theme => ({
       top: theme.spacing(2),
       left: theme.spacing(2)
     }
-  }
+  },
+  cardContent{
+    height: 200,
+  },
 }));
 
 const Course = ({ message, Tokens, GoogleId, dispatch }) => {
@@ -133,7 +136,7 @@ const Course = ({ message, Tokens, GoogleId, dispatch }) => {
     return (
       <Grid item xs={12} sm={6} md={4} lg={3}>
         <Card className={classes.card}>
-          <CardContent>
+          <CardContent className={classes.cardContent}>
             <Typography
               className={classes.title}
               color="textSecondary"
@@ -145,12 +148,13 @@ const Course = ({ message, Tokens, GoogleId, dispatch }) => {
               {courseWork.title}
             </Typography>
           </CardContent>
-          <CardActions style={{margin:'auto'}}>
+          <CardActions>
             <Button
               to={`/course/${courseWork.courseId}/details/${courseWork.id}`}
               component={Link}
               variant="contained"
               color="primary"
+              style={{margin:'auto'}}
             >
               Details
             </Button>
