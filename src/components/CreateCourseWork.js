@@ -22,11 +22,11 @@ const CreateCourse = ({ message, Tokens, GoogleId, dispatch }) => {
   };
 
   const onChange = e => {
-    const { title, value } = e.target;
+    const { name, value } = e.target;
     //console.log({[title]:value});
 
     //Set state from input value
-    setState(prevState => ({ ...prevState, [title]: value }));
+    setState(prevState => ({ ...prevState, [name]: value }));
   };
 
   const handleSubmit = e => {
@@ -74,7 +74,7 @@ const CreateCourse = ({ message, Tokens, GoogleId, dispatch }) => {
       <form autoComplete="off" onSubmit={handleSubmit}>
         <p>
           <TextField
-            title="title"
+            name="title"
             value={title}
             onChange={onChange}
             style={{ width: "80%" }}
@@ -83,22 +83,14 @@ const CreateCourse = ({ message, Tokens, GoogleId, dispatch }) => {
         </p>
         <p>
           <TextField
-            title="maxPoints"
+            name="maxPoints"
             value={maxPoints}
             onChange={onChange}
             style={{ width: "80%" }}
             label="maxPoints"
           />
         </p>
-        <p>
-          <TextField
-            title="room"
-            value={room}
-            onChange={onChange}
-            style={{ width: "80%" }}
-            label="Room"
-          />
-        </p>
+        
         <p>
           <Button type="submit" variant="contained" color="primary">
             Create course work.
