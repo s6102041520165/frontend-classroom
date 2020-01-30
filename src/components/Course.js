@@ -11,11 +11,7 @@ import Typography from "@material-ui/core/Typography";
 import AssignmentIcon from '@material-ui/icons/Assignment';
 import SpeedDialIcon from '@material-ui/lab/SpeedDialIcon';
 import {
-  MenuItem,
   makeStyles,
-  Menu,
-  MenuList,
-  Paper,
   Button
 } from "@material-ui/core";
 import SpeedDial from "@material-ui/lab/SpeedDial";
@@ -151,6 +147,8 @@ const Course = ({ message, Tokens, GoogleId, dispatch }) => {
           <Button
             to={`/course/${courseWork.courseId}/details/${courseWork.id}`}
             component={Link}
+            variant="contained" 
+            color="primary"
           >
             Details
           </Button>
