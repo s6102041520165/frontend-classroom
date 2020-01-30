@@ -225,7 +225,7 @@ function App({ message, Tokens, dispatch, props }) {
         >
           <PrivateRoute exact path="/" component={courses} />
           <PrivateRoute path="/create-course" component={CreateCourse} />
-          <PrivateRoute path="/create-course/:courseId" component={CreateCourseWork} />
+          <PrivateRoute path="/create-assignment/:courseId" component={CreateCourseWork} />
           <PrivateRoute path="/update-course" component={UpdateCourse} />
           <PrivateRoute path="/invitation" component={invitation} />
           <PrivateRoute path="/student" component={invitation} />
