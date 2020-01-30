@@ -36,6 +36,7 @@ const CreateCourse = ({ message, Tokens, GoogleId, dispatch }) => {
     const classroom = {
       title: title,
       maxPoints: maxPoints,
+      workType: "ASSIGNMENT"
     };
 
     //console.log(classroom);
