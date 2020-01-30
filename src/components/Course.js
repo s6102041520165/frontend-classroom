@@ -134,7 +134,7 @@ const Course = ({ message, Tokens, GoogleId, dispatch }) => {
 
   const renderCourse = (courseWork, idx) => {
     return (
-      <Grid item xs={12} sm={6} md={4} lg={3}>
+      <Grid item xs={12} sm={6} md={4} lg={4}>
         <Card className={classes.card}>
           <CardContent className={classes.cardContent}>
             <Typography
