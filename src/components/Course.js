@@ -106,10 +106,7 @@ const Course = ({ message, Tokens, GoogleId, dispatch }) => {
             </Typography>
           </CardContent>
           <CardActions>
-            <Button
-              to={`/course/${courseWork.classId}/${courseWork.id}`}
-              component={Link}
-            ></Button>
+            
           </CardActions>
         </Card>
       </MenuItem>
