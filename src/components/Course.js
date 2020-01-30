@@ -100,7 +100,8 @@ const Course = ({ message, Tokens, GoogleId, dispatch }) => {
 
   const renderCourse = (courseWork, idx) => {
     return (
-          <Card className={classes.card} to={`/course/${courseWork.classId}/${courseWork.id}`} component={Link}>
+      <MenuItem to={`/course/${courseWork.classId}/${courseWork.id}`} component={Link}>
+             <Card className={classes.card} >
             <CardContent>
               <Typography className={classes.title} color="textSecondary" gutterBottom>
                 Max Points: {courseWork.maxPoints}
@@ -115,13 +116,15 @@ const Course = ({ message, Tokens, GoogleId, dispatch }) => {
             <CardActions>
             </CardActions>
           </Card>
+          </MenuItem>
       );
   };
 
   return (
     <div id="create-course">
+      <Menu>
         <FlatList list={courseWork} renderItem={renderCourse} />
-      
+      </Menu>
     </div>
   );
 };
