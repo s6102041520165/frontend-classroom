@@ -5,7 +5,7 @@ import axios from "axios";
 import { connect } from "react-redux";
 import googleMapState from "../map-state/google-map-state";
 import Select from "react-select";
-import { useParams } from "react-router-dom";
+import { useParams , Link} from "react-router-dom";
 import FlatList from "flatlist-react";
 import Card from '@material-ui/core/Card';
 import CardActions from '@material-ui/core/CardActions';
@@ -100,7 +100,7 @@ const Course = ({ message, Tokens, GoogleId, dispatch }) => {
 
   const renderCourse = (courseWork, idx) => {
     return (
-        <MenuItem>
+        <MenuItem to={`/course/${courseWork.classId}/${courseWork.id}`} component={Link}>
           <Card className={classes.card}>
             <CardContent>
               <Typography className={classes.title} color="textSecondary" gutterBottom>
