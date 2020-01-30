@@ -100,7 +100,7 @@ const Course = ({ message, Tokens, GoogleId, dispatch }) => {
   const listCourse = async () => {
     await axios({
       method: "get",
-      url: `https://classroom.googleapis.com/v1/courses/${id}/courseWork`,
+      url: `https://classroom.googleapis.com/v1/courses/${decodeURI(id)}/courseWork`,
       params: {
         courseWorkStates: "PUBLISHED"
       },
@@ -150,7 +150,7 @@ const Course = ({ message, Tokens, GoogleId, dispatch }) => {
           </CardContent>
           <CardActions>
             <Button
-              to={`/course/${courseWork.courseId}/details/${courseWork.id}`}
+              to={`/course/${encodeURI(courseWork.courseId)}/details/${encodeURI(courseWork.id)}`}
               component={Link}
               variant="contained"
               color="primary"
