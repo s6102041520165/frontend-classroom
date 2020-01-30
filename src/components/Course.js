@@ -88,36 +88,40 @@ const Course = ({ message, Tokens, GoogleId, dispatch }) => {
 
   const renderCourse = (courseWork, idx) => {
     return (
-      <Card className={classes.card}>
-        <CardContent>
-          <Typography
-            className={classes.title}
-            color="textSecondary"
-            gutterBottom
-          >
-            Max Points: {courseWork.maxPoints}
-          </Typography>
-          <Typography variant="h5" component="h2">
-            {courseWork.title}
-          </Typography>
-          <Typography className={classes.pos} color="textSecondary">
-            {courseWork.description}
-          </Typography>
-        </CardContent>
-        <CardActions>
-          <Button
-            to={`/course/${courseWork.classId}/${courseWork.id}`}
-            component={Link}
-          ></Button>
-        </CardActions>
-      </Card>
+      <MenuItem key={`${courseWork.id}-${idx}`}>
+        <Card className={classes.card}>
+          <CardContent>
+            <Typography
+              className={classes.title}
+              color="textSecondary"
+              gutterBottom
+            >
+              Max Points: {courseWork.maxPoints}
+            </Typography>
+            <Typography variant="h5" component="h2">
+              {courseWork.title}
+            </Typography>
+            <Typography className={classes.pos} color="textSecondary">
+              {courseWork.description}
+            </Typography>
+          </CardContent>
+          <CardActions>
+            <Button
+              to={`/course/${courseWork.classId}/${courseWork.id}`}
+              component={Link}
+            ></Button>
+          </CardActions>
+        </Card>
+      </MenuItem>
     );
   };
 
   return (
-    <div id="create-course">
-      <FlatList list={courseWork} renderItem={renderCourse} />
-    </div>
+    <Menu>
+      <div id="course">
+        <FlatList list={courseWork} renderItem={renderCourse} />
+      </div>
+    </Menu>
   );
 };
 
