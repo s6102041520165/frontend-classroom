@@ -8,7 +8,7 @@ import Card from "@material-ui/core/Card";
 import CardActions from "@material-ui/core/CardActions";
 import CardContent from "@material-ui/core/CardContent";
 import Typography from "@material-ui/core/Typography";
-import { MenuItem, makeStyles, Menu, MenuList, Paper } from "@material-ui/core";
+import { MenuItem, makeStyles, Menu, MenuList, Paper, Button } from "@material-ui/core";
 
 const useStyles = makeStyles(theme => ({
   formControl: {
@@ -85,37 +85,30 @@ const Course = ({ message, Tokens, GoogleId, dispatch }) => {
 
   const renderCourse = (courseWork, idx) => {
     return (
-      <MenuItem style={{minWidth: '100%', display: 'block'}} key={`${courseWork.id}-${idx}`} to={`/course/${courseWork.courseId}/details/${courseWork.id}`} component={Link}>
-        <Card className={classes.card}>
-          <CardContent>
-            <Typography
-              className={classes.title}
-              color="textSecondary"
-              gutterBottom
-            >
-              Max Points: {courseWork.maxPoints}
-            </Typography>
-            <Typography variant="h5" component="h2">
-              {courseWork.title}
-            </Typography>
-            <Typography className={classes.pos} color="textSecondary">
-              {courseWork.description}
-            </Typography>
-          </CardContent>
-          <CardActions>
-            
-          </CardActions>
-        </Card>
-      </MenuItem>
+      <Card className={classes.card}>
+        <CardContent>
+          <Typography
+            className={classes.title}
+            color="textSecondary"
+            gutterBottom
+          >
+            Max Points: {courseWork.maxPoints}
+          </Typography>
+          <Typography variant="h5" component="h2">
+            {courseWork.title}
+          </Typography>
+        </CardContent>
+        <CardActions>
+          <Button to={`/course/${courseWork.courseId}/details/${courseWork.id}`} component={Link}>Details</Button>
+        </CardActions>
+      </Card>
     );
   };
 
   return (
-    <MenuList>
-      <div id="course">
-        <FlatList list={courseWork} renderItem={renderCourse} />
-      </div>
-    </MenuList>
+    <div id="course">
+      <FlatList list={courseWork} renderItem={renderCourse} />
+    </div>
   );
 };
 
