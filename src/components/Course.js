@@ -26,7 +26,6 @@ const useStyles = makeStyles(theme => ({
   card: {
     minWidth: 275,
     margin: "10px",
-    width: "100%",
     backgroundColor: 'white'
   },
   bullet: {
