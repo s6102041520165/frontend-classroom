@@ -5,19 +5,13 @@ import axios from "axios";
 import { connect } from "react-redux";
 import googleMapState from "../map-state/google-map-state";
 import Select from "react-select";
-import { useParams , Link} from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 import FlatList from "flatlist-react";
-import Card from '@material-ui/core/Card';
-import CardActions from '@material-ui/core/CardActions';
-import CardContent from '@material-ui/core/CardContent';
-import Typography from '@material-ui/core/Typography';
-import {
-  MenuItem,
-  makeStyles,
-  Menu,
-  MenuList,
-  Paper,
-} from "@material-ui/core";
+import Card from "@material-ui/core/Card";
+import CardActions from "@material-ui/core/CardActions";
+import CardContent from "@material-ui/core/CardContent";
+import Typography from "@material-ui/core/Typography";
+import { MenuItem, makeStyles, Menu, MenuList, Paper } from "@material-ui/core";
 
 const useStyles = makeStyles(theme => ({
   formControl: {
@@ -34,19 +28,19 @@ const useStyles = makeStyles(theme => ({
   },
   card: {
     minWidth: 275,
-    margin: '10px',
+    margin: "10px"
   },
   bullet: {
-    display: 'inline-block',
-    margin: '0 2px',
-    transform: 'scale(0.8)',
+    display: "inline-block",
+    margin: "0 2px",
+    transform: "scale(0.8)"
   },
   title: {
-    fontSize: 14,
+    fontSize: 14
   },
   pos: {
-    marginBottom: 12,
-  },
+    marginBottom: 12
+  }
 }));
 
 const Course = ({ message, Tokens, GoogleId, dispatch }) => {
@@ -59,7 +53,6 @@ const Course = ({ message, Tokens, GoogleId, dispatch }) => {
       listCourse();
     }
   }, []);
-  
 
   const clearState = () => {
     setCourseWork(null);
@@ -68,7 +61,6 @@ const Course = ({ message, Tokens, GoogleId, dispatch }) => {
   const classes = useStyles();
   const bull = <span className={classes.bullet}>•</span>;
 
-
   let header = {
     "Content-Type": "application/json",
     Authorization: `Bearer ${Tokens}`,
@@ -76,55 +68,55 @@ const Course = ({ message, Tokens, GoogleId, dispatch }) => {
   };
 
   const listCourse = async () => {
-  
     await axios({
       method: "get",
       url: `https://classroom.googleapis.com/v1/courses/${id}/courseWork`,
       params: {
-        courseWorkStates: "PUBLISHED",
+        courseWorkStates: "PUBLISHED"
       },
       headers: header
     }).then(async Response => {
       setCourseWork(Response.data.courseWork);
-
     });
   };
 
-  console.log(courseWork)
+  console.log(courseWork);
 
   const handleSubmit = async e => {
     e.preventDefault();
-
-    
   };
 
   const renderCourse = (courseWork, idx) => {
     return (
-      <MenuItem to={`/course/${courseWork.classId}/${courseWork.id}`} component={Link}>
-             <Card className={classes.card} >
-            <CardContent>
-              <Typography className={classes.title} color="textSecondary" gutterBottom>
-                Max Points: {courseWork.maxPoints}
-              </Typography>
-              <Typography variant="h5" component="h2">
-                {courseWork.title}
-              </Typography>
-              <Typography className={classes.pos} color="textSecondary">
-                {courseWork.description}
-              </Typography>
-            </CardContent>
-            <CardActions>
-            </CardActions>
-          </Card>
-          </MenuItem>
-      );
+      <Card className={classes.card}>
+        <CardContent>
+          <Typography
+            className={classes.title}
+            color="textSecondary"
+            gutterBottom
+          >
+            Max Points: {courseWork.maxPoints}
+          </Typography>
+          <Typography variant="h5" component="h2">
+            {courseWork.title}
+          </Typography>
+          <Typography className={classes.pos} color="textSecondary">
+            {courseWork.description}
+          </Typography>
+        </CardContent>
+        <CardActions>
+          <Button
+            to={`/course/${courseWork.classId}/${courseWork.id}`}
+            component={Link}
+          ></Button>
+        </CardActions>
+      </Card>
+    );
   };
 
   return (
     <div id="create-course">
-      <Menu>
-        <FlatList list={courseWork} renderItem={renderCourse} />
-      </Menu>
+      <FlatList list={courseWork} renderItem={renderCourse} />
     </div>
   );
 };
