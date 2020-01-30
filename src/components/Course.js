@@ -84,7 +84,7 @@ const Course = ({ message, Tokens, GoogleId, dispatch }) => {
   };
 
   const actions = [
-    { icon: <AssignmentIcon />, name: 'Create Assignment', uri: `/create-assignment/${courseWork.courseId}` },
+    { icon: <AssignmentIcon />, name: 'Create Assignment', uri: `/create-assignment/${id}` },
   ];
 
   const classes = useStyles();
