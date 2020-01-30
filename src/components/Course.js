@@ -114,11 +114,11 @@ const Course = ({ message, Tokens, GoogleId, dispatch }) => {
   };
 
   return (
-    <Menu>
+    <MenuList>
       <div id="course">
         <FlatList list={courseWork} renderItem={renderCourse} />
       </div>
-    </Menu>
+    </MenuList>
   );
 };
 
