@@ -9,6 +9,7 @@ import CardActions from "@material-ui/core/CardActions";
 import CardContent from "@material-ui/core/CardContent";
 import Typography from "@material-ui/core/Typography";
 import AssignmentIcon from '@material-ui/icons/Assignment';
+import SpeedDialIcon from '@material-ui/lab/SpeedDialIcon';
 import {
   MenuItem,
   makeStyles,
@@ -71,6 +72,7 @@ const actions = [
 const Course = ({ message, Tokens, GoogleId, dispatch }) => {
   let { id } = useParams();
   const [courseWork, setCourseWork] = useState("");
+  const [direction, setDirection] = React.useState('up');
   const [openDial, setOpenDial] = React.useState(false);
   const [hidden, setHidden] = React.useState(false);
   useEffect(() => {
