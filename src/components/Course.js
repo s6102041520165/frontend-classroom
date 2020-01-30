@@ -1,10 +1,7 @@
 import React, { useState, useEffect } from "react";
-import Button from "@material-ui/core/Button";
-import TextField from "@material-ui/core/TextField";
 import axios from "axios";
 import { connect } from "react-redux";
 import googleMapState from "../map-state/google-map-state";
-import Select from "react-select";
 import { useParams, Link } from "react-router-dom";
 import FlatList from "flatlist-react";
 import Card from "@material-ui/core/Card";
@@ -28,7 +25,9 @@ const useStyles = makeStyles(theme => ({
   },
   card: {
     minWidth: 275,
-    margin: "10px"
+    margin: "10px",
+    width: "100%",
+    backgroundColor: 'white'
   },
   bullet: {
     display: "inline-block",
@@ -88,7 +87,7 @@ const Course = ({ message, Tokens, GoogleId, dispatch }) => {
 
   const renderCourse = (courseWork, idx) => {
     return (
-      <MenuItem key={`${courseWork.id}-${idx}`}>
+      <MenuItem key={`${courseWork.id}-${idx}`} to={`/course/${courseWork.courseId}/details/${courseWork.id}`} component={Link}>
         <Card className={classes.card}>
           <CardContent>
             <Typography
