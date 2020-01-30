@@ -29,6 +29,7 @@ const useStyles = makeStyles(theme => ({
   },
   card: {
     minWidth: 275,
+    minHeight: 250,
     margin: "10px"
   },
   bullet: {
@@ -130,7 +131,7 @@ const Course = ({ message, Tokens, GoogleId, dispatch }) => {
 
   const renderCourse = (courseWork, idx) => {
     return (
-      <Grid item xs={3}>
+      <Grid item xs={12} sm={6} md={4} lg={3}>
         <Card className={classes.card}>
           <CardContent>
             <Typography
