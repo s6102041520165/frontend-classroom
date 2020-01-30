@@ -25,8 +25,7 @@ const useStyles = makeStyles(theme => ({
   },
   card: {
     minWidth: 275,
-    margin: "10px",
-    backgroundColor: 'white'
+    margin: "10px"
   },
   bullet: {
     display: "inline-block",
@@ -86,7 +85,7 @@ const Course = ({ message, Tokens, GoogleId, dispatch }) => {
 
   const renderCourse = (courseWork, idx) => {
     return (
-      <MenuItem key={`${courseWork.id}-${idx}`} to={`/course/${courseWork.courseId}/details/${courseWork.id}`} component={Link}>
+      <MenuItem style={{minWidth: '100%'}} key={`${courseWork.id}-${idx}`} to={`/course/${courseWork.courseId}/details/${courseWork.id}`} component={Link}>
         <Card className={classes.card}>
           <CardContent>
             <Typography
