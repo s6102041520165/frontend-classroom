@@ -76,6 +76,7 @@ const CreateCourse = ({ message, Tokens, GoogleId, dispatch }) => {
             name="title"
             value={title}
             onChange={onChange}
+            style={{ width: "100%" }}
             label="Course title"
           />
         </p>
@@ -84,6 +85,7 @@ const CreateCourse = ({ message, Tokens, GoogleId, dispatch }) => {
             name="maxPoints"
             value={maxPoints}
             onChange={onChange}
+            style={{ width: "100%" }}
             label="maxPoints"
           />
         </p>
