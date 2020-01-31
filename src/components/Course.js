@@ -9,6 +9,9 @@ import CardActions from "@material-ui/core/CardActions";
 import CardContent from "@material-ui/core/CardContent";
 import Typography from "@material-ui/core/Typography";
 import AssignmentIcon from "@material-ui/icons/Assignment";
+import LiveHelpIcon from "@material-ui/icons/LiveHelp";
+import BookIcon from "@material-ui/icons/Book";
+import ListIcon from "@material-ui/icons/List";
 import SpeedDialIcon from "@material-ui/lab/SpeedDialIcon";
 import { makeStyles, Button, Grid } from "@material-ui/core";
 import SpeedDial from "@material-ui/lab/SpeedDial";
@@ -83,9 +86,21 @@ const Course = ({ message, Tokens, GoogleId, dispatch }) => {
   const actions = [
     {
       icon: <AssignmentIcon />,
-      name: "Create Assignment",
-      uri: `/create-assignment/${id}`
-    }
+      name: "Assignment",
+      uri: `/create-assignment/${id}`,
+    },{
+      icon: <LiveHelpIcon />,
+      name: "Question",
+      uri: `/create-question/${id}`,
+    },{
+      icon: <BookIcon />,
+      name: "Books",
+      uri: `/create-material/${id}`,
+    },{
+      icon: <ListIcon />,
+      name: "Topic",
+      uri: `/create-topic/${id}`,
+    },
   ];
 
   const classes = useStyles();
