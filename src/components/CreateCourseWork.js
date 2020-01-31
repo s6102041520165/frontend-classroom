@@ -36,7 +36,7 @@ const CreateCourse = ({ message, Tokens, GoogleId, dispatch }) => {
     const classroom = {
       title: title,
       maxPoints: maxPoints,
-      workType: "ASSIGNMENT"
+      workType: "ASSIGNMENT" 
     };
 
     //console.log(classroom);
@@ -76,7 +76,6 @@ const CreateCourse = ({ message, Tokens, GoogleId, dispatch }) => {
             name="title"
             value={title}
             onChange={onChange}
-            style={{ width: "80%" }}
             label="Course title"
           />
         </p>
@@ -85,7 +84,6 @@ const CreateCourse = ({ message, Tokens, GoogleId, dispatch }) => {
             name="maxPoints"
             value={maxPoints}
             onChange={onChange}
-            style={{ width: "80%" }}
             label="maxPoints"
           />
         </p>
