@@ -39,10 +39,11 @@ const CreateCourse = ({ message, Tokens, GoogleId, dispatch }) => {
     e.preventDefault();
     //console.log(event);
 
-    const classroom = {
+    const courseWork = {
       title: title,
       maxPoints: maxPoints,
-      workType: "ASSIGNMENT"
+      workType: "ASSIGNMENT",
+      state: state,
     };
 
     //console.log(classroom);
@@ -54,14 +55,14 @@ const CreateCourse = ({ message, Tokens, GoogleId, dispatch }) => {
     axios
       .post(
         `https://classroom.googleapis.com/v1/courses/${decodeURI(courseId)}/courseWork`,
-        JSON.stringify(classroom),
+        JSON.stringify(courseWork),
         {
           headers: headers
         }
       )
       .then(response => {
         // handle success
-        console.log(response);
+        //console.log(response);
         clearState();
       })
 
