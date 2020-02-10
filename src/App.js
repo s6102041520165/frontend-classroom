@@ -231,7 +231,6 @@ function App({ message, Tokens, dispatch, props }) {
           <PrivateRoute path="/student" component={invitation} />
           <PrivateRoute path="/courses" component={courses} />
           <PrivateRoute path="/course/:id" component={getCourse} />
-          <Route path="/redirect" component={redirect} />
           <Route path="/login" component={Login} />
         </div>
       </main>
@@ -239,9 +238,6 @@ function App({ message, Tokens, dispatch, props }) {
   );
 }
 
-const redirect = ()=>{
-  return (<h3>Logged in</h3>)
-}
   
 
 const AppWithConnect = connect(googleMapState)(App);
