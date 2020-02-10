@@ -231,11 +231,16 @@ function App({ message, Tokens, dispatch, props }) {
           <PrivateRoute path="/student" component={invitation} />
           <PrivateRoute path="/courses" component={courses} />
           <PrivateRoute path="/course/:id" component={getCourse} />
+          <Route path="/redirect" component={redirect} />
           <Route path="/login" component={Login} />
         </div>
       </main>
     </div>
   );
+}
+
+const redirect = ()=>{
+  return (<h3>Logged in</h3>)
 }
   
 
