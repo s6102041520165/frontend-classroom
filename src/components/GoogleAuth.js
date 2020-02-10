@@ -29,7 +29,7 @@ const App = ({
       //Save response to reducer state
       dispatch(storeToken(res.accessToken));
       dispatch(storeGoogleId(res.googleId));
-      return <Redirect go={-1}/>;
+      return <Redirect go={-2}/>;
     }}
     onFailure={onFailLogin}
     cookiePolicy={"single_host_origin"}

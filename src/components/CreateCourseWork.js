@@ -76,7 +76,7 @@ const CreateCourse = ({ message, Tokens, GoogleId, dispatch }) => {
 
   return (
     <div id="create-course">
-      <h1>Create Course Work</h1>
+      <h1>Create Assignment</h1>
       <form autoComplete="off" onSubmit={handleSubmit}>
         <p>
           <Select
