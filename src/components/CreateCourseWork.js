@@ -5,17 +5,22 @@ import axios from "axios";
 import { connect } from "react-redux";
 import googleMapState from "../map-state/google-map-state";
 import { useParams } from "react-router-dom";
+import Select from "react-select";
 
 const initialState = {
   title: "",
   maxPoints: "",
-  room: "",
-  googleId: ""
+  state: "",
 };
+
+const stateAssignment = [
+  { value: "PUBLISHED", label: "DRAFT" },
+  { value: "DRAFT", label: "DRAFT" },
+]
 
 const CreateCourse = ({ message, Tokens, GoogleId, dispatch }) => {
   const { courseId } = useParams();
-  const [{ title, maxPoints, room }, setState] = useState(initialState);
+  const [{ title, maxPoints, state }, setState] = useState(initialState);
 
   const clearState = () => {
     setState({ ...initialState });
@@ -24,6 +29,7 @@ const CreateCourse = ({ message, Tokens, GoogleId, dispatch }) => {
   const onChange = e => {
     const { name, value } = e.target;
     //console.log({[title]:value});
+    console.log(value);
 
     //Set state from input value
     setState(prevState => ({ ...prevState, [name]: value }));
@@ -36,7 +42,7 @@ const CreateCourse = ({ message, Tokens, GoogleId, dispatch }) => {
     const classroom = {
       title: title,
       maxPoints: maxPoints,
-      workType: "ASSIGNMENT" 
+      workType: "ASSIGNMENT"
     };
 
     //console.log(classroom);
@@ -59,11 +65,11 @@ const CreateCourse = ({ message, Tokens, GoogleId, dispatch }) => {
         clearState();
       })
 
-      .catch(function(error) {
+      .catch(function (error) {
         // handle error
         console.log(error);
       })
-      .finally(function() {});
+      .finally(function () { });
     /**/
   };
 
@@ -71,6 +77,14 @@ const CreateCourse = ({ message, Tokens, GoogleId, dispatch }) => {
     <div id="create-course">
       <h1>Create Course Work</h1>
       <form autoComplete="off" onSubmit={handleSubmit}>
+        <p>
+          <Select
+            labelId="demo-simple-select-label"
+            name="state"
+            onChange={onChange}
+            options={stateAssignment}
+          />
+        </p>
         <p>
           <TextField
             name="title"
@@ -89,7 +103,7 @@ const CreateCourse = ({ message, Tokens, GoogleId, dispatch }) => {
             label="maxPoints"
           />
         </p>
-        
+
         <p>
           <Button type="submit" variant="contained" color="primary">
             Create course work.
