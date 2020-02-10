@@ -14,7 +14,7 @@ const initialState = {
 };
 
 const stateAssignment = [
-  { value: "PUBLISHED", label: "DRAFT" },
+  { value: "PUBLISHED", label: "PUBLISHED" },
   { value: "DRAFT", label: "DRAFT" },
 ]
 
@@ -81,7 +81,11 @@ const CreateCourse = ({ message, Tokens, GoogleId, dispatch }) => {
           <Select
             labelId="demo-simple-select-label"
             name="state"
-            onChange={onChange}
+            onChange={ async e => {
+              //console.log({[name]:value});
+              await setState(prevState => ({ ...prevState, state: e.value }));
+              console.log(state);
+            }}
             options={stateAssignment}
           />
         </p>
