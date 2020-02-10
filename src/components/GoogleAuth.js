@@ -23,21 +23,13 @@ const App = ({
 }) => (
   <GoogleLogin
     clientId="308789454611-isrob12j0f3l23meqnl8959lvdfgdg67.apps.googleusercontent.com"
-    buttonText="Login"
+    buttonText="Login with Google"
     onSuccess={res => {
       //console.log(Tokens);
       //Save response to reducer state
       dispatch(storeToken(res.accessToken));
       dispatch(storeGoogleId(res.googleId));
-      render (
-        <Button
-          style={{ margin: "auto" }}
-          href="/create-course"
-          variant="contained"
-        >
-          Goto Create Course
-        </Button>
-      );
+      return <Redirect go={-1}/>;
     }}
     onFailure={onFailLogin}
     cookiePolicy={"single_host_origin"}
