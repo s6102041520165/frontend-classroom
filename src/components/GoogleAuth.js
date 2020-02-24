@@ -29,14 +29,14 @@ const App = ({
       //Save response to reducer state
       dispatch(storeToken(res.accessToken));
       dispatch(storeGoogleId(res.googleId));
-      return <Redirect go={-2}/>;
+      return <Redirect to="/"/>;
     }}
     onFailure={onFailLogin}
     cookiePolicy={"single_host_origin"}
     scope="https://www.googleapis.com/auth/classroom.courses https://www.googleapis.com/auth/classroom.courses.readonly https://www.googleapis.com/auth/classroom.rosters https://www.googleapis.com/auth/classroom.coursework.students.readonly https://www.googleapis.com/auth/classroom.coursework.me.readonly https://www.googleapis.com/auth/classroom.coursework.students https://www.googleapis.com/auth/classroom.coursework.me https://www.googleapis.com/auth/classroom.topics"
     redirectUri="https://lineclassroom.herokuapp.com/redirect"
-    uxMode="redirect"
-    responseType='token code'
+    uxMode="popup"
+    //responseType='token code'
     style={{ position: "absolute", marginTop: "50%" }}
   />
 );
