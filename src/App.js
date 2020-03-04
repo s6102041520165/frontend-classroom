@@ -235,7 +235,7 @@ function App({ message, Tokens, dispatch, props }) {
           <PrivateRoute path="/courses" component={courses} />
           <PrivateRoute path="/course/:id" component={getCourse} />
           <Route path="/login" component={Login} />
-          <Route path="/login" component={Upload} />
+          <Route path="/upload" component={Upload} />
         </div>
       </main>
     </div>
