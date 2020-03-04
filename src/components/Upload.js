@@ -67,7 +67,7 @@ const useStyles = makeStyles(theme => ({
     },
 }));
 
-const UploadFile = ({ message, Tokens, GoogleId, dispatch }) => {
+const UploadFile = () => {
     const [file, setFile] = useState('');
     const [filename, setFilename] = useState('Choose File');
     const [uploadedFile, setUploadedFile] = useState({});
