@@ -85,9 +85,10 @@ const UploadFile = () => {
         formData.append('file', file);
 
         try {
-            const res = await axios.post('/upload', formData, {
+            const res = await axios.post('https://www.googleapis.com/upload/drive/v3/files?uploadType=media', formData, {
                 headers: {
-                    'Content-Type': 'multipart/form-data'
+                    'Authorization': 'Bearer ya29.Il_ABzxOyNRbZXbSDBPvMs3tVIDvOKQoFv1XKPxl6IO4dNHun1Dirum5RdjAmRLv3Ypqz0Np-BLepDHZCMBAHAr77Ghl6bOCclG55vlos6NpjQwPWQOtxAXS2fyMS6BUcw',
+                    'Content-Type': 'multipart/related'
                 },
                 onUploadProgress: progressEvent => {
                     setUploadPercentage(
