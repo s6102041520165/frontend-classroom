@@ -89,7 +89,7 @@ const UploadFile = ({ Tokens, GoogleId, dispatch }) => {
                 headers: {
                     'Authorization': `Bearer ${Tokens}`,
                     'Content-Type': 'application/json; charset=UTF-8',
-                    'X-Upload-Content-Type': 'image/jpeg'
+                    'X-Upload-Content-Type': fileType
                 },
                 onUploadProgress: progressEvent => {
                     setUploadPercentage(
