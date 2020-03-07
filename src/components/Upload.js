@@ -91,8 +91,9 @@ const UploadFile = ({ Tokens, GoogleId, dispatch }) => {
                 {
                     headers: {
                         'Authorization': `Bearer ${Tokens}`,
-                        'Content-Type': `image/jpeg`,
+                        'Content-Type': `image/png`,
                     },
+                    "data-binary": "@/F:/Weerachai/Pictures/gear.png",
                     onUploadProgress: progressEvent => {
                         setUploadPercentage(
                             parseInt(
