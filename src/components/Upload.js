@@ -66,8 +66,8 @@ const useStyles = makeStyles(theme => ({
 
 const UploadFile = ({ Tokens, GoogleId, dispatch }) => {
     const [file, setFile] = useState('');
-    const [filename, setFilename] = useState('Choose File');
-    const [fileType, setFileType] = useState('Choose File');
+    const [filename, setFilename] = useState('');
+    const [fileType, setFileType] = useState('');
     const [uploadedFile, setUploadedFile] = useState({});
     const [message, setMessage] = useState('');
     const [uploadPercentage, setUploadPercentage] = useState(0);
@@ -85,22 +85,25 @@ const UploadFile = ({ Tokens, GoogleId, dispatch }) => {
         console.log(e.target.files)
 
         try {
-            const res = await axios.post('https://www.googleapis.com/upload/drive/v3/files?uploadType=media', formData, {
-                headers: {
-                    'Authorization': `Bearer ${Tokens}`,
-                    'Content-Type': fileType,
-                },
-                onUploadProgress: progressEvent => {
-                    setUploadPercentage(
-                        parseInt(
-                            Math.round((progressEvent.loaded * 100) / progressEvent.total)
-                        )
-                    );
+            //console.log()
+            const res = await axios.post('https://www.googleapis.com/upload/drive/v3/files?uploadType=media',
+                formData,
+                {
+                    headers: {
+                        'Authorization': `Bearer ${Tokens}`,
+                        'Content-Type': `${fileType}`,
+                    },
+                    onUploadProgress: progressEvent => {
+                        setUploadPercentage(
+                            parseInt(
+                                Math.round((progressEvent.loaded * 100) / progressEvent.total)
+                            )
+                        );
 
-                    // Clear percentage
-                    setTimeout(() => setUploadPercentage(0), 10000);
-                }
-            });
+                        // Clear percentage
+                        setTimeout(() => setUploadPercentage(0), 10000);
+                    }
+                });
 
             const { fileName, filePath } = res.data;
 
