@@ -85,10 +85,11 @@ const UploadFile = ({ Tokens, GoogleId, dispatch }) => {
         console.log(e.target.files)
 
         try {
-            const res = await axios.post('https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart', formData, {
+            const res = await axios.post('https://www.googleapis.com/upload/drive/v3/files?uploadType=resumable', formData, {
                 headers: {
                     'Authorization': `Bearer ${Tokens}`,
-                    'Content-Type': 'multipart/related'
+                    'Content-Type': 'application/json; charset=UTF-8',
+                    'X-Upload-Content-Type': 'image/jpeg'
                 },
                 onUploadProgress: progressEvent => {
                     setUploadPercentage(
