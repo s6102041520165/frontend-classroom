@@ -5,16 +5,7 @@ import Progress from './Progress';
 import { connect } from "react-redux";
 import googleMapState from "../map-state/google-map-state";
 import { useParams, Link } from "react-router-dom";
-import FlatList from "flatlist-react";
-import Card from "@material-ui/core/Card";
-import CardActions from "@material-ui/core/CardActions";
-import CardContent from "@material-ui/core/CardContent";
-import Typography from "@material-ui/core/Typography";
-import AssignmentIcon from "@material-ui/icons/Assignment";
-import LiveHelpIcon from "@material-ui/icons/LiveHelp";
-import BookIcon from "@material-ui/icons/Book";
-import ListIcon from "@material-ui/icons/List";
-import SpeedDialIcon from "@material-ui/lab/SpeedDialIcon";
+import CloudUploadIcon from '@material-ui/icons/CloudUpload';
 import { makeStyles, Button, Grid } from "@material-ui/core";
 import SpeedDial from "@material-ui/lab/SpeedDial";
 import SpeedDialAction from "@material-ui/lab/SpeedDialAction";
@@ -65,29 +56,36 @@ const useStyles = makeStyles(theme => ({
     cardContent: {
         height: 200,
     },
+    button: {
+        margin: theme.spacing(1),
+    },
+    input: {
+        display: 'none',
+    },
 }));
 
-const UploadFile = () => {
+const UploadFile = ({ Tokens, GoogleId, dispatch }) => {
     const [file, setFile] = useState('');
     const [filename, setFilename] = useState('Choose File');
     const [uploadedFile, setUploadedFile] = useState({});
     const [message, setMessage] = useState('');
     const [uploadPercentage, setUploadPercentage] = useState(0);
+    const classes = useStyles();
 
-    const onChange = e => {
+    const onChange = async e => {
+        e.preventDefault();
         setFile(e.target.files[0]);
         setFilename(e.target.files[0].name);
-    };
 
-    const onSubmit = async e => {
-        e.preventDefault();
+        let lengthFile = e.target.files.length
         const formData = new FormData();
         formData.append('file', file);
+        console.log(formData)
 
         try {
             const res = await axios.post('https://www.googleapis.com/upload/drive/v3/files?uploadType=media', formData, {
                 headers: {
-                    'Authorization': 'Bearer ya29.Il_ABzxOyNRbZXbSDBPvMs3tVIDvOKQoFv1XKPxl6IO4dNHun1Dirum5RdjAmRLv3Ypqz0Np-BLepDHZCMBAHAr77Ghl6bOCclG55vlos6NpjQwPWQOtxAXS2fyMS6BUcw',
+                    'Authorization': `Bearer ${Tokens}`,
                     'Content-Type': 'multipart/related'
                 },
                 onUploadProgress: progressEvent => {
@@ -119,26 +117,33 @@ const UploadFile = () => {
     return (
         <Fragment>
             {message ? <Message msg={message} /> : null}
-            <form onSubmit={onSubmit}>
+            <form>
                 <div className='custom-file mb-4'>
-                    <input
+                    {/*<input
                         type='file'
-                        className='custom-file-input'
-                        id='customFile'
+                        className='contained-button-file'
+                        id="contained-button-file"
+                        multiple
+                        type="file"
+                        onChange={onChange}
+                    />*/}
+                    <input
+                        accept="image/*"
+                        className={classes.input}
+                        id="contained-button-file"
+                        multiple
+                        type="file"
                         onChange={onChange}
                     />
-                    <label className='custom-file-label' htmlFor='customFile'>
-                        {filename}
+                    <label htmlFor="contained-button-file">
+                        <Button variant="contained" color="secondary" component="span" className={classes.button} startIcon={<CloudUploadIcon />}>
+                            Choose Files
+                        </Button>
                     </label>
                 </div>
 
                 <Progress percentage={uploadPercentage} />
 
-                <input
-                    type='submit'
-                    value='Upload'
-                    className='btn btn-primary btn-block mt-4'
-                />
             </form>
             {uploadedFile ? (
                 <div className='row mt-5'>
@@ -152,5 +157,5 @@ const UploadFile = () => {
     );
 };
 
-//const AppWithConnect = connect(googleMapState)(Course);
-export default UploadFile;
+const AppWithConnect = connect(googleMapState)(UploadFile);
+export default AppWithConnect;
