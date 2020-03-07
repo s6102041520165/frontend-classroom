@@ -67,6 +67,7 @@ const useStyles = makeStyles(theme => ({
 const UploadFile = ({ Tokens, GoogleId, dispatch }) => {
     const [file, setFile] = useState('');
     const [filename, setFilename] = useState('Choose File');
+    const [fileType, setFileType] = useState('Choose File');
     const [uploadedFile, setUploadedFile] = useState({});
     const [message, setMessage] = useState('');
     const [uploadPercentage, setUploadPercentage] = useState(0);
@@ -76,14 +77,15 @@ const UploadFile = ({ Tokens, GoogleId, dispatch }) => {
         e.preventDefault();
         setFile(e.target.files[0]);
         setFilename(e.target.files[0].name);
+        setFileType(e.target.files[0].type);
 
         let lengthFile = e.target.files.length
         const formData = new FormData();
         formData.append('file', file);
-        console.log(formData)
+        console.log(e.target.files)
 
         try {
-            const res = await axios.post('https://www.googleapis.com/upload/drive/v3/files?uploadType=media', formData, {
+            const res = await axios.post('https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart', formData, {
                 headers: {
                     'Authorization': `Bearer ${Tokens}`,
                     'Content-Type': 'multipart/related'
