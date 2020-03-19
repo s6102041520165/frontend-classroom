@@ -27,7 +27,8 @@ const useStyles = makeStyles(theme => ({
     card: {
         minWidth: 275,
         minHeight: 250,
-        margin: "10px"
+        margin: "10px",
+        float: 'left'
     },
     bullet: {
         display: "inline-block",

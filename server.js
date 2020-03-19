@@ -4,8 +4,8 @@ const path = require("path");
 const port = process.env.PORT || 80;
 const app = express();
 var bodyParser = require('body-parser')
-const studentSubmit = require('./api/StudentSubmit');
-const test = require('./api/test');
+/* const studentSubmit = require('./api/StudentSubmit');
+const test = require('./api/test'); */
 
 
 app.use(bodyParser.urlencoded({ extended: false }))
@@ -18,8 +18,8 @@ app.use(favicon(__dirname + "/build/favicon.ico"));
 app.use(express.static(__dirname));
 app.use(express.static(path.join(__dirname, "build")));
 
-app.use("/api/", studentSubmit)
-app.use("/test/", test)
+/* app.use("/api/", studentSubmit)
+app.use("/test/", test) */
 
 app.get("/ping", function (req, res) {
   return res.send("pong");
