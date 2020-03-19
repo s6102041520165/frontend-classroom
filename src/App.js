@@ -233,9 +233,11 @@ function App({ message, Tokens, dispatch, props }) {
           <PrivateRoute path="/invitation" component={invitation} />
           <PrivateRoute path="/student" component={invitation} />
           <PrivateRoute path="/courses" component={courses} />
+          <PrivateRoute path="/course-work/:courseId/details/:id" component={Upload} />
           <PrivateRoute path="/course/:id" component={getCourse} />
+         
           <Route path="/login" component={Login} />
-          <Route path="/upload" component={Upload} />
+          
         </div>
       </main>
     </div>

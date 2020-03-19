@@ -165,7 +165,7 @@ const Course = ({ message, Tokens, GoogleId, dispatch }) => {
           </CardContent>
           <CardActions>
             <Button
-              to={`/course/${encodeURI(courseWork.courseId)}/details/${encodeURI(courseWork.id)}`}
+              to={`/course-work/${encodeURI(courseWork.courseId)}/details/${encodeURI(courseWork.id)}`}
               component={Link}
               variant="contained"
               color="primary"

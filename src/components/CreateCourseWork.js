@@ -44,6 +44,7 @@ const CreateCourse = ({ message, Tokens, GoogleId, dispatch }) => {
       maxPoints: maxPoints,
       workType: "ASSIGNMENT",
       state: state,
+      submissionModificationMode: 'SUBMISSION_MODIFICATION_MODE_UNSPECIFIED',
     };
 
     //console.log(classroom);
@@ -77,12 +78,12 @@ const CreateCourse = ({ message, Tokens, GoogleId, dispatch }) => {
   return (
     <div id="create-course">
       <h1>Create Assignment</h1>
-      <form autoComplete="off" onSubmit={handleSubmit}>
+      <form autoComplete="off" encType="multipart/form-data" onSubmit={handleSubmit}>
         <p>
           <Select
             labelId="demo-simple-select-label"
             name="state"
-            onChange={ async e => {
+            onChange={async e => {
               //console.log({[name]:value});
               await setState(prevState => ({ ...prevState, state: e.value }));
               console.log(state);
