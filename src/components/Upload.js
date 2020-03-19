@@ -91,14 +91,14 @@ const UploadFile = ({ Tokens, GoogleId, dispatch }) => {
 
     const renderAssignmentSubmission = (assignmentSubmission, idx) => {
         //console.log(assignmentSubmission);
-        return (<Grid item xs={12} sm={6} md={4} lg={4}>
+        return (<Grid item xs={12} sm={12} md={12} lg={12}>
             <Card className={classes.card}>
                 <CardContent className={classes.cardContent}>
-                    <img src={assignmentSubmission.driveFile.thumbnailUrl} />
-                    <Typography variant="h5" component="h2">
-                        {assignmentSubmission.driveFile.title}
-                    </Typography>
+                    <img src={assignmentSubmission.driveFile.thumbnailUrl} style={{ maxWidth: "200px" }} />
                 </CardContent>
+                <Typography variant="h5" component="h2">
+                    {assignmentSubmission.driveFile.title}
+                </Typography>
                 {/*<CardActions>
                     <Button
                         to={`/course-work/${encodeURI(courseWork.courseId)}/details/${encodeURI(courseWork.id)}`}
@@ -237,6 +237,7 @@ const UploadFile = ({ Tokens, GoogleId, dispatch }) => {
                     <FlatList list={assignmentSubmission} renderItem={renderAssignmentSubmission} />
                 </MenuList>
             </Paper>
+            <br />
 
             <form encType="multipart/form-data" onSubmit={handleUpload}
             >
