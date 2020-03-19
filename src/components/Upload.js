@@ -40,6 +40,11 @@ const useStyles = makeStyles(theme => ({
     pos: {
         marginBottom: 12
     },
+    paper: {
+        marginRight: theme.spacing(2),
+        marginTop: '20px',
+        height: '100%',
+    },
     exampleWrapper: {
         position: "relative"
     },
@@ -91,7 +96,7 @@ const UploadFile = ({ Tokens, GoogleId, dispatch }) => {
 
     const renderAssignmentSubmission = (assignmentSubmission, idx) => {
         //console.log(assignmentSubmission);
-        return (<Grid item xs={12} sm={12} md={12} lg={12}>
+        return (<Grid item xs={12} sm={12} md={4} lg={3}>
             <Card className={classes.card}>
                 <CardContent className={classes.cardContent}>
                     <img src={assignmentSubmission.driveFile.thumbnailUrl} style={{ maxWidth: "200px" }} />
@@ -232,10 +237,13 @@ const UploadFile = ({ Tokens, GoogleId, dispatch }) => {
         <Fragment>
             {message ? <Message msg={message} /> : null}
             <h2>Student Submissions</h2>
+
             <Paper className={classes.paper}>
-                <MenuList>
-                    <FlatList list={assignmentSubmission} renderItem={renderAssignmentSubmission} />
-                </MenuList>
+                <Grid container spacing={3}>
+                    <MenuList>
+                        <FlatList list={assignmentSubmission} renderItem={renderAssignmentSubmission} />
+                    </MenuList>
+                </Grid>
             </Paper>
             <br />
 
