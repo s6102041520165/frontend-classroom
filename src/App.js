@@ -1,6 +1,6 @@
 //Import modules
 import { Route } from "react-router-dom";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 import clsx from "clsx";
@@ -116,7 +116,15 @@ function App({ message, Tokens, dispatch, props }) {
   const classes = useStyles();
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
-  
+
+  useEffect(() => {
+    // You need to restrict it at some point
+    // This is just dummy code and should be replaced by actual
+    if (!name) {
+      getProfile();
+    }
+  }, []);
+
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -194,11 +202,11 @@ function App({ message, Tokens, dispatch, props }) {
             {theme.direction === "ltr" ? (
               <ChevronLeftIcon />
             ) : (
-              <ChevronRightIcon />
-            )}
+                <ChevronRightIcon />
+              )}
           </IconButton>
         </div>
-        
+
         <Divider />
         <List>
           {["Home", "Create Course", "Invitation"].map((text, index) => {
@@ -227,6 +235,13 @@ function App({ message, Tokens, dispatch, props }) {
           }}
         >
           <button onClick={closeLIFF}>Close</button>
+
+          {(name && name != '')
+            ?
+            <p>Name: {name}</p>
+            :
+            null
+          }
           <PrivateRoute exact path="/" component={courses} />
           <PrivateRoute path="/create-course" component={CreateCourse} />
           <PrivateRoute path="/create-assignment/:courseId" component={CreateCourseWork} />
@@ -237,16 +252,16 @@ function App({ message, Tokens, dispatch, props }) {
           <PrivateRoute path="/courses" component={courses} />
           <PrivateRoute path="/course-work/:courseId/details/:id" component={Upload} />
           <PrivateRoute path="/course/:id" component={getCourse} />
-         
+
           <Authorization path="/login" component={Login} />
-          
+
         </div>
       </main>
     </div>
   );
 }
 
-  
+
 
 const AppWithConnect = connect(googleMapState)(App);
 export default AppWithConnect;
