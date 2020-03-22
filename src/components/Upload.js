@@ -27,8 +27,7 @@ const useStyles = makeStyles(theme => ({
     card: {
         minWidth: 275,
         minHeight: 250,
-        margin: "10px",
-        float: 'left'
+        margin: "10px"
     },
     bullet: {
         display: "inline-block",
@@ -40,11 +39,6 @@ const useStyles = makeStyles(theme => ({
     },
     pos: {
         marginBottom: 12
-    },
-    paper: {
-        marginRight: theme.spacing(2),
-        marginTop: '20px',
-        height: '100%',
     },
     exampleWrapper: {
         position: "relative"
@@ -63,13 +57,11 @@ const useStyles = makeStyles(theme => ({
     cardContent: {
         height: 200,
     },
-    button: {
-        margin: theme.spacing(1),
-    },
     input: {
         display: 'none',
-    },
+    }
 }));
+
 
 const UploadFile = ({ Tokens, GoogleId, dispatch }) => {
     const { courseId } = useParams();//รหัสชั้นเรียน
@@ -239,13 +231,11 @@ const UploadFile = ({ Tokens, GoogleId, dispatch }) => {
             {message ? <Message msg={message} /> : null}
             <h2>Student Submissions</h2>
 
-            <Paper className={classes.paper}>
-                <Grid container spacing={3}>
-                    <MenuList>
-                        <FlatList list={assignmentSubmission} renderItem={renderAssignmentSubmission} />
-                    </MenuList>
-                </Grid>
-            </Paper>
+            <Grid container spacing={3}>
+                <MenuList>
+                    <FlatList list={assignmentSubmission} renderItem={renderAssignmentSubmission} />
+                </MenuList>
+            </Grid>
             <br />
 
             <form encType="multipart/form-data" onSubmit={handleUpload}
