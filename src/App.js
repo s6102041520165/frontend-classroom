@@ -36,6 +36,7 @@ import googleMapState from "./map-state/google-map-state";
 import Login from "./components/GoogleAuth";
 import getCourse from "./components/Course";
 import Upload from "./components/Upload";
+import Authorization from "./components/Authorization";
 
 // Line Frontend Framework Init
 const liff = window.liff;
@@ -236,7 +237,7 @@ function App({ message, Tokens, dispatch, props }) {
           <PrivateRoute path="/course-work/:courseId/details/:id" component={Upload} />
           <PrivateRoute path="/course/:id" component={getCourse} />
          
-          <Route path="/login" component={Login} />
+          <Authorization path="/login" component={Login} />
           
         </div>
       </main>

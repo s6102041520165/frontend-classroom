@@ -21,10 +21,11 @@ const App = ({
   dispatch,
   ...rest
 }) => (
+  
   <GoogleLogin
     clientId="308789454611-isrob12j0f3l23meqnl8959lvdfgdg67.apps.googleusercontent.com"
     buttonText="Login with Google"
-    onSuccess={res => {
+    onSuccess={ res => {
       //console.log(Tokens);
       //Save response to reducer state
       dispatch(storeToken(res.accessToken));
@@ -40,6 +41,7 @@ const App = ({
     //responseType='token code'
     style={{ position: "absolute", marginTop: "50%" }}
   />
+  /**/
 );
 
 
