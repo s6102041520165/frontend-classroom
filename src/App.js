@@ -226,6 +226,7 @@ function App({ message, Tokens, dispatch, props }) {
             textAlign: "center"
           }}
         >
+          <button onClick={closeLIFF}>Close</button>
           <PrivateRoute exact path="/" component={courses} />
           <PrivateRoute path="/create-course" component={CreateCourse} />
           <PrivateRoute path="/create-assignment/:courseId" component={CreateCourseWork} />
