@@ -7,8 +7,6 @@ import googleMapState from "../map-state/google-map-state";
 import { useParams, Link } from "react-router-dom";
 import CloudUploadIcon from '@material-ui/icons/CloudUpload';
 import { makeStyles, Button, Grid, Paper, MenuList, Card, CardContent, Typography, CardActions } from "@material-ui/core";
-import SpeedDial from "@material-ui/lab/SpeedDial";
-import SpeedDialAction from "@material-ui/lab/SpeedDialAction";
 import FlatList from "flatlist-react";
 
 const useStyles = makeStyles(theme => ({
