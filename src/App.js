@@ -203,7 +203,7 @@ function App({ message, Tokens, dispatch, props }) {
           <PrivateRoute path="/create-topic/:courseId" component={CreateTopic} />
           <PrivateRoute path="/update-course" component={UpdateCourse} />
           <PrivateRoute path="/invitation" component={invitation} />
-          <PrivateRoute path="/student" component={invitation} />
+          <PrivateRoute path="/student" component={student} />
           <PrivateRoute path="/courses" component={courses} />
           <PrivateRoute path="/course-work/:courseId/details/:id" component={Upload} />
           <PrivateRoute path="/course/:id" component={getCourse} />
