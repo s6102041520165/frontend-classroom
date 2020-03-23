@@ -74,11 +74,11 @@ const Course = ({ component: Component, message, Tokens, GoogleId, dispatch, mat
     const params = new URLSearchParams(location.search);
     //const code = params.get('code');
     const [code, setCode] = useState("");
-    useEffect(async () => {
+    useEffect(() => {
         // You need to restrict it at some point
         // This is just dummy code and should be replaced by actual
         if (!code) {
-            await authenticate()
+            authenticate()
         }
     }, []);
 
@@ -97,22 +97,26 @@ const Course = ({ component: Component, message, Tokens, GoogleId, dispatch, mat
                 "grant_type": "authorization_code"
             }
         }).then(async (response) => {
-            await console.log(response)
+            console.log(response)
             dispatch(storeToken(response.data.access_token));
-            await axios({
+
+            axios({
                 'method': 'GET',
                 'url': 'https://classroom.googleapis.com/v1/userProfiles/me',
                 'headers': {
                     'Authorization': `Bearer ${response.data.access_token}`,
                     'Accept': 'application/json'
                 }
-            }).then((res) => {
-                dispatch(storeGoogleId(response.data.id));
-                return (<Redirect to="/"/>);
+            }).then(async (res) => {
+                console.log(res)
+                await dispatch(storeGoogleId(res.data.id));
             })
+
         })
 
     }
+
+    return <div>Direct Fail</div>;
 
 };
 
