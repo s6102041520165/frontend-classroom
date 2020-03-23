@@ -71,11 +71,11 @@ const Course = ({ match, location }) => {
     const params = new URLSearchParams(location.search);
     //const code = params.get('code');
     const [code, setCode] = useState("");
-    useEffect(async () => {
+    useEffect(() => {
         // You need to restrict it at some point
         // This is just dummy code and should be replaced by actual
         setCode(params.get('code'));
-        await axios
+        axios
             .post(
                 "https://www.googleapis.com/oauth2/v4/token",
                 JSON.stringify({
