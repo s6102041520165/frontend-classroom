@@ -4,7 +4,7 @@ import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 import clsx from "clsx";
-import { makeStyles, useTheme } from "@material-ui/core/styles";
+import { makeStyles, useTheme, ThemeProvider } from "@material-ui/core/styles";
 import Drawer from "@material-ui/core/Drawer";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import AppBar from "@material-ui/core/AppBar";
@@ -19,8 +19,12 @@ import ChevronRightIcon from "@material-ui/icons/ChevronRight";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
-import InboxIcon from "@material-ui/icons/MoveToInbox";
-import MailIcon from "@material-ui/icons/Mail";
+import PlusOne from "@material-ui/icons/PlusOne";
+import Home from "@material-ui/icons/Home";
+import Person from "@material-ui/icons/Person";
+import InsertInvitation from "@material-ui/icons/InsertInvitation";
+import brown from '@material-ui/core/colors/brown';
+import { createMuiTheme } from '@material-ui/core/styles';
 
 
 //Import screens
@@ -50,7 +54,8 @@ const drawerWidth = 240;
 
 const useStyles = makeStyles(theme => ({
   root: {
-    display: "flex"
+    display: "flex",
+    backgroundColor: brown
   },
   appBar: {
     transition: theme.transitions.create(["margin", "width"], {
@@ -106,6 +111,7 @@ const useStyles = makeStyles(theme => ({
 
 //Key menu
 const navbar = ["/", "/create-course", "/invitation", "/profile"];
+const icons = [<Home />, <PlusOne />, <InsertInvitation />, <Person />];
 
 function App({ message, Tokens, dispatch, props }) {
   const classes = useStyles();
@@ -113,7 +119,7 @@ function App({ message, Tokens, dispatch, props }) {
   const [open, setOpen] = React.useState(false);
 
   useEffect(() => {
-    
+
   }, []);
 
 
@@ -126,94 +132,97 @@ function App({ message, Tokens, dispatch, props }) {
   };
 
   return (
-    <div className={classes.root}>
-      <CssBaseline />
-      <AppBar
-        position="fixed"
-        className={clsx(classes.appBar, {
-          [classes.appBarShift]: open
-        })}
-      >
-        <Toolbar>
-          <IconButton
-            color="inherit"
-            aria-label="open drawer"
-            onClick={handleDrawerOpen}
-            edge="start"
-            className={clsx(classes.menuButton, open && classes.hide)}
-          >
-            <MenuIcon />
-          </IconButton>
-          <Typography variant="h6" noWrap>
-            Line Classroom
-          </Typography>
-        </Toolbar>
-      </AppBar>
-      <Drawer
-        className={classes.drawer}
-        variant="persistent"
-        anchor="left"
-        open={open}
-        classes={{
-          paper: classes.drawerPaper
-        }}
-      >
-        <div className={classes.drawerHeader}>
-          <IconButton onClick={handleDrawerClose}>
-            {theme.direction === "ltr" ? (
-              <ChevronLeftIcon />
-            ) : (
-                <ChevronRightIcon />
-              )}
-          </IconButton>
-        </div>
-
-        <Divider />
-        <List>
-          {["Home", "Create Course", "Invitation", "Profile"].map((text, index) => {
-            console.log(index)
-            return (
-              <ListItem button key={text} to={navbar[index]} component={Link}>
-                <ListItemIcon>
-                  <InboxIcon /> 
-                </ListItemIcon>
-                <ListItemText style={{display:'inline'}} primary={text} />
-              </ListItem>
-            );
+    <ThemeProvider theme={theme}>
+      <div className={classes.root}>
+        <CssBaseline />
+        <AppBar
+          colorSecondary
+          position="fixed"
+          className={clsx(classes.appBar, {
+            [classes.appBarShift]: open
           })}
-        </List>
-      </Drawer>
-      <main
-        className={clsx(classes.content, {
-          [classes.contentShift]: open
-        })}
-      >
-        <div className={classes.drawerHeader} />
-        <div
-          style={{
-            margin: "auto",
-            maxWidth: "90%",
-            textAlign: "center"
+        >
+          <Toolbar>
+            <IconButton
+              color="inherit"
+              aria-label="open drawer"
+              onClick={handleDrawerOpen}
+              edge="start"
+              className={clsx(classes.menuButton, open && classes.hide)}
+            >
+              <MenuIcon />
+            </IconButton>
+            <Typography variant="h6" noWrap>
+              Line Classroom
+          </Typography>
+          </Toolbar>
+        </AppBar>
+        <Drawer
+          className={classes.drawer}
+          variant="persistent"
+          anchor="left"
+          open={open}
+          classes={{
+            paper: classes.drawerPaper
           }}
         >
-          
-          <PrivateRoute exact path="/" component={courses} />
-          <PrivateRoute path="/create-course" component={CreateCourse} />
-          <PrivateRoute path="/create-assignment/:courseId" component={CreateCourseWork} />
-          <PrivateRoute path="/create-topic/:courseId" component={CreateTopic} />
-          <PrivateRoute path="/update-course" component={UpdateCourse} />
-          <PrivateRoute path="/invitation" component={invitation} />
-          <PrivateRoute path="/student" component={student} />
-          <PrivateRoute path="/courses" component={courses} />
-          <PrivateRoute path="/course-work/:courseId/details/:id" component={Upload} />
-          <PrivateRoute path="/course/:id" component={getCourse} />
-          <Authorization path="/redirect/" component={redirect} />
-          <Authorization path="/login" component={Login} />
-          <PrivateRoute path="/profile" component={profile} />
-          
-        </div>
-      </main>
-    </div>
+          <div className={classes.drawerHeader}>
+            <IconButton onClick={handleDrawerClose}>
+              {theme.direction === "ltr" ? (
+                <ChevronLeftIcon />
+              ) : (
+                  <ChevronRightIcon />
+                )}
+            </IconButton>
+          </div>
+
+          <Divider />
+          <List>
+            {["Home", "Create Course", "Invitation", "Profile"].map((text, index) => {
+              console.log(index)
+              return (
+                <ListItem button key={text} to={navbar[index]} component={Link}>
+                  <ListItemIcon>
+                    {icons[index]}
+                  </ListItemIcon>
+                  <ListItemText style={{ display: 'inline' }} primary={text} />
+                </ListItem>
+              );
+            })}
+          </List>
+        </Drawer>
+        <main
+          className={clsx(classes.content, {
+            [classes.contentShift]: open
+          })}
+        >
+          <div className={classes.drawerHeader} />
+          <div
+            style={{
+              margin: "auto",
+              maxWidth: "90%",
+              textAlign: "center"
+            }}
+          >
+
+            <PrivateRoute exact path="/" component={courses} />
+            <PrivateRoute path="/create-course" component={CreateCourse} />
+            <PrivateRoute path="/create-assignment/:courseId" component={CreateCourseWork} />
+            <PrivateRoute path="/create-topic/:courseId" component={CreateTopic} />
+            <PrivateRoute path="/update-course" component={UpdateCourse} />
+            <PrivateRoute path="/invitation" component={invitation} />
+            <PrivateRoute path="/student" component={student} />
+            <PrivateRoute path="/courses" component={courses} />
+            <PrivateRoute path="/course-work/:courseId/details/:id" component={Upload} />
+            <PrivateRoute path="/course/:id" component={getCourse} />
+            <Authorization path="/redirect/" component={redirect} />
+            <Authorization path="/login" component={Login} />
+            <PrivateRoute path="/profile" component={profile} />
+
+          </div>
+        </main>
+      </div>
+    </ThemeProvider>
   );
 }
 

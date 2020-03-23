@@ -6,6 +6,7 @@ import { Redirect, Route, Link, Router } from "react-router-dom";
 import { Button } from "@material-ui/core";
 import googleMapState from "../map-state/google-map-state";
 import { render } from "@testing-library/react";
+import PersonIcon from "@material-ui/icons/PersonPinRounded";
 //import { Route, Redirect } from "react-router-dom";
 import qs from "query-string";
 
@@ -15,7 +16,7 @@ const onFailLogin = res => {
 };
 
 const togglePage = e => {
-  
+
 }
 
 const App = ({
@@ -26,16 +27,20 @@ const App = ({
   dispatch,
   ...rest
 }) => (
-
-    <Button
-      //to={`https://lineappbackend.herokuapp.com/webhook/auth/google`}
-      //*component={Link}
-      variant="contained"
-      color="primary"
-      style={{ margin: 'auto' }}
-      href="https://lineappbackend.herokuapp.com/webhook/auth/google">
-      SignIn With Google
+    <div>
+      <br /><br />
+      <Button
+        //to={`https://lineappbackend.herokuapp.com/webhook/auth/google`}
+        //*component={Link}
+        variant="contained"
+        color="primary"
+        style={{ margin: 'auto' }}
+        href="https://lineappbackend.herokuapp.com/webhook/auth/google"
+        size="large"
+        startIcon={<PersonIcon />}>
+        SignIn With Google
     </Button>
+    </div>
   );
 
 
