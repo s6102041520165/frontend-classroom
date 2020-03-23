@@ -24,14 +24,10 @@ const liff = window.liff;
 const initialStateLine = {
   name: "",
   userLineId: "",
-  statusMessage: ""
+  statusMessage: "",
+  pictureUrl: ""
 };
 
-const initialState = {
-  courseId: "",
-  userId: "",
-  role: ""
-};
 
 const useStyles = makeStyles(theme => ({
   formControl: {
@@ -58,8 +54,7 @@ const renderPerson = (course, idx) => {
 };
 
 const Invitation = ({ message, Tokens, GoogleId, dispatch }) => {
-  const [debugProfile, setDebug] = useState("");
-  const [{ name, userLineId, statusMessage }, setStateLine] = useState(
+  const [{ name, userLineId, statusMessage,pictureUrl }, setStateLine] = useState(
     initialStateLine
   );
   useEffect(() => {
@@ -90,11 +85,11 @@ const Invitation = ({ message, Tokens, GoogleId, dispatch }) => {
 
   const getProfile = () => {
     liff.init(async () => {
-      await setDebug(liff.getProfile());
       let getProfile = await liff.getProfile();
       setStateLine({
         name: getProfile.displayName,
         userLineId: getProfile.userId,
+        pictureUrl: getProfile.pictureUrl,
         statusMessage: getProfile.statusMessage
       });
     });
@@ -107,9 +102,16 @@ const Invitation = ({ message, Tokens, GoogleId, dispatch }) => {
   return (
     <div id="create-course">
       {
+        (pictureUrl && pictureUrl != '')
+          ?
+          <p><img src={pictureUrl} style={{maxWidth:'300px',height:'auto',borderRadius:'20px'}}/></p>
+          :
+          null
+      }
+      {
         (name && name != '')
           ?
-          <p>Name: {JSON.stringify(debugProfile)}</p>
+          <p>Name: {name}</p>
           :
           null
       }
