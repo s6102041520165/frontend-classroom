@@ -108,6 +108,7 @@ const Course = ({ component: Component, message, Tokens, GoogleId, dispatch, mat
                 }
             }).then((res) => {
                 dispatch(storeGoogleId(response.data.id));
+                return (<Redirect to="/"/>);
             })
         })
 
