@@ -31,7 +31,7 @@ import UpdateCourse from "./components/UpdateCourse";
 import invitation from "./components/invitation";
 import courses from "./components/Courses";
 import profile from "./components/profile";
-import profile from "./components/students";
+import student from "./components/students";
 
 import PrivateRoute from "./components/PrivateRoute";
 import googleMapState from "./map-state/google-map-state";
