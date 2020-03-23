@@ -170,6 +170,7 @@ function App({ message, Tokens, dispatch, props }) {
         <Divider />
         <List>
           {["Home", "Create Course", "Invitation", "Profile"].map((text, index) => {
+            console.log(index)
             return (
               <ListItem button key={text} to={navbar[index]} component={Link}>
                 <ListItemIcon>
@@ -207,7 +208,7 @@ function App({ message, Tokens, dispatch, props }) {
           <PrivateRoute path="/course/:id" component={getCourse} />
           <Authorization path="/redirect/" component={redirect} />
           <Authorization path="/login" component={Login} />
-          <Authorization path="/profile" component={profile} />
+          <PrivateRoute path="/profile" component={profile} />
           
         </div>
       </main>
