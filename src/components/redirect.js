@@ -74,37 +74,34 @@ const Course = ({ match, location }) => {
     useEffect(async () => {
         // You need to restrict it at some point
         // This is just dummy code and should be replaced by actual
-        setCode(params.get('code'));
-        
-        await axios
-            .post(
-                "https://www.googleapis.com/oauth2/v4/token",
-                JSON.stringify({
-                    code: `${code}`,
-                    redirect_uri: "https://lineclassroom.herokuapp.com/redirect",
-                    client_secret: "v-_5N09bLsRf3nsNYje1b4PR",
-                    client_id: "308789454611-isrob12j0f3l23meqnl8959lvdfgdg67.apps.googleusercontent.com",
-                    scope: "https://www.googleapis.com/auth/classroom.courses https://www.googleapis.com/auth/classroom.courses.readonly https://www.googleapis.com/auth/classroom.rosters https://www.googleapis.com/auth/classroom.coursework.students.readonly https://www.googleapis.com/auth/classroom.coursework.me.readonly https://www.googleapis.com/auth/classroom.coursework.students https://www.googleapis.com/auth/classroom.coursework.me https://www.googleapis.com/auth/classroom.topics https://www.googleapis.com/auth/drive https://www.googleapis.com/auth/drive.file https://www.googleapis.com/auth/drive.appdata",
-                    grant_type: "authorization_code"
-                }),
-            )
-            .then(response => {
-                // handle success
-                console.log(response);
-                
-            })
-
-            .catch(function (error) {
-                // handle error
-                console.log(error);
-            })
-            .finally(function () {
-
-            });
+        if (!code) {
+            authenticate();
+        }
     }, []);
 
+    const authenticate = async () => {
+        setCode(params.get('code'));
+
+        await axios({
+            'method': 'POST',
+            'url': `https://www.googleapis.com/oauth2/v4/token`,
+            'data': JSON.stringify({
+                code: `${code}`,
+                redirect_uri: "https://lineclassroom.herokuapp.com/redirect",
+                client_secret: "v-_5N09bLsRf3nsNYje1b4PR",
+                client_id: "308789454611-isrob12j0f3l23meqnl8959lvdfgdg67.apps.googleusercontent.com",
+                scope: "https://www.googleapis.com/auth/classroom.courses https://www.googleapis.com/auth/classroom.courses.readonly https://www.googleapis.com/auth/classroom.rosters https://www.googleapis.com/auth/classroom.coursework.students.readonly https://www.googleapis.com/auth/classroom.coursework.me.readonly https://www.googleapis.com/auth/classroom.coursework.students https://www.googleapis.com/auth/classroom.coursework.me https://www.googleapis.com/auth/classroom.topics https://www.googleapis.com/auth/drive https://www.googleapis.com/auth/drive.file https://www.googleapis.com/auth/drive.appdata",
+                grant_type: "authorization_code"
+            })
+        }).then(async (response) => {
+
+            await console.log(response)
+        })
+
+    }
+
     return (
-    <div>{code}</div>
+        <div>{code}</div>
     )
 };
 
