@@ -58,14 +58,13 @@ const CreateCourse = ({ message, Tokens, GoogleId, dispatch }) => {
         clearState();
       })
 
-      .catch(function(error) {
+      .catch(function (error) {
         // handle error
         console.log(error);
       })
-      .finally(function() {
-        
+      .finally(function () {
+
       });
-      /**/
   };
 
   return (

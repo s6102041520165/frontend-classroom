@@ -76,6 +76,7 @@ const Course = ({ message, Tokens, GoogleId, dispatch }) => {
     // This is just dummy code and should be replaced by actual
     if (!courseWork) {
       listCourse();
+      console.log(id)
     }
   }, []);
 

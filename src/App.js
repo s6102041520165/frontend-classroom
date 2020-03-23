@@ -1,5 +1,5 @@
 //Import modules
-import { Route } from "react-router-dom";
+import { Route, Router } from "react-router-dom";
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
@@ -37,6 +37,7 @@ import Login from "./components/GoogleAuth";
 import getCourse from "./components/Course";
 import Upload from "./components/Upload";
 import Authorization from "./components/Authorization";
+import redirect from "./components/redirect";
 
 // Line Frontend Framework Init
 const liff = window.liff;
@@ -234,7 +235,6 @@ function App({ message, Tokens, dispatch, props }) {
             textAlign: "center"
           }}
         >
-          <button onClick={closeLIFF}>Close</button>
 
           {(name && name != '')
             ?
@@ -242,6 +242,7 @@ function App({ message, Tokens, dispatch, props }) {
             :
             null
           }
+          
           <PrivateRoute exact path="/" component={courses} />
           <PrivateRoute path="/create-course" component={CreateCourse} />
           <PrivateRoute path="/create-assignment/:courseId" component={CreateCourseWork} />
@@ -252,9 +253,9 @@ function App({ message, Tokens, dispatch, props }) {
           <PrivateRoute path="/courses" component={courses} />
           <PrivateRoute path="/course-work/:courseId/details/:id" component={Upload} />
           <PrivateRoute path="/course/:id" component={getCourse} />
-
+          <Route path="/redirect/" component={redirect} />
           <Authorization path="/login" component={Login} />
-
+          
         </div>
       </main>
     </div>

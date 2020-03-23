@@ -7,6 +7,7 @@ import { Button } from "@material-ui/core";
 import googleMapState from "../map-state/google-map-state";
 import { render } from "@testing-library/react";
 //import { Route, Redirect } from "react-router-dom";
+import qs from "query-string";
 
 //Callback uri function
 const onFailLogin = res => {
@@ -37,8 +38,9 @@ const App = ({
     scope="https://www.googleapis.com/auth/classroom.courses https://www.googleapis.com/auth/classroom.courses.readonly https://www.googleapis.com/auth/classroom.rosters https://www.googleapis.com/auth/classroom.coursework.students.readonly https://www.googleapis.com/auth/classroom.coursework.me.readonly https://www.googleapis.com/auth/classroom.coursework.students https://www.googleapis.com/auth/classroom.coursework.me https://www.googleapis.com/auth/classroom.topics https://www.googleapis.com/auth/drive https://www.googleapis.com/auth/drive.file https://www.googleapis.com/auth/drive.appdata"
     //redirectUri="http://lineclassroom.herokuapp.com/redirect"
     redirectUri="http://localhost/redirect"
-    uxMode="popup"
-    //responseType='token code'
+    uxMode="redirect"
+    accessType="offline"
+    isSignedIn={true}
     style={{ position: "absolute", marginTop: "50%" }}
   />
   /**/
