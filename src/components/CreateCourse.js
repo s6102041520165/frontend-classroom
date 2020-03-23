@@ -30,7 +30,7 @@ const CreateCourse = ({ message, Permissions , Tokens, GoogleId, dispatch }) => 
         }    
       }
     } 
-    if(checkPermission == true){
+    if(checkPermission == false){
       return <Redirect go="-1"/>
     }
   },[]);
