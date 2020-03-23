@@ -111,9 +111,9 @@ const Invitation = ({ message, Tokens, GoogleId, dispatch }) => {
       {
         (name && name != '')
           ?
-          <p>Name: {name}</p>
+          <h3>Name: {name}</h3>
           :
-          null
+          <h3>Browser not support.</h3>
       }
     </div>
   );

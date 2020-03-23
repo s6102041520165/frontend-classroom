@@ -6,6 +6,16 @@ import { connect } from "react-redux";
 import googleMapState from "../map-state/google-map-state";
 import FlatList from "flatlist-react";
 import Select from "react-select";
+import { makeStyles } from '@material-ui/core/styles';
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemText from '@material-ui/core/ListItemText';
+import ListItemAvatar from '@material-ui/core/ListItemAvatar';
+import Avatar from '@material-ui/core/Avatar';
+import ImageIcon from '@material-ui/icons/Image';
+import WorkIcon from '@material-ui/icons/Work';
+import BeachAccessIcon from '@material-ui/icons/BeachAccess';
+import Divider from '@material-ui/core/Divider';
 import {
   FormControl,
   InputLabel,
@@ -24,18 +34,11 @@ const initialState = {
 };
 
 const useStyles = makeStyles(theme => ({
-  formControl: {
-    margin: theme.spacing(1),
-    minWidth: 120
-  },
-  selectEmpty: {
-    marginTop: theme.spacing(2)
-  },
   root: {
-    width: "100%",
+    width: '100%',
     maxWidth: 360,
-    backgroundColor: theme.palette.background.paper
-  }
+    backgroundColor: theme.palette.background.paper,
+  },
 }));
 
 const renderPerson = (course, idx) => {
@@ -128,61 +131,37 @@ const Invitation = ({ message, Tokens, GoogleId, dispatch }) => {
     console.log(courseId);
   };
 
+  const classes = useStyles();
+
   return (
-    <div id="create-course">
-      <h1>Invitation</h1>
-
-      <form autoComplete="off" onSubmit={handleSubmit}>
-        <p>
-          <FormControl className={classes.formControl}>
-            <InputLabel id="demo-simple-select-label">Course</InputLabel>
-            <Select
-              labelId="demo-simple-select-label"
-              name="courseId"
-              onChange={ async e => {
-                //console.log({[name]:value});
-                await setState(prevState => ({ ...prevState, courseId: e.value }));
-                console.log(courseId);
-              }}
-              options={courses}
-            />
-          </FormControl>
-        </p>
-        <p>
-          <TextField
-            name="userId"
-            value={userId}
-            onChange={onChange}
-            style={{ width: "80%" }}
-            label="Email"
-          />
-        </p>
-
-        <p>
-          <FormControl className={classes.formControl}>
-            <InputLabel id="demo-simple-select-label">Role</InputLabel>
-            <Select
-              labelId="demo-simple-select-label"
-              name="role"
-              options={[
-                { value: "STUDENT", label: "STUDENT" },
-                { value: "TEACHER", label: "TEACHER" }
-              ]}
-              onChange={ async e => {
-                //console.log({[name]:value});
-                await setState(prevState => ({ ...prevState, role: e.value }));
-                console.log(role);
-              }}
-            />
-          </FormControl>
-        </p>
-        <p>
-          <Button type="submit" variant="contained" color="primary">
-            Invite
-          </Button>
-        </p>
-      </form>
-    </div>
+    <List className={classes.root}>
+      <ListItem>
+        <ListItemAvatar>
+          <Avatar>
+            <ImageIcon />
+          </Avatar>
+        </ListItemAvatar>
+        <ListItemText primary="Photos" secondary="Jan 9, 2014" />
+      </ListItem>
+      <Divider variant="inset" component="li" />
+      <ListItem>
+        <ListItemAvatar>
+          <Avatar>
+            <WorkIcon />
+          </Avatar>
+        </ListItemAvatar>
+        <ListItemText primary="Work" secondary="Jan 7, 2014" />
+      </ListItem>
+      <Divider variant="inset" component="li" />
+      <ListItem>
+        <ListItemAvatar>
+          <Avatar>
+            <BeachAccessIcon />
+          </Avatar>
+        </ListItemAvatar>
+        <ListItemText primary="Vacation" secondary="July 20, 2014" />
+      </ListItem>
+    </List>
   );
 };
 
