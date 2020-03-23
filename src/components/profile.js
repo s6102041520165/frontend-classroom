@@ -17,6 +17,16 @@ import {
   Divider
 } from "@material-ui/core";
 
+// Line Frontend Framework Init
+const liff = window.liff;
+
+//Initial state
+const initialStateLine = {
+  name: "",
+  userLineId: "",
+  statusMessage: ""
+};
+
 const initialState = {
   courseId: "",
   userId: "",
@@ -49,139 +59,59 @@ const renderPerson = (course, idx) => {
 
 const Invitation = ({ message, Tokens, GoogleId, dispatch }) => {
   const [courses, setCourses] = useState("");
+  const [{ name, userLineId, statusMessage }, setStateLine] = useState(
+    initialStateLine
+  );
   useEffect(() => {
-    // You need to restrict it at some point
-    // This is just dummy code and should be replaced by actual
-    if (!courseId) {
-      listCourse();
+    
+    if (!name) {
+      getProfile();
     }
   }, []);
-  const [{ courseId, userId, role }, setState] = useState(initialState);
 
   const clearState = () => {
-    setState({ ...initialState });
+    setStateLine({ ...initialStateLine });
   };
 
   const classes = useStyles();
 
-  const onChange = e => {
-    const { name, value } = e.target;
-    //console.log({[name]:value});
-    console.log(e.target);
-    setState(prevState => ({ ...prevState, [name]: value }));
-  };
-
-  let header = {
-    "Content-Type": "application/json",
-    Authorization: `Bearer ${Tokens}`,
-    Accept: "application/json"
-  };
-
-  const listCourse = async () => {
-    /**
-     * 
-     * 
-     curl \
-  'https://classroom.googleapis.com/v1/courses?key=[YOUR_API_KEY]' \
-  --header 'Authorization: Bearer [YOUR_ACCESS_TOKEN]' \
-  --header 'Accept: application/json' \
-  --compressed
-     */
-    /** */
-    await axios({
-      method: "get",
-      url: "https://classroom.googleapis.com/v1/courses",
-      params: {
-        courseStates: "ACTIVE",
-        teacherId: GoogleId
-      },
-      headers: header
-    }).then(async Response => {
-      let itemCourse = [];
-      Response.data.courses.forEach(item => {
-        itemCourse.push({ value: item.id, label: item.name });
+  const sendMessage = () => {
+    liff
+      .sendMessage([
+        {
+          type: "text",
+          text: `Say Hi!`
+        }
+      ])
+      .then(() => {
+        liff.closeWindow();
       });
-      console.log(itemCourse);
-      setCourses(itemCourse);
+  };
+
+  const getProfile = () => {
+    liff.init(async () => {
+      let getProfile = await liff.getProfile();
+      setStateLine({
+        name: getProfile.displayName,
+        userLineId: getProfile.userId,
+        statusMessage: getProfile.statusMessage
+      });
     });
   };
 
-  console.log(courses);
-
-  const handleSubmit = async e => {
-    e.preventDefault();
-
-    let data = {
-      courseId: courseId,
-      userId: userId,
-      role: role,
-    }
-
-    await axios({
-      method: "post",
-      url: "https://classroom.googleapis.com/v1/invitations",
-      data: data,
-      headers: header
-    }).then(async Response => {
-      console.log(Response)
-    });
-    console.log(courseId);
+  const closeLIFF = () => {
+    liff.closeWindow();
   };
 
   return (
     <div id="create-course">
-      <h1>Invitations</h1>
-
-      <form autoComplete="off" onSubmit={handleSubmit}>
-        <p>
-          <FormControl className={classes.formControl}>
-            <InputLabel id="demo-simple-select-label">Course</InputLabel>
-            <Select
-              labelId="demo-simple-select-label"
-              name="courseId"
-              onChange={ async e => {
-                //console.log({[name]:value});
-                await setState(prevState => ({ ...prevState, courseId: e.value }));
-                console.log(courseId);
-              }}
-              options={courses}
-            />
-          </FormControl>
-        </p>
-        <p>
-          <TextField
-            name="userId"
-            value={userId}
-            onChange={onChange}
-            style={{ width: "80%" }}
-            label="Email"
-          />
-        </p>
-
-        <p>
-          <FormControl className={classes.formControl}>
-            <InputLabel id="demo-simple-select-label">Role</InputLabel>
-            <Select
-              labelId="demo-simple-select-label"
-              name="role"
-              options={[
-                { value: "STUDENT", label: "STUDENT" },
-                { value: "TEACHER", label: "TEACHER" }
-              ]}
-              onChange={ async e => {
-                //console.log({[name]:value});
-                await setState(prevState => ({ ...prevState, role: e.value }));
-                console.log(role);
-              }}
-            />
-          </FormControl>
-        </p>
-        <p>
-          <Button type="submit" variant="contained" color="primary">
-            Invite
-          </Button>
-        </p>
-      </form>
+      {
+        (name && name != '')
+          ?
+          <p>Name: {name}</p>
+          :
+          null
+      }
     </div>
   );
 };

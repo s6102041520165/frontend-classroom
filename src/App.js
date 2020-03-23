@@ -30,6 +30,7 @@ import CreateTopic from "./components/CreateTopic";
 import UpdateCourse from "./components/UpdateCourse";
 import invitation from "./components/invitation";
 import courses from "./components/Courses";
+import profile from "./components/profile";
 
 import PrivateRoute from "./components/PrivateRoute";
 import googleMapState from "./map-state/google-map-state";
@@ -45,12 +46,6 @@ const liff = window.liff;
 //ความกว้างเมนู
 const drawerWidth = 240;
 
-//Initial state
-const initialState = {
-  name: "",
-  userLineId: "",
-  statusMessage: ""
-};
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -108,22 +103,16 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-const navbar = ["/", "/create-course", "/invitation"];
+//Key menu
+const navbar = ["/", "/create-course", "/invitation", "/profile"];
 
 function App({ message, Tokens, dispatch, props }) {
-  const [{ name, userLineId, statusMessage }, setState] = useState(
-    initialState
-  );
   const classes = useStyles();
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
 
   useEffect(() => {
-    // You need to restrict it at some point
-    // This is just dummy code and should be replaced by actual
-    if (!name) {
-      getProfile();
-    }
+    
   }, []);
 
 
@@ -133,36 +122,6 @@ function App({ message, Tokens, dispatch, props }) {
 
   const handleDrawerClose = () => {
     setOpen(false);
-  };
-
-
-
-  const sendMessage = () => {
-    liff
-      .sendMessage([
-        {
-          type: "text",
-          text: `Say Hi!`
-        }
-      ])
-      .then(() => {
-        liff.closeWindow();
-      });
-  };
-
-  const getProfile = () => {
-    liff.init(async () => {
-      let getProfile = await liff.getProfile();
-      setState({
-        name: getProfile.displayName,
-        userLineId: getProfile.userId,
-        statusMessage: getProfile.statusMessage
-      });
-    });
-  };
-
-  const closeLIFF = () => {
-    liff.closeWindow();
   };
 
   return (
@@ -210,13 +169,13 @@ function App({ message, Tokens, dispatch, props }) {
 
         <Divider />
         <List>
-          {["Home", "Create Course", "Invitation"].map((text, index) => {
+          {["Home", "Create Course", "Invitation", "Profile"].map((text, index) => {
             return (
               <ListItem button key={text} to={navbar[index]} component={Link}>
                 <ListItemIcon>
-                  {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
+                  <InboxIcon /> 
                 </ListItemIcon>
-                <ListItemText primary={text} />
+                <ListItemText style={{display:'inline'}} primary={text} />
               </ListItem>
             );
           })}
@@ -231,17 +190,10 @@ function App({ message, Tokens, dispatch, props }) {
         <div
           style={{
             margin: "auto",
-            maxWidth: "80%",
+            maxWidth: "90%",
             textAlign: "center"
           }}
         >
-
-          {(name && name != '')
-            ?
-            <p>Name: {name}</p>
-            :
-            null
-          }
           
           <PrivateRoute exact path="/" component={courses} />
           <PrivateRoute path="/create-course" component={CreateCourse} />
@@ -255,6 +207,7 @@ function App({ message, Tokens, dispatch, props }) {
           <PrivateRoute path="/course/:id" component={getCourse} />
           <Authorization path="/redirect/" component={redirect} />
           <Authorization path="/login" component={Login} />
+          <Authorization path="/profile" component={profile} />
           
         </div>
       </main>
