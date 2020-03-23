@@ -6,7 +6,6 @@ import { connect } from "react-redux";
 import googleMapState from "../map-state/google-map-state";
 import FlatList from "flatlist-react";
 import Select from "react-select";
-import { makeStyles } from '@material-ui/core/styles';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
@@ -16,16 +15,7 @@ import ImageIcon from '@material-ui/icons/Image';
 import WorkIcon from '@material-ui/icons/Work';
 import BeachAccessIcon from '@material-ui/icons/BeachAccess';
 import Divider from '@material-ui/core/Divider';
-import {
-  FormControl,
-  InputLabel,
-  MenuItem,
-  makeStyles,
-  ListItem,
-  List,
-  ListItemText,
-  Divider
-} from "@material-ui/core";
+import { makeStyles, MenuItem } from "@material-ui/core";
 
 const initialState = {
   courseId: "",
@@ -131,7 +121,6 @@ const Invitation = ({ message, Tokens, GoogleId, dispatch }) => {
     console.log(courseId);
   };
 
-  const classes = useStyles();
 
   return (
     <List className={classes.root}>
