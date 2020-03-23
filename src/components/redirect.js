@@ -3,23 +3,8 @@ import axios from "axios";
 import { connect } from "react-redux";
 import googleMapState from "../map-state/google-map-state";
 import { storeToken, storeGoogleId } from "../reducers/actions";
-import { useParams, Link, Route, Redirect } from "react-router-dom";
-import FlatList from "flatlist-react";
-import Card from "@material-ui/core/Card";
-import CardActions from "@material-ui/core/CardActions";
-import CardContent from "@material-ui/core/CardContent";
-import Typography from "@material-ui/core/Typography";
-import AssignmentIcon from "@material-ui/icons/Assignment";
-import LiveHelpIcon from "@material-ui/icons/LiveHelp";
-import BookIcon from "@material-ui/icons/Book";
-import ListIcon from "@material-ui/icons/List";
-import SpeedDialIcon from "@material-ui/lab/SpeedDialIcon";
 import { makeStyles, Button, Grid } from "@material-ui/core";
-import SpeedDial from "@material-ui/lab/SpeedDial";
-import SpeedDialAction from "@material-ui/lab/SpeedDialAction";
-import Querystring from "query-string"
-import { json } from "body-parser";
-import { render } from "react-dom";
+
 
 const useStyles = makeStyles(theme => ({
     formControl: {
