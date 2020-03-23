@@ -101,6 +101,10 @@ const Course = ({ match, location }) => {
 
             });
     }, []);
+
+    return (
+        <div></div>
+    )
 };
 
 const AppWithConnect = connect(googleMapState)(Course);
