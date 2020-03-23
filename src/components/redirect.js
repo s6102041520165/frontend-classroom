@@ -67,7 +67,7 @@ const useStyles = makeStyles(theme => ({
     },
 }));
 
-const Course = ({ match, location }) => {
+const Course = ({ message, Tokens, GoogleId, dispatch, match, location }) => {
     //let { scope } = useParams();
     const params = new URLSearchParams(location.search);
     //const code = params.get('code');
