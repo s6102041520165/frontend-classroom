@@ -82,7 +82,6 @@ const Course = ({ match, location }) => {
 
     async function authenticate() {
 
-        
 
         await axios({
             'method': 'POST',
@@ -98,6 +97,7 @@ const Course = ({ match, location }) => {
         }).then(async (response) => {
 
             await console.log(response)
+            dispatch(storeToken(response.data.access_token));
         })
 
     }
