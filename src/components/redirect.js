@@ -17,6 +17,7 @@ import { makeStyles, Button, Grid } from "@material-ui/core";
 import SpeedDial from "@material-ui/lab/SpeedDial";
 import SpeedDialAction from "@material-ui/lab/SpeedDialAction";
 import Querystring from "query-string"
+import { json } from "body-parser";
 
 const useStyles = makeStyles(theme => ({
     formControl: {
@@ -75,24 +76,25 @@ const Course = ({ match, location }) => {
         // You need to restrict it at some point
         // This is just dummy code and should be replaced by actual
         if (!code) {
-            authenticate();
+            await authenticate()
         }
     }, []);
 
-    const authenticate = async () => {
-        setCode(params.get('code'));
+    async function authenticate() {
+
+        
 
         await axios({
             'method': 'POST',
             'url': `https://www.googleapis.com/oauth2/v4/token`,
-            'data': {
-                "code": `${code}`,
+            'data': JSON.stringify({
+                "code": `${params.get('code')}`,
                 "redirect_uri": "https://lineclassroom.herokuapp.com/redirect",
                 "client_secret": "v-_5N09bLsRf3nsNYje1b4PR",
                 "client_id": "308789454611-isrob12j0f3l23meqnl8959lvdfgdg67.apps.googleusercontent.com",
                 "scope": "https://www.googleapis.com/auth/classroom.courses https://www.googleapis.com/auth/classroom.courses.readonly https://www.googleapis.com/auth/classroom.rosters https://www.googleapis.com/auth/classroom.coursework.students.readonly https://www.googleapis.com/auth/classroom.coursework.me.readonly https://www.googleapis.com/auth/classroom.coursework.students https://www.googleapis.com/auth/classroom.coursework.me https://www.googleapis.com/auth/classroom.topics https://www.googleapis.com/auth/drive https://www.googleapis.com/auth/drive.file https://www.googleapis.com/auth/drive.appdata",
                 "grant_type": "authorization_code"
-            }
+            })
         }).then(async (response) => {
 
             await console.log(response)
