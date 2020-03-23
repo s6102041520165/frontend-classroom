@@ -6,7 +6,7 @@ import { Redirect, Route, Link, Router } from "react-router-dom";
 import { Button } from "@material-ui/core";
 import googleMapState from "../map-state/google-map-state";
 import { render } from "@testing-library/react";
-import PersonIcon from "@material-ui/icons/PersonPinRounded";
+import PersonIcon from "@material-ui/icons/PersonRounded";
 //import { Route, Redirect } from "react-router-dom";
 import qs from "query-string";
 

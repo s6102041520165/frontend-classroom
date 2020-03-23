@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
 import axios from "axios";
@@ -12,12 +12,16 @@ const initialState = {
   googleId: ""
 };
 
-const CreateCourse = ({ message, Tokens, GoogleId, dispatch }) => {
+const CreateCourse = ({ message, Permissions , Tokens, GoogleId, dispatch }) => {
   const [{ name, section, room }, setState] = useState(initialState);
 
   const clearState = () => {
     setState({ ...initialState });
   };
+
+  useEffect(() => {
+    console.log(Permissions)
+  },[]);
 
   const onChange = e => {
     const { name, value } = e.target;
