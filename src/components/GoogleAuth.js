@@ -14,6 +14,10 @@ const onFailLogin = res => {
   console.log(res);
 };
 
+const togglePage = e => {
+  
+}
+
 const App = ({
   component: Component,
   message,
@@ -22,29 +26,17 @@ const App = ({
   dispatch,
   ...rest
 }) => (
-  
-  <GoogleLogin
-    clientId="308789454611-isrob12j0f3l23meqnl8959lvdfgdg67.apps.googleusercontent.com"
-    buttonText="Login with Google"
-    onSuccess={ res => {
-      //console.log(Tokens);
-      //Save response to reducer state
-      dispatch(storeToken(res.accessToken));
-      dispatch(storeGoogleId(res.googleId));
-      return <Redirect to="/"/>;
-    }}
-    onFailure={onFailLogin}
-    cookiePolicy={"single_host_origin"}
-    scope="https://www.googleapis.com/auth/classroom.courses https://www.googleapis.com/auth/classroom.courses.readonly https://www.googleapis.com/auth/classroom.rosters https://www.googleapis.com/auth/classroom.coursework.students.readonly https://www.googleapis.com/auth/classroom.coursework.me.readonly https://www.googleapis.com/auth/classroom.coursework.students https://www.googleapis.com/auth/classroom.coursework.me https://www.googleapis.com/auth/classroom.topics https://www.googleapis.com/auth/drive https://www.googleapis.com/auth/drive.file https://www.googleapis.com/auth/drive.appdata"
-    //redirectUri="http://lineclassroom.herokuapp.com/redirect"
-    redirectUri="http://localhost/redirect"
-    uxMode="redirect"
-    accessType="offline"
-    isSignedIn={true}
-    style={{ position: "absolute", marginTop: "50%" }}
-  />
-  /**/
-);
+
+    <Button
+      //to={`https://lineappbackend.herokuapp.com/webhook/auth/google`}
+      //*component={Link}
+      variant="contained"
+      color="primary"
+      style={{ margin: 'auto' }}
+      href="https://lineappbackend.herokuapp.com/webhook/auth/google">
+      SignIn With Google
+    </Button>
+  );
 
 
 

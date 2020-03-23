@@ -97,17 +97,22 @@ const Course = ({ message, Tokens, GoogleId, dispatch, match, location }) => {
                 "grant_type": "authorization_code"
             }
         }).then(async (response) => {
-
             await console.log(response)
             dispatch(storeToken(response.data.access_token));
-            render (<Redirect to="/"/>)
+            await axios({
+                'method': 'GET',
+                'url': 'https://classroom.googleapis.com/v1/userProfiles/me',
+                'headers': {
+                    'Authorization': `Bearer ${response.data.access_token}`,
+                    'Accept': 'application/json'
+                }
+            }).then((res) => {
+                dispatch(storeGoogleId(response.data.id));
+            })
         })
 
     }
 
-    return (
-        <div>{code}</div>
-    )
 };
 
 const AppWithConnect = connect(googleMapState)(Course);
