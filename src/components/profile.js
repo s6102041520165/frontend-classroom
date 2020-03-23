@@ -58,7 +58,7 @@ const renderPerson = (course, idx) => {
 };
 
 const Invitation = ({ message, Tokens, GoogleId, dispatch }) => {
-  const [courses, setCourses] = useState("");
+  const [debugProfile, setDebug] = useState("");
   const [{ name, userLineId, statusMessage }, setStateLine] = useState(
     initialStateLine
   );
@@ -90,6 +90,7 @@ const Invitation = ({ message, Tokens, GoogleId, dispatch }) => {
 
   const getProfile = () => {
     liff.init(async () => {
+      await setDebug(liff.getProfile());
       let getProfile = await liff.getProfile();
       setStateLine({
         name: getProfile.displayName,
@@ -108,7 +109,7 @@ const Invitation = ({ message, Tokens, GoogleId, dispatch }) => {
       {
         (name && name != '')
           ?
-          <p>Name: {name}</p>
+          <p>Name: {JSON.stringify(debugProfile)}</p>
           :
           null
       }
