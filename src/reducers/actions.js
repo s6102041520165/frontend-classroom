@@ -8,3 +8,8 @@ export const storeGoogleId = (googleId = null) => ({
   googleId
 });
 
+export const storePermissions = (permissions = null) => ({
+  type: "STORE_PERMISSIONS",
+  permissions
+});
+

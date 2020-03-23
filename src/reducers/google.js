@@ -22,3 +22,15 @@ export const googleId = (state = null, action) => {
       return state;
   }
 }
+
+export const permissions = (state = null, action) => {
+  switch (action.type) {
+    case "STORE_PERMISSIONS":
+      return action.permissions;
+    case "CLEAR_PERMISSIONS":
+      return null;
+  
+    default:
+      return state;
+  }
+}

@@ -1,7 +1,8 @@
 import { combineReducers } from "redux";
-import { token, googleId } from "./google";
+import { token, googleId, permissions } from "./google";
 
 export default combineReducers({
   token,
-  googleId
+  googleId,
+  permissions
 });

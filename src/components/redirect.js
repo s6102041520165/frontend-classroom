@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { connect } from "react-redux";
 import googleMapState from "../map-state/google-map-state";
-import { storeToken, storeGoogleId } from "../reducers/actions";
+import { storeToken, storeGoogleId, storePermissions } from "../reducers/actions";
 import { makeStyles, Button, Grid } from "@material-ui/core";
 
 
@@ -54,7 +54,7 @@ const useStyles = makeStyles(theme => ({
     },
 }));
 
-const Course = ({ component: Component, message, Tokens, GoogleId, dispatch, match, location }) => {
+const Course = ({ component: Component, message, Tokens, Permissions , GoogleId, dispatch, match, location }) => {
     //let { scope } = useParams();
     const params = new URLSearchParams(location.search);
     //const code = params.get('code');
@@ -95,6 +95,10 @@ const Course = ({ component: Component, message, Tokens, GoogleId, dispatch, mat
             }).then(async (res) => {
                 console.log(res)
                 await dispatch(storeGoogleId(res.data.id));
+                //ไปเก็บในตัวแปร Redux State
+                if(res.data.permissions != null){
+                    dispatch(storePermissions(res.data.permissions))
+                }
             })
 
         })
