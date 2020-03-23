@@ -4,6 +4,7 @@ import TextField from "@material-ui/core/TextField";
 import axios from "axios";
 import { connect } from "react-redux";
 import googleMapState from "../map-state/google-map-state";
+import { Redirect } from "react-router-dom";
 
 const initialState = {
   name: "",
@@ -14,13 +15,24 @@ const initialState = {
 
 const CreateCourse = ({ message, Permissions , Tokens, GoogleId, dispatch }) => {
   const [{ name, section, room }, setState] = useState(initialState);
+  const [checkPermission, setPermission] = useState(false);
 
   const clearState = () => {
     setState({ ...initialState });
   };
 
   useEffect(() => {
-    console.log(Permissions)
+    if(Permissions){
+      for (let index = 0; index < Permissions.length; index++) {
+        if((Permissions[0].permission) == "CREATE_COURSE"){
+          setPermission(true);
+          continue;
+        }    
+      }
+    } 
+    if(checkPermission == true){
+      return <Redirect go="-1"/>
+    }
   },[]);
 
   const onChange = e => {
