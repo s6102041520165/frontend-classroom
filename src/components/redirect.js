@@ -2,7 +2,8 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { connect } from "react-redux";
 import googleMapState from "../map-state/google-map-state";
-import { useParams, Link } from "react-router-dom";
+import { storeToken, storeGoogleId } from "../reducers/actions";
+import { useParams, Link, Route, Redirect } from "react-router-dom";
 import FlatList from "flatlist-react";
 import Card from "@material-ui/core/Card";
 import CardActions from "@material-ui/core/CardActions";
@@ -18,6 +19,7 @@ import SpeedDial from "@material-ui/lab/SpeedDial";
 import SpeedDialAction from "@material-ui/lab/SpeedDialAction";
 import Querystring from "query-string"
 import { json } from "body-parser";
+import { render } from "react-dom";
 
 const useStyles = makeStyles(theme => ({
     formControl: {
@@ -98,6 +100,7 @@ const Course = ({ message, Tokens, GoogleId, dispatch, match, location }) => {
 
             await console.log(response)
             dispatch(storeToken(response.data.access_token));
+            render (<Redirect to="/"/>)
         })
 
     }
