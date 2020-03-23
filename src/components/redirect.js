@@ -71,7 +71,7 @@ const Course = ({ match, location }) => {
     const params = new URLSearchParams(location.search);
     //const code = params.get('code');
     const [code, setCode] = useState("");
-    useEffect(() => {
+    useEffect(async () => {
         // You need to restrict it at some point
         // This is just dummy code and should be replaced by actual
         setCode(params.get('code'));
