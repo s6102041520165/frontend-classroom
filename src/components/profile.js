@@ -130,7 +130,7 @@ const Invitation = ({ message, Tokens, GoogleId, dispatch }) => {
 
   return (
     <div id="create-course">
-      <h1>Invitation</h1>
+      <h1>Invitations</h1>
 
       <form autoComplete="off" onSubmit={handleSubmit}>
         <p>
