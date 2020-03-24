@@ -29,30 +29,70 @@ app.get('/', (req, res) => {
         //console.log(url + "&lineUserId=" +req.params.lineUserId);
         res.redirect(url);
     } else {
-        
+
         //echoBot.reply(reply_token, "Authenticated successful.", userId);
         res.sendStatus(200);
     }
 })
 
+app.post('/setCredential', function (req, res) {
+    const accessToken = req.body;
+    console.log(accessToken)
+
+    if (oAuth2Client.setCredentials(accessToken)) {
+        console.log('Set Success');
+    } else console.log('Error')
+    //console.log(oAuth2Client.getAccessToken())
+    res.json({ status: 'Successfully', access_token: accessToken })
+
+});
+
 app.get('/redirect', function (req, res) {
     const code = req.query.code
 
     if (code) {
-        // Get an access token based on our OAuth code
 
-        oAuth2Client.getToken(code, function (err, tokens) {
+        oAuth2Client.getToken(code, async function (err, tokens) {
             if (err) {
                 console.log('Error authenticating')
                 console.log(err);
             } else {
                 //console.log(tokens);
-                oAuth2Client.setCredentials(tokens);
-                authed = true;
-                res.redirect('/auth/')
+                await oAuth2Client.setCredentials(tokens);
+
             }
+
         });
+        res.redirect('/logged')
     }
+
+});
+
+app.post('/getToken', async function (req, res) {
+
+    /*const drive = google.drive({
+        version: 'v3',
+        auth: oAuth2Client
+    });
+
+    const response = await drive.files.create({
+        requestBody: {
+            name: 'Test',
+            mimeType: 'text/plain'
+        },
+        media: {
+            mimeType: 'text/plain',
+            body: 'Hello World'
+        }
+    });*/
+    try {
+        const tokenInfo = await oAuth2Client.credentials
+        console.log(tokenInfo)
+        res.json(tokenInfo)
+    } catch (err) {
+        res.status(401).json({ message: 'Cannot Login With Google' })
+    }
+    
 });
 
 module.exports = app;

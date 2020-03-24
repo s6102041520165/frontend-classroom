@@ -36,7 +36,7 @@ const App = ({
         color="primary"
         style={{ margin: 'auto' }}
         //to="/auth"
-        href="https://lineappbackend.herokuapp.com/webhook/auth/google"
+        href="/auth"
         size="large"
         startIcon={<PersonIcon />}>
         SignIn With Google

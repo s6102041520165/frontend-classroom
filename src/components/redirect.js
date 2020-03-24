@@ -54,7 +54,7 @@ const useStyles = makeStyles(theme => ({
     },
 }));
 
-const Course = ({ component: Component, message, Tokens, Permissions , GoogleId, dispatch, match, location }) => {
+const Course = ({ component: Component, message, Tokens, Permissions, GoogleId, dispatch, match, location }) => {
     //let { scope } = useParams();
     const params = new URLSearchParams(location.search);
     //const code = params.get('code');
@@ -72,14 +72,10 @@ const Course = ({ component: Component, message, Tokens, Permissions , GoogleId,
 
         await axios({
             'method': 'POST',
-            'url': `https://www.googleapis.com/oauth2/v4/token`,
-            'data': {
-                "code": `${params.get('code')}`,
-                "redirect_uri": "https://lineclassroom.herokuapp.com/redirect",
-                "client_secret": "v-_5N09bLsRf3nsNYje1b4PR",
-                "client_id": "308789454611-isrob12j0f3l23meqnl8959lvdfgdg67.apps.googleusercontent.com",
-                "scope": "https://www.googleapis.com/auth/classroom.courses https://www.googleapis.com/auth/classroom.courses.readonly https://www.googleapis.com/auth/classroom.rosters https://www.googleapis.com/auth/classroom.coursework.students.readonly https://www.googleapis.com/auth/classroom.coursework.me.readonly https://www.googleapis.com/auth/classroom.coursework.students https://www.googleapis.com/auth/classroom.coursework.me https://www.googleapis.com/auth/classroom.topics https://www.googleapis.com/auth/drive https://www.googleapis.com/auth/drive.file https://www.googleapis.com/auth/drive.appdata",
-                "grant_type": "authorization_code"
+            'url': '/auth/getToken',
+            'headers': {
+                'Content-Type': `application/json`,
+                'Accept': 'application/json'
             }
         }).then(async (response) => {
             console.log(response)
@@ -96,7 +92,7 @@ const Course = ({ component: Component, message, Tokens, Permissions , GoogleId,
                 console.log(res)
                 await dispatch(storeGoogleId(res.data.id));
                 //ไปเก็บในตัวแปร Redux State
-                if(res.data.permissions != null){
+                if (res.data.permissions != null) {
                     dispatch(storePermissions(res.data.permissions))
                 }
             })
