@@ -15,7 +15,8 @@ const initialState = {
 
 const CreateCourse = ({ component: Component, message, Permissions, Tokens, GoogleId, dispatch, ...rest }) => {
   const [{ name, section, room }, setState] = useState(initialState);
-  const [checkPermission, setPermission] = useState(false);
+  const [permission, setPermission] = useState("");
+  let checkPermission = null;
 
   const clearState = () => {
     setState({ ...initialState });
@@ -24,11 +25,8 @@ const CreateCourse = ({ component: Component, message, Permissions, Tokens, Goog
   useEffect(() => {
     if (Permissions) {
       //Search Object in Array
-      setPermission(Permissions.find(({ permission }) => permission === 'CREATE_COURSE'));
-
-      (checkPermission != null) ? console.log(checkPermission) : console.log('Load Failed...');
-      console.log(checkPermission)
-
+      setPermission(Permissions.find(({ permission }) => permission === 'CREATE_COURSE'))
+      //console.log(Permissions.find(({ permission }) => permission === 'CREATE_COURSE'))
     }
 
   }, []);
@@ -126,19 +124,15 @@ const CreateCourse = ({ component: Component, message, Permissions, Tokens, Goog
 
 
 
-  return (<Route
-    {...rest}
-    render={props => {
+  return (permission) ?
+    <HasCreateCourse />
+    :
+    <div>
+      <h1>Permission Access Denined</h1>
+    </div>
+    ;
 
-      if (checkPermission) {
-        return <HasCreateCourse/>;
-      } else {
-        return <Redirect to="/login" />;
-      }
-    }}
-  />)
 
-  
 
 };
 

@@ -63,7 +63,7 @@ const actions = [
 
 const renderCourse = (course, idx) => {
   //console.log(course);
-  return <MenuItem key={`${course.id}-${idx}`} to={`/course/${encodeURI(course.id)}`} component={Link}>{course.name}</MenuItem>;
+  return <MenuItem key={`${course.id}-${idx}`} to={`/course/${encodeURI(course.id)}`} component={Link} style={{wordWrap:'break-word;'}}>{course.name}</MenuItem>;
 };
 
 const Course = ({ message, Tokens, GoogleId, dispatch }) => {
