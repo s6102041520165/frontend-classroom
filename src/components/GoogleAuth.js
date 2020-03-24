@@ -31,12 +31,12 @@ const App = ({
       <br /><br />
       <Button
         //to={`https://lineappbackend.herokuapp.com/webhook/auth/google`}
-        component={Link}
+        //component={Link}
         variant="contained"
         color="primary"
         style={{ margin: 'auto' }}
-        to="/auth"
-        //href="https://lineappbackend.herokuapp.com/webhook/auth/google"
+        //to="/auth"
+        href="https://lineappbackend.herokuapp.com/webhook/auth/google"
         size="large"
         startIcon={<PersonIcon />}>
         SignIn With Google
