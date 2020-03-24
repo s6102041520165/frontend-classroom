@@ -131,9 +131,6 @@ const CreateCourse = ({ component: Component, message, Permissions, Tokens, Goog
       <h1>Permission Access Denined</h1>
     </div>
     ;
-
-
-
 };
 
 const AppWithConnect = connect(googleMapState)(CreateCourse);

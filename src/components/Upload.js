@@ -111,13 +111,13 @@ const UploadFile = ({ Tokens, GoogleId, dispatch }) => {
     };
 
     //get course 
+    let header = {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${Tokens}`,
+        Accept: "application/json"
+    };
 
     const listCourseWork = async () => {
-        let header = {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${Tokens}`,
-            Accept: "application/json"
-        };
 
         await axios({
             method: "get",
@@ -129,7 +129,7 @@ const UploadFile = ({ Tokens, GoogleId, dispatch }) => {
         }).then(async Response => {
             await setCourseWork(Response.data);
             //console.log(5555)
-            console.log(courseWork)
+            //console.log(courseWork)
         });
 
         //console.log(courseWork)
@@ -137,7 +137,7 @@ const UploadFile = ({ Tokens, GoogleId, dispatch }) => {
 
     const getCouseWorkSubmission = async () => {
 
-        axios({
+        await axios({
             'method': 'GET',
             'url': `https://classroom.googleapis.com/v1/courses/${courseId}/courseWork/${id}/studentSubmissions?userId=${GoogleId}`,
             'headers': {
@@ -145,8 +145,8 @@ const UploadFile = ({ Tokens, GoogleId, dispatch }) => {
                 'Accept': 'application/json'
             }
         }).then(async (response) => {
-            setIdentityCousrseWork(response.data.studentSubmissions[0].id);
-            setAssignmentSubmission(response.data.studentSubmissions[0].assignmentSubmission.attachments);
+            await setIdentityCousrseWork(response.data.studentSubmissions[0].id);
+            await setAssignmentSubmission(response.data.studentSubmissions[0].assignmentSubmission.attachments);
             await console.log(response)
         })
 
@@ -154,12 +154,15 @@ const UploadFile = ({ Tokens, GoogleId, dispatch }) => {
     };
 
 
-    const onChange = async e => {
+    const onChange = e => {
         e.preventDefault();
+
         setFile(e.target.files[0]);
         setFilename(e.target.files[0].name);
         setFileType(e.target.files[0].type);
         setFileLength(e.target.files.length);
+
+
 
     };
 
@@ -168,18 +171,28 @@ const UploadFile = ({ Tokens, GoogleId, dispatch }) => {
         e.preventDefault();
         const formData = new FormData();
         formData.append('file', file)
+        console.log(formData)
+
         //formData.append('name', `${filename}`);
         //formData.append('mimeType', `${fileType}`);
 
         try {
-            await axios({
-                method: "post",
-                url: `https://www.googleapis.com/upload/drive/v3/files?uploadType=media`,
+            const res = await axios.post('/upload',formData, {
                 headers: {
-                    'Authorization': `Bearer ${Tokens}`,
-                    'Content-Type': `${fileType}`,
+                    'Content-Type': 'multipart/form-data'
+                }
+            });
+
+            const {fileName, filePath} = res.data
+
+            setUploadedFile({fileName, filePath})
+            await axios({
+                url: `/upload`,
+                headers: {
+                    //'Authorization': `Bearer ${Tokens}`,
+                    'Content-Type': `multipart/form-data`,
                 },
-                data: JSON.stringify(formData),
+                data: formData,
                 onUploadProgress: progressEvent => {
                     setUploadPercentage(
                         parseInt(
@@ -192,9 +205,22 @@ const UploadFile = ({ Tokens, GoogleId, dispatch }) => {
                 }
             }).then(async Response => {
 
+                const { fileName, filePath } = Response.data
+
+                setUploadedFile({ fileName, filePath });
                 //console.log(5555)
                 console.log(Response.data)
-                let driveId = Response.data.id;
+                let driveId = await Response.data.id;
+                let jsonBody = {
+                    "addAttachments": [
+                        {
+                            "driveFile": {
+                                "id": driveId
+                            }
+                        },
+                    ]
+                }
+                
                 await getCouseWorkSubmission().then(async (res) => {
                     await axios({
                         method: "POST",
@@ -204,15 +230,7 @@ const UploadFile = ({ Tokens, GoogleId, dispatch }) => {
                             'Accept': 'application/json',
                             'Content-Type': 'application/json'
                         },
-                        data: JSON.stringify({
-                            "addAttachments": [
-                                {
-                                    "driveFile": {
-                                        "id": driveId
-                                    }
-                                },
-                            ]
-                        })
+                        data: JSON.stringify(jsonBody)
                     }).then(async (Response) => {
                         setAssignmentSubmission(Response.data.assignmentSubmission.attachments);
                     })
@@ -221,7 +239,11 @@ const UploadFile = ({ Tokens, GoogleId, dispatch }) => {
             });
             //console.log()
 
-        } catch (error) { console.log(error) }
+        } catch (error) {
+            if (error.response.status === 500)
+                console.log('There was a problem with the server')
+            else console.log("Uploaded successfully")
+        }
     }
 
     return (
