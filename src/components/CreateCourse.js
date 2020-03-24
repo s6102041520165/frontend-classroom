@@ -4,7 +4,7 @@ import TextField from "@material-ui/core/TextField";
 import axios from "axios";
 import { connect } from "react-redux";
 import googleMapState from "../map-state/google-map-state";
-import { Redirect } from "react-router-dom";
+import { Redirect, Route } from "react-router-dom";
 
 const initialState = {
   name: "",
@@ -13,7 +13,7 @@ const initialState = {
   googleId: ""
 };
 
-const CreateCourse = ({ message, Permissions , Tokens, GoogleId, dispatch }) => {
+const CreateCourse = ({ component: Component, message, Permissions, Tokens, GoogleId, dispatch, ...rest }) => {
   const [{ name, section, room }, setState] = useState(initialState);
   const [checkPermission, setPermission] = useState(false);
 
@@ -22,18 +22,16 @@ const CreateCourse = ({ message, Permissions , Tokens, GoogleId, dispatch }) => 
   };
 
   useEffect(() => {
-    if(Permissions){
-      for (let index = 0; index < Permissions.length; index++) {
-        if((Permissions[0].permission) == "CREATE_COURSE"){
-          setPermission(true);
-          continue;
-        }    
-      }
-    } 
-    if(checkPermission == false){
-      return <Redirect go="-1"/>
+    if (Permissions) {
+      //Search Object in Array
+      setPermission(Permissions.find(({ permission }) => permission === 'CREATE_COURSE'));
+
+      (checkPermission != null) ? console.log(checkPermission) : console.log('Load Failed...');
+      console.log(checkPermission)
+
     }
-  },[]);
+
+  }, []);
 
   const onChange = e => {
     const { name, value } = e.target;
@@ -83,45 +81,65 @@ const CreateCourse = ({ message, Permissions , Tokens, GoogleId, dispatch }) => 
       });
   };
 
-  return (
-    <div id="create-course">
-      <h1>Create Course</h1>
-      <form autoComplete="off" onSubmit={handleSubmit}>
-        <p>
-          <TextField
-            name="name"
-            value={name}
-            onChange={onChange}
-            style={{ width: "80%" }}
-            label="Course name"
-          />
-        </p>
-        <p>
-          <TextField
-            name="section"
-            value={section}
-            onChange={onChange}
-            style={{ width: "80%" }}
-            label="Section"
-          />
-        </p>
-        <p>
-          <TextField
-            name="room"
-            value={room}
-            onChange={onChange}
-            style={{ width: "80%" }}
-            label="Room"
-          />
-        </p>
-        <p>
-          <Button type="submit" variant="contained" color="primary">
-            Create course.
-          </Button>
-        </p>
-      </form>
-    </div>
-  );
+
+  const HasCreateCourse = () => {
+    return (
+      <div id="create-course">
+        <h1>Create Course</h1>
+        <form autoComplete="off" onSubmit={handleSubmit}>
+          <p>
+            <TextField
+              name="name"
+              value={name}
+              onChange={onChange}
+              style={{ width: "80%" }}
+              label="Course name"
+            />
+          </p>
+          <p>
+            <TextField
+              name="section"
+              value={section}
+              onChange={onChange}
+              style={{ width: "80%" }}
+              label="Section"
+            />
+          </p>
+          <p>
+            <TextField
+              name="room"
+              value={room}
+              onChange={onChange}
+              style={{ width: "80%" }}
+              label="Room"
+            />
+          </p>
+          <p>
+            <Button type="submit" variant="contained" color="primary">
+              Create course.
+            </Button>
+          </p>
+        </form>
+      </div>
+    );
+  }
+
+
+
+  return (<Route
+    {...rest}
+    render={props => {
+
+      if (checkPermission) {
+        return <HasCreateCourse/>;
+      } else {
+        return <Redirect to="/login" />;
+      }
+    }}
+  />)
+
+  
+
 };
 
 const AppWithConnect = connect(googleMapState)(CreateCourse);
