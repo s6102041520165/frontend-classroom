@@ -206,10 +206,11 @@ const UploadFile = ({ Tokens, GoogleId, dispatch }) => {
             }).then(async Response => {
 
                 const { fileName, filePath } = Response.data
+                console.log(Response.data)
 
                 setUploadedFile({ fileName, filePath });
                 //console.log(5555)
-                console.log(Response.data)
+                /*console.log(Response.data)
                 let driveId = await Response.data.id;
                 let jsonBody = {
                     "addAttachments": [
@@ -236,6 +237,7 @@ const UploadFile = ({ Tokens, GoogleId, dispatch }) => {
                     })
                 })
                 //console.log(formData)
+                */
             });
             //console.log()
 
