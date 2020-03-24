@@ -177,22 +177,10 @@ const UploadFile = ({ Tokens, GoogleId, dispatch }) => {
         //formData.append('mimeType', `${fileType}`);
 
         try {
-            const res = await axios.post('/upload',formData, {
+            const res = await axios.post('/upload', formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data'
-                }
-            });
-
-            const {fileName, filePath} = res.data
-
-            setUploadedFile({fileName, filePath})
-            await axios({
-                url: `/upload`,
-                headers: {
-                    //'Authorization': `Bearer ${Tokens}`,
-                    'Content-Type': `multipart/form-data`,
                 },
-                data: formData,
                 onUploadProgress: progressEvent => {
                     setUploadPercentage(
                         parseInt(
@@ -203,6 +191,19 @@ const UploadFile = ({ Tokens, GoogleId, dispatch }) => {
                     // Clear percentage
                     setTimeout(() => setUploadPercentage(0), 10000);
                 }
+            });
+
+            const { fileName, filePath } = res.data
+
+            setUploadedFile({ fileName, filePath })
+            await axios({
+                url: `/upload`,
+                headers: {
+                    //'Authorization': `Bearer ${Tokens}`,
+                    'Content-Type': `multipart/form-data`,
+                },
+                data: formData,
+
             }).then(async Response => {
 
                 const { fileName, filePath } = Response.data
@@ -242,9 +243,11 @@ const UploadFile = ({ Tokens, GoogleId, dispatch }) => {
             //console.log()
 
         } catch (error) {
-            if (error.response.status === 500)
-                console.log('There was a problem with the server')
-            else console.log("Uploaded successfully")
+            if (error.response.status === 500) {
+                setMessage('There was a problem with the server');
+            } else {
+                setMessage(error.response.data.msg);
+            }
         }
     }
 
