@@ -154,15 +154,13 @@ const UploadFile = ({ Tokens, GoogleId, dispatch }) => {
     };
 
 
-    const onChange = e => {
+    const onChange = async e => {
         e.preventDefault();
 
         setFile(e.target.files[0]);
         setFilename(e.target.files[0].name);
         setFileType(e.target.files[0].type);
         setFileLength(e.target.files.length);
-
-
 
     };
 
@@ -173,10 +171,39 @@ const UploadFile = ({ Tokens, GoogleId, dispatch }) => {
         formData.append('file', file)
         console.log(formData)
 
+
+
+        try {
+            const res = await axios.post('/upload', formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                },
+                onUploadProgress: progressEvent => {
+                    setUploadPercentage(
+                        parseInt(
+                            Math.round((progressEvent.loaded * 100) / progressEvent.total)
+                        )
+                    );
+
+                    // Clear percentage
+                    setTimeout(() => setUploadPercentage(0), 10000);
+                }
+            });
+            const { fileName, filePath } = res.data
+
+            setUploadedFile({ fileName, filePath })
+        } catch (error) {
+            if (error.response.status === 500) {
+                setMessage('There was a problem with the server');
+            } else {
+                setMessage(error.response.data.msg);
+            }
+        }
+
         //formData.append('name', `${filename}`);
         //formData.append('mimeType', `${fileType}`);
 
-        try {
+        try {/*
             const res = await axios.post('/upload', formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data'
@@ -238,8 +265,8 @@ const UploadFile = ({ Tokens, GoogleId, dispatch }) => {
                     })
                 })
                 //console.log(formData)
-                */
-            });
+                
+            });*/
             //console.log()
 
         } catch (error) {
