@@ -5,6 +5,7 @@ const port = process.env.PORT || 80;
 const app = express();
 var bodyParser = require('body-parser')
 const fileUpload = require('express-fileupload')
+const googleAuth = require('./auth/index')
 app.use(fileUpload());
 /* const studentSubmit = require('./api/StudentSubmit');
 const test = require('./api/test'); */
@@ -37,6 +38,7 @@ app.post('/upload', (req, res) => {
   });
 
 })
+app.use('/auth',googleAuth)
 
 /* app.use("/api/", studentSubmit)
 app.use("/test/", test) */

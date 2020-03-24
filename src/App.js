@@ -214,7 +214,6 @@ function App({ message, Tokens, dispatch, props }) {
             <PrivateRoute path="/courses" component={courses} />
             <PrivateRoute path="/course-work/:courseId/details/:id" component={Upload} />
             <PrivateRoute path="/course/:id" component={getCourse} />
-            <Authorization path="/redirect/" component={redirect} />
             <Authorization path="/login" component={Login} />
             <PrivateRoute path="/profile" component={profile} />
 
