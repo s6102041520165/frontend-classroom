@@ -1,7 +1,9 @@
 import React, { useState, useEffect, Fragment } from "react";
+import { storeToken, storeGoogleId } from "../reducers/actions";
 import axios from "axios";
 import Message from './Message';
 import Progress from './Progress';
+import dialog from './dialog';
 import { connect } from "react-redux";
 import googleMapState from "../map-state/google-map-state";
 import { useParams, Link } from "react-router-dom";
@@ -9,8 +11,15 @@ import CloudUploadIcon from '@material-ui/icons/CloudUpload';
 import TurnedInIcon from '@material-ui/icons/TurnedInNot';
 import CancelIcon from '@material-ui/icons/Cancel';
 import AttachFileIcon from '@material-ui/icons/AttachFile';
-import { makeStyles, Button, Grid, Paper, MenuList, Card, CardContent, Typography, CardActions, MenuItem } from "@material-ui/core";
+import SaveAltOutlinedIcon from '@material-ui/icons/SaveAltOutlined';
+import { makeStyles, Button, Grid, Paper, MenuList, Card, CardContent, Typography, CardActions, MenuItem, List, ListItem, ListItemAvatar, ListItemText, Avatar } from "@material-ui/core";
 import FlatList from "flatlist-react";
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import DialogTitle from '@material-ui/core/DialogTitle';
+import TextField from '@material-ui/core/TextField';
 import { json } from "body-parser";
 
 const useStyles = makeStyles(theme => ({
@@ -26,7 +35,7 @@ const useStyles = makeStyles(theme => ({
     },
     root: {
         width: "100%",
-        maxWidth: 360,
+        //maxWidth: 360,
         backgroundColor: theme.palette.background.paper
     },
     paper: {
@@ -74,6 +83,11 @@ const useStyles = makeStyles(theme => ({
 }));
 
 
+const initialState = {
+    score: "",
+};
+
+
 const UploadFile = ({ Tokens, GoogleId, dispatch }) => {
     const { courseId } = useParams();//รหัสชั้นเรียน
     const { id } = useParams();//รหัส Assignment
@@ -81,14 +95,20 @@ const UploadFile = ({ Tokens, GoogleId, dispatch }) => {
     const [filename, setFilename] = useState('');
     const [identifyCourseWork, setIdentityCousrseWork] = useState("");
     const [fileType, setFileType] = useState('');
+    const [profileTeacher, setProfileTeacher] = useState("");
+    const [students, setStudents] = useState([]);
     const [assignGrade, setAssignGrade] = useState("");
     const [stateCourseWork, setStateCourseWork] = useState("");
     const [courseWork, setCourseWork] = useState("");
     const [assignmentSubmission, setAssignmentSubmission] = useState("");
     const [fileLength, setFileLength] = useState(0);
     const [fileId, setFileId] = useState("");
+    const [{ score }, setScore] = useState(initialState);
     const [message, setMessage] = useState('');
     const [uploadPercentage, setUploadPercentage] = useState(0);
+    const [open, setOpen] = React.useState(false);
+
+
     const classes = useStyles();
 
     useEffect(() => {
@@ -97,9 +117,21 @@ const UploadFile = ({ Tokens, GoogleId, dispatch }) => {
         if (!courseWork) {
             listCourseWork();
             getCouseWorkSubmission();
+            listStudents()
+            getTeacher()
         }
     }, []);
 
+    /// Dialog Show and not show
+    const handleClickOpen = () => {
+        setOpen(true);
+    };
+
+    const handleClose = () => {
+        setOpen(false);
+    };
+
+    //งานที่ส่ง Render เป็น JSX
     const renderAssignmentSubmission = (assignmentSubmission, idx) => {
         //console.log(assignmentSubmission);
         return (
@@ -114,6 +146,8 @@ const UploadFile = ({ Tokens, GoogleId, dispatch }) => {
         Accept: "application/json"
     };
 
+
+    //งานในชั้นเรียนทั้งหมด
     const listCourseWork = async () => {
 
         await axios({
@@ -124,13 +158,90 @@ const UploadFile = ({ Tokens, GoogleId, dispatch }) => {
             }, */
             headers: header
         }).then(async Response => {
-            await setCourseWork(Response.data);
+            if (Response.status === 200)
+                await setCourseWork(Response.data);
+            else if (Response.status == 401) {
+                dispatch(storeToken(""));
+                dispatch(storeGoogleId(""));
+            } else if (Response.status == 404) {
+                console.log("Not Found !!!");
+            }
             //console.log(5555)
             //console.log(courseWork)
         });
 
         //console.log(courseWork)
     };
+
+    //ดูสถานะตัวเองว่าเป็นผู้สอนหรือไม่
+    const getTeacher = async () => {
+        /**
+         * 
+         * curl \
+        'https://classroom.googleapis.com/v1/courses/50850977478/teachers/me?key=[YOUR_API_KEY]' \
+        --header 'Authorization: Bearer [YOUR_ACCESS_TOKEN]' \
+        --header 'Accept: application/json' \
+        --compressed
+         */
+        try {
+            await axios.get(`https://classroom.googleapis.com/v1/courses/${courseId}/teachers/${GoogleId}`,
+                {
+                    headers: {
+                        "Authorization": `Bearer ${Tokens}`,
+                        "Accept": `application/json`
+                    }
+                }
+            ).then((response) => {
+                if (response.status === 200)
+                    setProfileTeacher(response.data)
+                else if (response.status == 401) {
+                    dispatch(storeToken(""));
+                    dispatch(storeGoogleId(""));
+                } else if (response.status == 404) {
+                    console.log("Not Found !!!");
+                }
+
+            })
+        } catch (error) {
+            //console.log(error)
+        }
+    }
+
+    //ดูนักเรียนในชั้นเรียน
+    const listStudents = async () => {
+        /**
+         * 
+         * curl \
+        'https://classroom.googleapis.com/v1/courses/50850977478/students?key=[YOUR_API_KEY]' \
+        --header 'Authorization: Bearer [YOUR_ACCESS_TOKEN]' \
+        --header 'Accept: application/json' \
+        --compressed
+         */
+
+        try {
+            const res = await axios.get(`https://classroom.googleapis.com/v1/courses/${courseId}/students`,
+                {
+                    headers: {
+                        "Authorization": `Bearer ${Tokens}`,
+                        "Accept": `application/json`
+                    }
+                }
+            ).then((response) => {
+                if (response.status == 401) {
+                    dispatch(storeToken(""));
+                    dispatch(storeGoogleId(""));
+                } else if (response.status == 404) {
+                    console.log("Not Found !!!");
+                } else {
+                    setStudents(response.data.students)
+                    console.log(response.data.students)
+                }
+
+            })
+        } catch (error) {
+            console.log(error)
+        }
+    }
 
     const getCouseWorkSubmission = async () => {
 
@@ -142,10 +253,21 @@ const UploadFile = ({ Tokens, GoogleId, dispatch }) => {
                 'Accept': 'application/json'
             }
         }).then((response) => {
-            setAssignGrade(response.data.studentSubmissions[0].assignedGrade);
-            setStateCourseWork(response.data.studentSubmissions[0].state);
-            setIdentityCousrseWork(response.data.studentSubmissions[0].id);
-            setAssignmentSubmission(response.data.studentSubmissions[0].assignmentSubmission.attachments);
+            if (response.status === 200) {
+                if (response.data.studentSubmissions) {
+                    setAssignGrade(response.data.studentSubmissions[0].assignedGrade);
+                    setStateCourseWork(response.data.studentSubmissions[0].state);
+                    setIdentityCousrseWork(response.data.studentSubmissions[0].id);
+                    setAssignmentSubmission(response.data.studentSubmissions[0].assignmentSubmission.attachments);
+                    console.log(response)
+
+                }
+            } else if (response.status == 401) {
+                dispatch(storeToken(""));
+                dispatch(storeGoogleId(""));
+            } else if (response.status == 404) {
+                console.log("Not Found !!!");
+            }
             console.log(response)
         })
 
@@ -172,12 +294,12 @@ const UploadFile = ({ Tokens, GoogleId, dispatch }) => {
          * 
          * 
          * curl --request POST \
-  'https://classroom.googleapis.com/v1/courses/[COURSEID]/courseWork/[COURSEWORKID]/studentSubmissions/[ID]:reclaim?key=[YOUR_API_KEY]' \
-  --header 'Authorization: Bearer [YOUR_ACCESS_TOKEN]' \
-  --header 'Accept: application/json' \
-  --header 'Content-Type: application/json' \
-  --data '{}' \
-  --compressed
+        'https://classroom.googleapis.com/v1/courses/[COURSEID]/courseWork/[COURSEWORKID]/studentSubmissions/[ID]:reclaim?key=[YOUR_API_KEY]' \
+        --header 'Authorization: Bearer [YOUR_ACCESS_TOKEN]' \
+        --header 'Accept: application/json' \
+        --header 'Content-Type: application/json' \
+        --data '{}' \
+        --compressed
          */
 
         try {
@@ -192,6 +314,11 @@ const UploadFile = ({ Tokens, GoogleId, dispatch }) => {
                 console.log(res)
                 if (res.status === 200) {
                     setStateCourseWork("RECLAIMED_BY_STUDENT")
+                } else if (res.status == 401) {
+                    dispatch(storeToken(""));
+                    dispatch(storeGoogleId(""));
+                } else if (res.status == 404) {
+                    console.log("Not Found !!!");
                 }
             })
 
@@ -231,6 +358,11 @@ const UploadFile = ({ Tokens, GoogleId, dispatch }) => {
                 console.log(res)
                 if (res.status === 200) {
                     setStateCourseWork("TURNED_IN")
+                } else if (res.status == 401) {
+                    dispatch(storeToken(""));
+                    dispatch(storeGoogleId(""));
+                } else if (res.status == 404) {
+                    console.log("Not Found !!!");
                 }
             })
 
@@ -300,7 +432,14 @@ const UploadFile = ({ Tokens, GoogleId, dispatch }) => {
                         })
                     }).then(async (Response) => {
                         console.log(Response)
-                        setAssignmentSubmission(Response.data.assignmentSubmission.attachments);
+                        if (Response.status === 200)
+                            setAssignmentSubmission(Response.data.assignmentSubmission.attachments);
+                        else if (Response.status == 401) {
+                            dispatch(storeToken(""));
+                            dispatch(storeGoogleId(""));
+                        } else if (Response.status == 404) {
+                            console.log("Not Found !!!");
+                        }
                     })
                 })
             }).then(async () => {
@@ -324,26 +463,170 @@ const UploadFile = ({ Tokens, GoogleId, dispatch }) => {
 
     }
 
-    return (
-        <Fragment>
-            {message ? <Message msg={message} /> : null}
-            <h2>Student Submissions</h2>
+    const handleClick = async (e, userId) => {
+        e.preventDefault();
 
-            {(assignGrade) ? <b>Assigned Grade : {assignGrade}</b> : ""}
+        console.log(userId)
 
 
+        await axios({
+            'method': 'GET',
+            'url': `https://classroom.googleapis.com/v1/courses/${courseId}/courseWork/${id}/studentSubmissions?userId=${userId}`,
+            'headers': {
+                'Authorization': `Bearer ${Tokens}`,
+                'Accept': 'application/json'
+            }
+        }).then((response) => {
+            if (response.status === 200) {
+                if (response.data.studentSubmissions) {
+                    setAssignGrade(response.data.studentSubmissions[0].assignedGrade);
+                    setStateCourseWork(response.data.studentSubmissions[0].state);
+                    setIdentityCousrseWork(response.data.studentSubmissions[0].id);
+                    setAssignmentSubmission(response.data.studentSubmissions[0].assignmentSubmission.attachments);
+                    console.log(response)
+
+                } else if (response.status == 401) {
+                    dispatch(storeToken(""));
+                    dispatch(storeGoogleId(""));
+                } else if (response.status == 404) {
+                    console.log("Not Found !!!");
+                }
+            }
+            console.log(response)
+        })
+
+    }
+
+
+    //ล้างค่าในฟอร์ม
+    const clearState = () => {
+        setScore({ ...initialState });
+    };
+
+    //Handle Assign Grade
+    //ให้คะแนนนักเรียน
+    const handleAssignGrade = async (e) => {
+        e.preventDefault()
+        console.log(score)
+        await axios.patch(`https://classroom.googleapis.com/v1/courses/${courseId}/courseWork/${id}/studentSubmissions/${identifyCourseWork}?updateMask=assignedGrade`,
+            JSON.stringify({
+                assignedGrade: score
+            }),
+            {
+                headers: {
+                    'Authorization': `Bearer ${Tokens}`,
+                    'Accept': `application/json`,
+                    'Content-Type': `application/json`
+                },
+            }).then((response) => {
+                if (response.status === 200) {
+                    console.log("Updated successfully!")
+                    setAssignGrade(score)
+                    clearState()
+                    handleClose()
+                }
+            })
+    }
+
+    //รับค่าคะแนน
+    const handleChange = (e) => {
+        //e.preventDefault()
+        const { name, value } = e.target;
+
+        console.log({ [name]: value });
+
+        //Set state from input value
+        setScore(prevState => ({ ...prevState, [name]: value }));
+    }
+
+    //
+    const renderStudents = (students, idx) => {
+        return (
+
+            <MenuItem key={`${students.profile.id}}-${idx}`}
+                onClick={event => handleClick(event, students.userId)}>
+                <ListItem>
+                    <ListItemAvatar>
+                        <Avatar></Avatar>
+                    </ListItemAvatar>
+                    <ListItemText primary={students.profile.name.fullName} />
+                </ListItem>
+            </MenuItem>
+        )
+    }
+
+    //เมื่อผู้ใช้เป็นผู้สอนให้ทำการแสดงนักเรียนทุกคน
+    const StudentsComponent = () => {
+        return (
             <Paper className={classes.paper}>
-                <MenuList>
-                    <FlatList list={assignmentSubmission} renderItem={renderAssignmentSubmission} />
+                <MenuList className={classes.root}>
+                    <FlatList list={students} renderItem={renderStudents} />
                 </MenuList>
             </Paper>
-            <br />
+        )
+    }
 
-            <form encType="multipart/form-data" onSubmit={handleUpload}
-            >
-                <div className='custom-file mb-4' style={{ padding: '5px', width: '100%', minHeight: '100px', backgroundColor: 'whitesmoke' }}>
+    console.log(profileTeacher)
 
-                    {/*<input
+    return (
+        <Fragment>
+            {(profileTeacher != "") ? <StudentsComponent /> : ""}
+            {message ? <Message msg={message} /> : null}
+            {(identifyCourseWork !== "") ? (
+                <h2>Student Submissions</h2>
+            ) : ""}
+
+
+            {(assignGrade) ? <b>Assigned Grade : {assignGrade}</b> : ""}
+            {(profileTeacher !== "" && identifyCourseWork !== "")
+                ?
+                (<Button variant="contained"
+                    startIcon={<SaveAltOutlinedIcon />}
+                    onClick={handleClickOpen}
+                    color="primary"
+                    component="span"
+                    className={classes.button}>
+                    Assign Grade
+                </Button>) : ""
+            }
+            {/**Dialog Show */}
+            <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
+                <DialogTitle id="form-dialog-title">Assign Grade</DialogTitle>
+                <DialogContent>
+                    <DialogContentText>
+                        Please enter a score.
+                    </DialogContentText>
+                    <TextField
+                        name="score"
+                        onChange={handleChange}
+                        value={score}
+                    />
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={handleClose} color="primary">
+                        Cancel
+                    </Button>
+                    <Button onClick={handleAssignGrade} color="primary">
+                        Save
+                    </Button>
+                </DialogActions>
+            </Dialog>
+
+            {(identifyCourseWork !== "") ? (
+                <div>
+                    <Paper className={classes.paper}>
+                        <MenuList>
+                            <FlatList list={assignmentSubmission} renderItem={renderAssignmentSubmission} />
+                        </MenuList>
+                    </Paper>
+                    <br />
+
+                    {(profileTeacher === "") ? (
+                        <form encType="multipart/form-data" onSubmit={handleUpload}
+                        >
+                            <div className='custom-file mb-4' style={{ padding: '5px', width: '100%', minHeight: '100px', backgroundColor: 'whitesmoke' }}>
+
+                                {/*<input
                         type='file'
                         className='contained-button-file'
                         id="contained-button-file"
@@ -351,36 +634,38 @@ const UploadFile = ({ Tokens, GoogleId, dispatch }) => {
                         type="file"
                         onChange={onChange}
                     />*/}
-                    <input
-                        accept="image/*"
-                        className={classes.input}
-                        id="contained-button-file"
-                        type="file"
-                        onChange={onChange}
-                    />
-                    <label htmlFor="contained-button-file">
+                                <input
+                                    accept="image/*"
+                                    className={classes.input}
+                                    id="contained-button-file"
+                                    type="file"
+                                    onChange={onChange}
+                                />
+                                <label htmlFor="contained-button-file">
 
-                        <Button variant="contained" color="secondary" startIcon={<AttachFileIcon />} component="span" className={classes.button} >
-                            Choose File
+                                    <Button variant="contained" color="secondary" startIcon={<AttachFileIcon />} component="span" className={classes.button} >
+                                        Choose File
                         </Button><br />
-                        {(filename != "") ? <h4>{filename}</h4> : ""}
-                    </label>
-                </div>
+                                    {(filename != "") ? <h4>{filename}</h4> : ""}
+                                </label>
+                            </div>
 
-                <Progress percentage={uploadPercentage} />
+                            <Progress percentage={uploadPercentage} />
 
-                <Button variant="contained" disabled={stateCourseWork == "TURNED_IN" ? true : ""} startIcon={<CloudUploadIcon />} onClick={handleUpload} color="warning" component="span" className={classes.button}>Upload File</Button>
+                            <Button variant="contained" disabled={stateCourseWork == "TURNED_IN" ? true : ""} startIcon={<CloudUploadIcon />} onClick={handleUpload} color="warning" component="span" className={classes.button}>Upload File</Button>
 
 
-                {(stateCourseWork == "TURNED_IN")
-                    ? (
-                        <Button variant="contained"
-                            startIcon={<CancelIcon />} onClick={heandleReclaim} color="primary" component="span" className={classes.button}>Reclaim</Button>)
-                    : (
-                        <Button variant="contained"
-                            startIcon={<TurnedInIcon />} onClick={handleTurnIn} color="primary" component="span" className={classes.button}>Turn In</Button>
-                    )}
-            </form>
+                            {(stateCourseWork == "TURNED_IN")
+                                ? (
+                                    <Button variant="contained"
+                                        startIcon={<CancelIcon />} onClick={heandleReclaim} color="primary" component="span" className={classes.button}>Reclaim</Button>)
+                                : (
+                                    <Button variant="contained"
+                                        startIcon={<TurnedInIcon />} onClick={handleTurnIn} color="primary" component="span" className={classes.button}>Turn In</Button>
+                                )}
+                        </form>) : ""}
+                </div>) : ""
+            }
             {/*fileId ? (
                 <div className='row mt-5'>
                     <div className='col-md-6 m-auto'>
@@ -389,6 +674,8 @@ const UploadFile = ({ Tokens, GoogleId, dispatch }) => {
                     </div>
                 </div>
             ) : null*/}
+
+
         </Fragment >
     );
 };
