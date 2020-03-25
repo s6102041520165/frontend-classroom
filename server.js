@@ -1,5 +1,6 @@
 const express = require("express");
 const favicon = require("express-favicon");
+const cors = require('cors')
 const path = require("path");
 const port = process.env.PORT || 80;
 const app = express();
@@ -14,7 +15,9 @@ const test = require('./api/test'); */
 app.use(bodyParser.urlencoded({ extended: false }))
 
 // parse application/json
+app.use(cors());
 app.use(bodyParser.json())
+
 
 app.use(favicon(__dirname + "/build/favicon.ico"));
 // the __dirname is the current directory from where the script is running

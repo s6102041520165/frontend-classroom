@@ -203,7 +203,7 @@ function App({ message, Tokens, dispatch, props }) {
               textAlign: "center"
             }}
           >
-
+            
             <PrivateRoute exact path="/" component={courses} />
             <PrivateRoute path="/create-course" component={CreateCourse} />
             <PrivateRoute path="/create-assignment/:courseId" component={CreateCourseWork} />
