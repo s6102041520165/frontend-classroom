@@ -347,7 +347,7 @@ const UploadFile = ({ Tokens, GoogleId, dispatch }) => {
          */
 
         try {
-            const res = await axios.post(`https://classroom.googleapis.com/v1/courses/${courseId}/courseWork/${id}/studentSubmissions/${identifyCourseWork}:turnIn`, "{}", {
+            await axios.post(`https://classroom.googleapis.com/v1/courses/${courseId}/courseWork/${id}/studentSubmissions/${identifyCourseWork}:turnIn`, "{}", {
                 headers: {
                     'Authorization': `Bearer ${Tokens}`,
                     'Accept': `application/json`,
@@ -370,7 +370,7 @@ const UploadFile = ({ Tokens, GoogleId, dispatch }) => {
             //console.log(res.data)
 
         } catch (error) {
-            console.log(error)
+            
         }
     }
 
@@ -379,7 +379,7 @@ const UploadFile = ({ Tokens, GoogleId, dispatch }) => {
         e.preventDefault();
         const formData = new FormData();
         formData.append('file', file)
-        console.log(formData)
+        //console.log(formData)
 
 
 
@@ -409,7 +409,7 @@ const UploadFile = ({ Tokens, GoogleId, dispatch }) => {
                         },
                     ]
                 }
-                console.log(jsonbody)
+                //console.log(jsonbody)
 
                 getCouseWorkSubmission().then(async (response) => {
                     console.log(identifyCourseWork)
@@ -431,7 +431,7 @@ const UploadFile = ({ Tokens, GoogleId, dispatch }) => {
                             ]
                         })
                     }).then(async (Response) => {
-                        console.log(Response)
+                        //console.log(Response)
                         if (Response.status === 200)
                             setAssignmentSubmission(Response.data.assignmentSubmission.attachments);
                         else if (Response.status == 401) {
@@ -466,7 +466,7 @@ const UploadFile = ({ Tokens, GoogleId, dispatch }) => {
     const handleClick = async (e, userId) => {
         e.preventDefault();
 
-        console.log(userId)
+        //console.log(userId)
 
 
         await axios({
@@ -483,7 +483,7 @@ const UploadFile = ({ Tokens, GoogleId, dispatch }) => {
                     setStateCourseWork(response.data.studentSubmissions[0].state);
                     setIdentityCousrseWork(response.data.studentSubmissions[0].id);
                     setAssignmentSubmission(response.data.studentSubmissions[0].assignmentSubmission.attachments);
-                    console.log(response)
+                    //console.log(response)
 
                 } else if (response.status == 401) {
                     dispatch(storeToken(""));
@@ -492,7 +492,7 @@ const UploadFile = ({ Tokens, GoogleId, dispatch }) => {
                     console.log("Not Found !!!");
                 }
             }
-            console.log(response)
+            //console.log(response)
         })
 
     }
@@ -507,7 +507,7 @@ const UploadFile = ({ Tokens, GoogleId, dispatch }) => {
     //ให้คะแนนนักเรียน
     const handleAssignGrade = async (e) => {
         e.preventDefault()
-        console.log(score)
+        //console.log(score)
         await axios.patch(`https://classroom.googleapis.com/v1/courses/${courseId}/courseWork/${id}/studentSubmissions/${identifyCourseWork}?updateMask=assignedGrade`,
             JSON.stringify({
                 assignedGrade: score
@@ -520,7 +520,7 @@ const UploadFile = ({ Tokens, GoogleId, dispatch }) => {
                 },
             }).then((response) => {
                 if (response.status === 200) {
-                    console.log("Updated successfully!")
+                    //console.log("Updated successfully!")
                     setAssignGrade(score)
                     clearState()
                     handleClose()
@@ -533,7 +533,7 @@ const UploadFile = ({ Tokens, GoogleId, dispatch }) => {
         //e.preventDefault()
         const { name, value } = e.target;
 
-        console.log({ [name]: value });
+        //console.log({ [name]: value });
 
         //Set state from input value
         setScore(prevState => ({ ...prevState, [name]: value }));
