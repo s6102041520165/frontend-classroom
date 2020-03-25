@@ -8,6 +8,7 @@ import {
   makeStyles,
   MenuList,
   Paper,
+  CircularProgress,
 } from "@material-ui/core";
 import { storeToken, storeGoogleId } from "../reducers/actions";
 import { Link } from "react-router-dom";
@@ -156,7 +157,7 @@ const Course = ({ message, Tokens, GoogleId, dispatch }) => {
       });
   };
 
-  return (
+  return (courses)?(
     <div id="create-course">
       <Paper className={classes.paper}>
         <MenuList>
@@ -187,7 +188,9 @@ const Course = ({ message, Tokens, GoogleId, dispatch }) => {
         </SpeedDial>
       </div>
     </div>
-  );
+  ):(
+    <div><CircularProgress color="secondary" /></div>
+  )
 };
 
 const AppWithConnect = connect(googleMapState)(Course);

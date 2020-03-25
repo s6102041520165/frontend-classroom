@@ -9,6 +9,7 @@ import {
   FormControl,
   InputLabel,
   makeStyles,
+  CircularProgress,
 } from "@material-ui/core";
 
 const initialState = {
@@ -20,15 +21,17 @@ const initialState = {
 const useStyles = makeStyles(theme => ({
   formControl: {
     margin: theme.spacing(1),
-    minWidth: 120
+    width: '80%'
   },
   selectEmpty: {
     marginTop: theme.spacing(2)
   },
   root: {
-    width: "100%",
-    maxWidth: 360,
-    backgroundColor: theme.palette.background.paper
+    display: 'flex',
+    '& > * + *': {
+      marginLeft: theme.spacing(2),
+      
+    },
   }
 }));
 
@@ -113,7 +116,7 @@ const Invitation = ({ message, Tokens, GoogleId, dispatch }) => {
     console.log(courseId);
   };
 
-  return (
+  return (courses) ? (
     <div id="create-course">
       <h1>Invitation</h1>
 
@@ -124,7 +127,7 @@ const Invitation = ({ message, Tokens, GoogleId, dispatch }) => {
             <Select
               labelId="demo-simple-select-label"
               name="courseId"
-              onChange={ async e => {
+              onChange={async e => {
                 //console.log({[name]:value});
                 await setState(prevState => ({ ...prevState, courseId: e.value }));
                 console.log(courseId);
@@ -144,16 +147,18 @@ const Invitation = ({ message, Tokens, GoogleId, dispatch }) => {
         </p>
 
         <p>
+
           <FormControl className={classes.formControl}>
-            <InputLabel id="demo-simple-select-label">Role</InputLabel>
+            <InputLabel id="demo-simple-select-label" style={{ width: '80%' }}>Role</InputLabel>
             <Select
               labelId="demo-simple-select-label"
               name="role"
+              style={{ width: '80%' }}
               options={[
                 { value: "STUDENT", label: "STUDENT" },
                 { value: "TEACHER", label: "TEACHER" }
               ]}
-              onChange={ async e => {
+              onChange={async e => {
                 //console.log({[name]:value});
                 await setState(prevState => ({ ...prevState, role: e.value }));
                 console.log(role);
@@ -168,7 +173,9 @@ const Invitation = ({ message, Tokens, GoogleId, dispatch }) => {
         </p>
       </form>
     </div>
-  );
+  ) : (
+      <div><CircularProgress color="secondary" /></div>
+    )
 };
 
 const AppWithConnect = connect(googleMapState)(Invitation);

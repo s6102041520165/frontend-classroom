@@ -13,7 +13,7 @@ import LiveHelpIcon from "@material-ui/icons/LiveHelp";
 import BookIcon from "@material-ui/icons/Book";
 import ListIcon from "@material-ui/icons/List";
 import SpeedDialIcon from "@material-ui/lab/SpeedDialIcon";
-import { makeStyles, Button, Grid } from "@material-ui/core";
+import { makeStyles, Button, Grid, CircularProgress } from "@material-ui/core";
 import SpeedDial from "@material-ui/lab/SpeedDial";
 import SpeedDialAction from "@material-ui/lab/SpeedDialAction";
 
@@ -90,6 +90,18 @@ const Course = ({ message, Tokens, GoogleId, dispatch }) => {
       name: "Assignment",
       uri: `/create-assignment/${id}`,
     },{
+      icon: <ListIcon />,
+      name: "Topic",
+      uri: `/create-topic/${id}`,
+    },
+  ];
+  /**
+   * const actions = [
+    {
+      icon: <AssignmentIcon />,
+      name: "Assignment",
+      uri: `/create-assignment/${id}`,
+    },{
       icon: <LiveHelpIcon />,
       name: "Question",
       uri: `/create-question/${id}`,
@@ -103,6 +115,7 @@ const Course = ({ message, Tokens, GoogleId, dispatch }) => {
       uri: `/create-topic/${id}`,
     },
   ];
+   */
 
   const classes = useStyles();
   const bull = <span className={classes.bullet}>•</span>;
@@ -180,7 +193,7 @@ const Course = ({ message, Tokens, GoogleId, dispatch }) => {
     );
   };
 
-  return (
+  return (courseWork)?(
     <div id="course">
       <Grid container spacing={3}>
         <FlatList list={courseWork} renderItem={renderCourse} />
@@ -209,7 +222,9 @@ const Course = ({ message, Tokens, GoogleId, dispatch }) => {
         </SpeedDial>
       </div>
     </div>
-  );
+  ): (
+    <div><CircularProgress color="secondary" /></div>
+  )
 };
 
 const AppWithConnect = connect(googleMapState)(Course);
