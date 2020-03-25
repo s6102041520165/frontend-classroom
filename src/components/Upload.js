@@ -6,7 +6,10 @@ import { connect } from "react-redux";
 import googleMapState from "../map-state/google-map-state";
 import { useParams, Link } from "react-router-dom";
 import CloudUploadIcon from '@material-ui/icons/CloudUpload';
-import { makeStyles, Button, Grid, Paper, MenuList, Card, CardContent, Typography, CardActions } from "@material-ui/core";
+import TurnedInIcon from '@material-ui/icons/TurnedInNot';
+import CancelIcon from '@material-ui/icons/Cancel';
+import AttachFileIcon from '@material-ui/icons/AttachFile';
+import { makeStyles, Button, Grid, Paper, MenuList, Card, CardContent, Typography, CardActions, MenuItem } from "@material-ui/core";
 import FlatList from "flatlist-react";
 import { json } from "body-parser";
 
@@ -18,10 +21,18 @@ const useStyles = makeStyles(theme => ({
     selectEmpty: {
         marginTop: theme.spacing(2)
     },
+    button: {
+        margin: 5
+    },
     root: {
         width: "100%",
         maxWidth: 360,
         backgroundColor: theme.palette.background.paper
+    },
+    paper: {
+        marginRight: theme.spacing(2),
+        marginTop: '20px',
+        height: '100%',
     },
     card: {
         minWidth: 275,
@@ -55,7 +66,7 @@ const useStyles = makeStyles(theme => ({
         }
     },
     cardContent: {
-        height: 200,
+        height: 100,
     },
     input: {
         display: 'none',
@@ -68,8 +79,10 @@ const UploadFile = ({ Tokens, GoogleId, dispatch }) => {
     const { id } = useParams();//รหัส Assignment
     const [file, setFile] = useState('');
     const [filename, setFilename] = useState('');
-    const [identifyCourseWork, setIdentityCousrseWork] = useState();
+    const [identifyCourseWork, setIdentityCousrseWork] = useState("");
     const [fileType, setFileType] = useState('');
+    const [assignGrade, setAssignGrade] = useState("");
+    const [stateCourseWork, setStateCourseWork] = useState("");
     const [courseWork, setCourseWork] = useState("");
     const [assignmentSubmission, setAssignmentSubmission] = useState("");
     const [fileLength, setFileLength] = useState(0);
@@ -89,31 +102,9 @@ const UploadFile = ({ Tokens, GoogleId, dispatch }) => {
 
     const renderAssignmentSubmission = (assignmentSubmission, idx) => {
         //console.log(assignmentSubmission);
-        return (<Grid item xs={12} sm={12} md={12} lg={12}>
-            <Card className={classes.card} >
-                {/*<CardContent className={classes.cardContent}>
-                    <img src={assignmentSubmission.driveFile.thumbnailUrl} style={{ maxWidth: "200px" }} />
-        </CardContent>*/}
-                <Card component="a" href={assignmentSubmission.driveFile.alternateLink}>
-                    <Typography variant="h5" component="h2">
-
-                        {assignmentSubmission.driveFile.title}
-                    </Typography>
-                </Card>
-
-                {/*<CardActions>
-                    <Button
-                        to={`/course-work/${encodeURI(courseWork.courseId)}/details/${encodeURI(courseWork.id)}`}
-                        component={Link}
-                        variant="contained"
-                        color="primary"
-                        style={{ margin: 'auto' }}
-                    >
-                        Details
-                </Button>
-                </CardActions>*/}
-            </Card>
-        </Grid>)
+        return (
+            <MenuItem key={`${idx}`} component="a" href={assignmentSubmission.driveFile.alternateLink} style={{ wordWrap: 'break-word;' }}>{assignmentSubmission.driveFile.title}</MenuItem>
+        )
     };
 
     //get course 
@@ -151,6 +142,8 @@ const UploadFile = ({ Tokens, GoogleId, dispatch }) => {
                 'Accept': 'application/json'
             }
         }).then((response) => {
+            setAssignGrade(response.data.studentSubmissions[0].assignedGrade);
+            setStateCourseWork(response.data.studentSubmissions[0].state);
             setIdentityCousrseWork(response.data.studentSubmissions[0].id);
             setAssignmentSubmission(response.data.studentSubmissions[0].assignmentSubmission.attachments);
             console.log(response)
@@ -169,6 +162,85 @@ const UploadFile = ({ Tokens, GoogleId, dispatch }) => {
         setFileLength(e.target.files.length);
 
     };
+
+    const heandleReclaim = async e => {
+        e.preventDefault()
+
+        e.preventDefault();
+
+        /**
+         * 
+         * 
+         * curl --request POST \
+  'https://classroom.googleapis.com/v1/courses/[COURSEID]/courseWork/[COURSEWORKID]/studentSubmissions/[ID]:reclaim?key=[YOUR_API_KEY]' \
+  --header 'Authorization: Bearer [YOUR_ACCESS_TOKEN]' \
+  --header 'Accept: application/json' \
+  --header 'Content-Type: application/json' \
+  --data '{}' \
+  --compressed
+         */
+
+        try {
+            const res = await axios.post(`https://classroom.googleapis.com/v1/courses/${courseId}/courseWork/${id}/studentSubmissions/${identifyCourseWork}:reclaim`, "{}", {
+                headers: {
+                    'Authorization': `Bearer ${Tokens}`,
+                    'Accept': `application/json`,
+                    'Content-Type': `application/json`
+                },
+            }).then((res) => {
+                console.log("Test Exceptions Turn In")
+                console.log(res)
+                if (res.status === 200) {
+                    setStateCourseWork("RECLAIMED_BY_STUDENT")
+                }
+            })
+
+
+            //console.log(res.data)
+
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
+    const handleTurnIn = async e => {
+        e.preventDefault()
+
+        e.preventDefault();
+
+        /**
+         * 
+         * curl --request POST \
+        'https://classroom.googleapis.com/v1/courses/[COURSEID]/courseWork/55022813448/studentSubmissions/Cg4Il5v57oIBEMPCn7DJAQ:turnIn?key=[YOUR_API_KEY]' \
+        --header 'Authorization: Bearer [YOUR_ACCESS_TOKEN]' \
+        --header 'Accept: application/json' \
+        --header 'Content-Type: application/json' \
+        --data '{}' \
+        --compressed
+         */
+
+        try {
+            const res = await axios.post(`https://classroom.googleapis.com/v1/courses/${courseId}/courseWork/${id}/studentSubmissions/${identifyCourseWork}:turnIn`, "{}", {
+                headers: {
+                    'Authorization': `Bearer ${Tokens}`,
+                    'Accept': `application/json`,
+                    'Content-Type': `application/json`
+                },
+            }).then((res) => {
+                console.log("Test Exceptions Turn In")
+                console.log(res)
+                if (res.status === 200) {
+                    setStateCourseWork("TURNED_IN")
+                }
+            })
+
+
+            //console.log(res.data)
+
+        } catch (error) {
+            console.log(error)
+        }
+    }
 
     const handleUpload = async e => {
         //Multipart Form data
@@ -249,58 +321,7 @@ const UploadFile = ({ Tokens, GoogleId, dispatch }) => {
         //formData.append('name', `${filename}`);
         //formData.append('mimeType', `${fileType}`);
 
-        try {/*
-            const res = await axios.post('/upload', formData, {
-                headers: {
-                    'Content-Type': 'multipart/form-data'
-                },
-                onUploadProgress: progressEvent => {
-                    setUploadPercentage(
-                        parseInt(
-                            Math.round((progressEvent.loaded * 100) / progressEvent.total)
-                        )
-                    );
 
-                    // Clear percentage
-                    setTimeout(() => setUploadPercentage(0), 10000);
-                }
-            });
-
-            const { fileName, filePath } = res.data
-
-            setUploadedFile({ fileName, filePath })
-            await axios({
-                url: `/upload`,
-                headers: {
-                    //'Authorization': `Bearer ${Tokens}`,
-                    'Content-Type': `multipart/form-data`,
-                },
-                data: formData,
-
-            }).then(async Response => {
-
-                const { fileName, filePath } = Response.data
-                console.log(Response.data)
-
-                setUploadedFile({ fileName, filePath });
-                //console.log(5555)
-                /*console.log(Response.data)
-                let driveId = await Response.data.id;
-                
-                
-                
-                //console.log(formData)
-                
-            });*/
-            //console.log()
-
-        } catch (error) {
-            if (error.response.status === 500) {
-                setMessage('There was a problem with the server');
-            } else {
-                setMessage(error.response.data.msg);
-            }
-        }
     }
 
     return (
@@ -308,16 +329,19 @@ const UploadFile = ({ Tokens, GoogleId, dispatch }) => {
             {message ? <Message msg={message} /> : null}
             <h2>Student Submissions</h2>
 
-            <Grid container spacing={3}>
+            {(assignGrade) ? <b>Assigned Grade : {assignGrade}</b> : ""}
+
+
+            <Paper className={classes.paper}>
                 <MenuList>
                     <FlatList list={assignmentSubmission} renderItem={renderAssignmentSubmission} />
                 </MenuList>
-            </Grid>
+            </Paper>
             <br />
 
             <form encType="multipart/form-data" onSubmit={handleUpload}
             >
-                <div className='custom-file mb-4' style={{ padding: '5px', width: '100%', minHeight: '200px', backgroundColor: 'whitesmoke' }}>
+                <div className='custom-file mb-4' style={{ padding: '5px', width: '100%', minHeight: '100px', backgroundColor: 'whitesmoke' }}>
 
                     {/*<input
                         type='file'
@@ -331,21 +355,31 @@ const UploadFile = ({ Tokens, GoogleId, dispatch }) => {
                         accept="image/*"
                         className={classes.input}
                         id="contained-button-file"
-                        multiple
                         type="file"
                         onChange={onChange}
                     />
                     <label htmlFor="contained-button-file">
-                        <Button variant="contained" color="secondary" component="span" className={classes.button} startIcon={<CloudUploadIcon />}>
-                            Choose Files
-                        </Button>
+
+                        <Button variant="contained" color="secondary" startIcon={<AttachFileIcon />} component="span" className={classes.button} >
+                            Choose File
+                        </Button><br />
+                        {(filename != "") ? <h4>{filename}</h4> : ""}
                     </label>
                 </div>
 
                 <Progress percentage={uploadPercentage} />
 
-                <Button variant="contained" onClick={handleUpload} color="primary" component="span" className={classes.button}>Upload File</Button>
+                <Button variant="contained" disabled={stateCourseWork == "TURNED_IN" ? true : ""} startIcon={<CloudUploadIcon />} onClick={handleUpload} color="warning" component="span" className={classes.button}>Upload File</Button>
 
+
+                {(stateCourseWork == "TURNED_IN")
+                    ? (
+                        <Button variant="contained"
+                            startIcon={<CancelIcon />} onClick={heandleReclaim} color="primary" component="span" className={classes.button}>Reclaim</Button>)
+                    : (
+                        <Button variant="contained"
+                            startIcon={<TurnedInIcon />} onClick={handleTurnIn} color="primary" component="span" className={classes.button}>Turn In</Button>
+                    )}
             </form>
             {/*fileId ? (
                 <div className='row mt-5'>
@@ -355,7 +389,7 @@ const UploadFile = ({ Tokens, GoogleId, dispatch }) => {
                     </div>
                 </div>
             ) : null*/}
-        </Fragment>
+        </Fragment >
     );
 };
 
