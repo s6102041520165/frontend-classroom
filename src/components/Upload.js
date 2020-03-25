@@ -8,6 +8,7 @@ import { useParams, Link } from "react-router-dom";
 import CloudUploadIcon from '@material-ui/icons/CloudUpload';
 import { makeStyles, Button, Grid, Paper, MenuList, Card, CardContent, Typography, CardActions } from "@material-ui/core";
 import FlatList from "flatlist-react";
+import { json } from "body-parser";
 
 const useStyles = makeStyles(theme => ({
     formControl: {
@@ -24,8 +25,9 @@ const useStyles = makeStyles(theme => ({
     },
     card: {
         minWidth: 275,
-        minHeight: 250,
-        margin: "10px"
+        minHeight: 100,
+        margin: "10px",
+        float: "left"
     },
     bullet: {
         display: "inline-block",
@@ -71,7 +73,7 @@ const UploadFile = ({ Tokens, GoogleId, dispatch }) => {
     const [courseWork, setCourseWork] = useState("");
     const [assignmentSubmission, setAssignmentSubmission] = useState("");
     const [fileLength, setFileLength] = useState(0);
-    const [uploadedFile, setUploadedFile] = useState({});
+    const [fileId, setFileId] = useState("");
     const [message, setMessage] = useState('');
     const [uploadPercentage, setUploadPercentage] = useState(0);
     const classes = useStyles();
@@ -87,14 +89,18 @@ const UploadFile = ({ Tokens, GoogleId, dispatch }) => {
 
     const renderAssignmentSubmission = (assignmentSubmission, idx) => {
         //console.log(assignmentSubmission);
-        return (<Grid item xs={12} sm={12} md={4} lg={3}>
-            <Card className={classes.card}>
-                <CardContent className={classes.cardContent}>
+        return (<Grid item xs={12} sm={12} md={12} lg={12}>
+            <Card className={classes.card} >
+                {/*<CardContent className={classes.cardContent}>
                     <img src={assignmentSubmission.driveFile.thumbnailUrl} style={{ maxWidth: "200px" }} />
-                </CardContent>
-                <Typography variant="h5" component="h2">
-                    {assignmentSubmission.driveFile.title}
-                </Typography>
+        </CardContent>*/}
+                <Card component="a" href={assignmentSubmission.driveFile.alternateLink}>
+                    <Typography variant="h5" component="h2">
+
+                        {assignmentSubmission.driveFile.title}
+                    </Typography>
+                </Card>
+
                 {/*<CardActions>
                     <Button
                         to={`/course-work/${encodeURI(courseWork.courseId)}/details/${encodeURI(courseWork.id)}`}
@@ -144,10 +150,10 @@ const UploadFile = ({ Tokens, GoogleId, dispatch }) => {
                 'Authorization': `Bearer ${Tokens}`,
                 'Accept': 'application/json'
             }
-        }).then(async (response) => {
-            await setIdentityCousrseWork(response.data.studentSubmissions[0].id);
-            await setAssignmentSubmission(response.data.studentSubmissions[0].assignmentSubmission.attachments);
-            await console.log(response)
+        }).then((response) => {
+            setIdentityCousrseWork(response.data.studentSubmissions[0].id);
+            setAssignmentSubmission(response.data.studentSubmissions[0].assignmentSubmission.attachments);
+            console.log(response)
         })
 
         //console.log(courseWork)
@@ -174,7 +180,7 @@ const UploadFile = ({ Tokens, GoogleId, dispatch }) => {
 
 
         try {
-            const res = await axios.post('/upload', formData, {
+            const res = await axios.post('/auth/upload', formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data'
                 },
@@ -188,10 +194,50 @@ const UploadFile = ({ Tokens, GoogleId, dispatch }) => {
                     // Clear percentage
                     setTimeout(() => setUploadPercentage(0), 10000);
                 }
-            });
-            const { fileName, filePath } = res.data
+            }).then((res) => {
 
-            setUploadedFile({ fileName, filePath })
+                const jsonbody = {
+                    "addAttachments": [
+                        {
+                            "driveFile": {
+                                "id": res.data.id
+                            }
+                        },
+                    ]
+                }
+                console.log(jsonbody)
+
+                getCouseWorkSubmission().then(async (response) => {
+                    console.log(identifyCourseWork)
+                    await axios({
+                        method: "POST",
+                        url: `https://classroom.googleapis.com/v1/courses/${courseId}/courseWork/${id}/studentSubmissions/${identifyCourseWork}:modifyAttachments`,
+                        'headers': {
+                            'Authorization': `Bearer ${Tokens}`,
+                            'Accept': 'application/json',
+                            'Content-Type': 'application/json'
+                        },
+                        data: JSON.stringify({
+                            "addAttachments": [
+                                {
+                                    "driveFile": {
+                                        "id": res.data.id
+                                    }
+                                },
+                            ]
+                        })
+                    }).then(async (Response) => {
+                        console.log(Response)
+                        setAssignmentSubmission(Response.data.assignmentSubmission.attachments);
+                    })
+                })
+            }).then(async () => {
+                console.log('End Process')
+            });
+
+
+            //console.log(res.data)
+
         } catch (error) {
             if (error.response.status === 500) {
                 setMessage('There was a problem with the server');
@@ -240,30 +286,9 @@ const UploadFile = ({ Tokens, GoogleId, dispatch }) => {
                 //console.log(5555)
                 /*console.log(Response.data)
                 let driveId = await Response.data.id;
-                let jsonBody = {
-                    "addAttachments": [
-                        {
-                            "driveFile": {
-                                "id": driveId
-                            }
-                        },
-                    ]
-                }
                 
-                await getCouseWorkSubmission().then(async (res) => {
-                    await axios({
-                        method: "POST",
-                        url: `https://classroom.googleapis.com/v1/courses/${courseId}/courseWork/${id}/studentSubmissions/${identifyCourseWork}:modifyAttachments`,
-                        'headers': {
-                            'Authorization': `Bearer ${Tokens}`,
-                            'Accept': 'application/json',
-                            'Content-Type': 'application/json'
-                        },
-                        data: JSON.stringify(jsonBody)
-                    }).then(async (Response) => {
-                        setAssignmentSubmission(Response.data.assignmentSubmission.attachments);
-                    })
-                })
+                
+                
                 //console.log(formData)
                 
             });*/
@@ -322,14 +347,14 @@ const UploadFile = ({ Tokens, GoogleId, dispatch }) => {
                 <Button variant="contained" onClick={handleUpload} color="primary" component="span" className={classes.button}>Upload File</Button>
 
             </form>
-            {uploadedFile ? (
+            {/*fileId ? (
                 <div className='row mt-5'>
                     <div className='col-md-6 m-auto'>
                         <h3 className='text-center'>{uploadedFile.fileName}</h3>
                         <img style={{ width: '100%' }} src={uploadedFile.filePath} alt='' />
                     </div>
                 </div>
-            ) : null}
+            ) : null*/}
         </Fragment>
     );
 };

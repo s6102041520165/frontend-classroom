@@ -1,6 +1,7 @@
 require("dotenv").config();
 const { google } = require('googleapis');
 const express = require('express')
+const fs = require('fs')
 
 
 const app = express()
@@ -92,7 +93,59 @@ app.post('/getToken', async function (req, res) {
     } catch (err) {
         res.status(401).json({ message: 'Cannot Login With Google' })
     }
-    
+
 });
+
+app.post('/upload', (req, res) => {
+    if (req.files === null) {
+        return res.status(400).json({ msg: 'No file uploaded' });
+    }
+
+
+    try {
+        const file = req.files.file;
+
+        file.mv(`${__dirname}/../public/uploads/${file.name}`, err => {
+            if (err) {
+                console.error(err);
+                return res.status(500).send(err);
+            } else {
+                const drive = google.drive({
+                    version: 'v3',
+                    auth: oAuth2Client
+                });
+
+
+                var fileMetadata = {
+                    'name': file.name,
+                };
+
+                var media = {
+                    mimeType: file.mimetype,
+                    body: fs.createReadStream(`${__dirname}/../public/uploads/${file.name}`)
+                };
+
+                drive.files.create({
+                    resource: fileMetadata,
+                    media: media,
+                    fields: 'id'
+                }, function (err, resFile) {
+                    if (err) {
+                        // Handle error
+                        console.error(err);
+                    } else {
+                        console.log('File:', resFile.data);
+                        res.json(resFile.data)
+                    }
+                });
+            }
+        });
+
+    } catch (error) {
+        res.json(401).status({message:'Permission Access Denined'})
+    }
+
+})
+
 
 module.exports = app;
