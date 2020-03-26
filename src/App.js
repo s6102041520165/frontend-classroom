@@ -24,7 +24,7 @@ import Home from "@material-ui/icons/Home";
 import Person from "@material-ui/icons/Person";
 import InsertInvitation from "@material-ui/icons/InsertInvitation";
 import brown from '@material-ui/core/colors/brown';
-import { storeToken, storeGoogleId, storePermissions } from "../reducers/actions";
+import { storeToken, storeGoogleId, storePermissions } from "./reducers/actions";
 import { createMuiTheme } from '@material-ui/core/styles';
 
 
@@ -116,7 +116,7 @@ const useStyles = makeStyles(theme => ({
 const navbar = ["/", "/create-course", "/invitation", "/profile"];
 const icons = [<Home />, <PlusOne />, <InsertInvitation />, <Person />];
 
-function App({ message, Tokens, dispatch, props, dispatch }) {
+function App({ message, Tokens, dispatch, props }) {
   const classes = useStyles();
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
@@ -196,7 +196,7 @@ function App({ message, Tokens, dispatch, props, dispatch }) {
           <MenuList>
             <MenuItem onClick={(e) => {
               Axios.post(`https://accounts.google.com/o/oauth2/revoke?token=${Tokens}`, '{}').then((res) => {
-                dispatch(storeToken(response.data.access_token));
+                dispatch(storeToken(null));
               })
             }} component="a">
               Logout
