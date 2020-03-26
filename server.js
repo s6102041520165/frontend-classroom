@@ -18,7 +18,7 @@ const test = require('./api/test'); */
 app.use(bodyParser.urlencoded({ extended: false }))
 
 
-// parse application/json
+// parse  application/json
 app.use(cors());
 app.use(bodyParser.json())
 

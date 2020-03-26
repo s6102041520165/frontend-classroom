@@ -24,6 +24,7 @@ import Home from "@material-ui/icons/Home";
 import Person from "@material-ui/icons/Person";
 import InsertInvitation from "@material-ui/icons/InsertInvitation";
 import brown from '@material-ui/core/colors/brown';
+import { storeToken, storeGoogleId, storePermissions } from "../reducers/actions";
 import { createMuiTheme } from '@material-ui/core/styles';
 
 
@@ -44,6 +45,8 @@ import getCourse from "./components/Course";
 import Upload from "./components/Upload";
 import Authorization from "./components/Authorization";
 import redirect from "./components/redirect";
+import { MenuList, MenuItem } from "@material-ui/core";
+import Axios from "axios";
 
 // Line Frontend Framework Init
 const liff = window.liff;
@@ -113,7 +116,7 @@ const useStyles = makeStyles(theme => ({
 const navbar = ["/", "/create-course", "/invitation", "/profile"];
 const icons = [<Home />, <PlusOne />, <InsertInvitation />, <Person />];
 
-function App({ message, Tokens, dispatch, props }) {
+function App({ message, Tokens, dispatch, props, dispatch }) {
   const classes = useStyles();
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
@@ -189,6 +192,16 @@ function App({ message, Tokens, dispatch, props }) {
               );
             })}
           </List>
+          <Divider />
+          <MenuList>
+            <MenuItem onClick={(e) => {
+              Axios.post(`https://accounts.google.com/o/oauth2/revoke?token=${Tokens}`, '{}').then((res) => {
+                dispatch(storeToken(response.data.access_token));
+              })
+            }} component="a">
+              Logout
+            </MenuItem>
+          </MenuList>
         </Drawer>
         <main
           className={clsx(classes.content, {
@@ -203,7 +216,7 @@ function App({ message, Tokens, dispatch, props }) {
               textAlign: "center"
             }}
           >
-            
+
             <PrivateRoute exact path="/" component={courses} />
             <PrivateRoute path="/create-course" component={CreateCourse} />
             <PrivateRoute path="/create-assignment/:courseId" component={CreateCourseWork} />

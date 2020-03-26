@@ -87,6 +87,7 @@ app.post('/getToken', async function (req, res) {
         }
     });*/
     try {
+
         const tokenInfo = await oAuth2Client.credentials
         console.log(tokenInfo)
         res.json(tokenInfo)
@@ -95,6 +96,14 @@ app.post('/getToken', async function (req, res) {
     }
 
 });
+
+app.get('signOut', (req ,res) => {
+    try {
+
+    } catch (err) {
+        google
+    }
+})
 
 app.post('/upload', (req, res) => {
     if (req.files === null) {
