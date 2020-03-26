@@ -137,7 +137,7 @@ const Course = ({ component: Component, message, Tokens, Permissions, GoogleId, 
                 }
             }).then(async (res) => {
                 console.log(res)
-                axios.post('https://lineappbackend.herokuapp.com/webhook/test/checkUser', JSON.stringify({
+                axios.post('/user/checkUser', JSON.stringify({
                     google_id: res.data.id,
                     line_id: userLineId,
                     f_name: res.data.name.givenName,
