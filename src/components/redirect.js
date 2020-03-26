@@ -6,6 +6,17 @@ import { storeToken, storeGoogleId, storePermissions } from "../reducers/actions
 import { makeStyles, Button, Grid } from "@material-ui/core";
 
 
+// Line Frontend Framework Init
+const liff = window.liff;
+
+//Initial state
+const initialStateLine = {
+  name: "",
+  userLineId: "",
+  statusMessage: "",
+  pictureUrl: ""
+};
+
 const useStyles = makeStyles(theme => ({
     formControl: {
         margin: theme.spacing(1),
@@ -57,15 +68,51 @@ const useStyles = makeStyles(theme => ({
 const Course = ({ component: Component, message, Tokens, Permissions, GoogleId, dispatch, match, location }) => {
     //let { scope } = useParams();
     const params = new URLSearchParams(location.search);
+    const [{ name, userLineId, statusMessage, pictureUrl }, setStateLine] = useState(
+        initialStateLine
+    );
     //const code = params.get('code');
     const [code, setCode] = useState("");
     useEffect(() => {
         // You need to restrict it at some point
         // This is just dummy code and should be replaced by actual
+        if(!userLineId){
+            getProfile();
+        }
+
         if (!code) {
             authenticate()
         }
     }, []);
+
+    const sendMessage = () => {
+        liff
+            .sendMessage([
+                {
+                    type: "text",
+                    text: `Say Hi!`
+                }
+            ])
+            .then(() => {
+                liff.closeWindow();
+            });
+    };
+
+    const getProfile = () => {
+        liff.init(async () => {
+            let getProfile = await liff.getProfile();
+            setStateLine({
+                name: getProfile.displayName,
+                userLineId: getProfile.userId,
+                pictureUrl: getProfile.pictureUrl,
+                statusMessage: getProfile.statusMessage
+            });
+        });
+    };
+
+    const closeLIFF = () => {
+        liff.closeWindow();
+    };
 
     async function authenticate() {
 
@@ -90,6 +137,21 @@ const Course = ({ component: Component, message, Tokens, Permissions, GoogleId, 
                 }
             }).then(async (res) => {
                 console.log(res)
+                axios.post('https://lineappbackend.herokuapp.com/webhook/test/checkUser', JSON.stringify({
+                    google_id: res.data.id,
+                    line_id: userLineId,
+                    f_name: res.data.name.givenName,
+                    l_name: res.data.name.familyName,
+                }),
+                    {
+                        headers: {
+                            'Content-Type': 'application/json'
+                        }
+                    }
+
+                ).then((res) => {
+                    console.log(res)
+                })
                 await dispatch(storeGoogleId(res.data.id));
                 //ไปเก็บในตัวแปร Redux State
                 if (res.data.permissions != null) {
