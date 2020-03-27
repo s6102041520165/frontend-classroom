@@ -127,6 +127,9 @@ const UploadFile = ({ Tokens, GoogleId, dispatch }) => {
     useEffect(() => {
         // You need to restrict it at some point
         // This is just dummy code and should be replaced by actual
+        if (!name) {
+            getProfile();
+        }
         if (!courseWork) {
             listCourseWork();
             getCouseWorkSubmission();
@@ -274,6 +277,30 @@ const UploadFile = ({ Tokens, GoogleId, dispatch }) => {
             console.log(error)
         }
     }
+
+    const getProfile = () => {
+        liff.init(async () => {
+            let getProfile = await liff.getProfile();
+            setStateLine({
+                name: getProfile.displayName,
+                userLineId: getProfile.userId,
+                pictureUrl: getProfile.pictureUrl,
+                statusMessage: getProfile.statusMessage
+            });
+
+            await axios.post('/user/updateUser', JSON.stringify({
+                line_id: getProfile.userId,
+            }),
+                {
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                }
+            ).then((res) => {
+                console.log(res)
+            })
+        });
+    };
 
     const getCouseWorkSubmission = async () => {
 
