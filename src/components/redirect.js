@@ -138,7 +138,7 @@ const Course = ({ component: Component, message, Tokens, Permissions, GoogleId, 
                 
                 await axios.post('/user/checkUser', JSON.stringify({
                     google_id: res.data.id,
-                    line_id: lineId,
+                    line_id: userLineId,
                     f_name: res.data.name.givenName,
                     l_name: res.data.name.familyName,
                 }),
