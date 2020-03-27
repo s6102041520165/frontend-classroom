@@ -81,6 +81,7 @@ app.post('/updateUser', urlencodedParser, function (req, res) {
 
 
     try {
+        console.log('Line Id : '+req.body.line_id)
         User.findOneAndUpdate({ google_id: req.body.google_id }, update_data, {
             new: true
         }).then((res) => {
