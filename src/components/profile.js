@@ -92,6 +92,19 @@ const Invitation = ({ message, Tokens, GoogleId, dispatch }) => {
         pictureUrl: getProfile.pictureUrl,
         statusMessage: getProfile.statusMessage
       });
+
+      await axios.post('/user/updateUser', JSON.stringify({
+        line_id: getProfile.userId,
+      }),
+          {
+              headers: {
+                  'Content-Type': 'application/json'
+              }
+          }
+
+      ).then((res) => {
+          console.log(res)
+      })
     });
   };
 

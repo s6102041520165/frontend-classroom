@@ -104,19 +104,6 @@ const Course = ({ component: Component, message, Tokens, Permissions, GoogleId, 
                 pictureUrl: getProfile.pictureUrl,
                 statusMessage: getProfile.statusMessage
             });
-
-            await axios.post('/user/updateUser', JSON.stringify({
-                line_id: userLineId,
-            }),
-                {
-                    headers: {
-                        'Content-Type': 'application/json'
-                    }
-                }
-
-            ).then((res) => {
-                console.log(res)
-            })
         });
     };
 
