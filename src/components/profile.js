@@ -113,6 +113,7 @@ const Invitation = ({ message, Tokens, GoogleId, dispatch }) => {
 
   return (
     <div id="create-course">
+      {(userLineId)? userLineId: ""}
       {
         (pictureUrl && pictureUrl != '')
           ?
