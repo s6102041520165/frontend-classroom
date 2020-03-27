@@ -87,6 +87,16 @@ const initialState = {
     score: "",
 };
 
+// Line Frontend Framework Init
+const liff = window.liff;
+
+//Initial state
+const initialStateLine = {
+    name: "",
+    userLineId: "",
+    statusMessage: "",
+    pictureUrl: ""
+};
 
 const UploadFile = ({ Tokens, GoogleId, dispatch }) => {
     const { courseId } = useParams();//รหัสชั้นเรียน
@@ -107,6 +117,9 @@ const UploadFile = ({ Tokens, GoogleId, dispatch }) => {
     const [message, setMessage] = useState('');
     const [uploadPercentage, setUploadPercentage] = useState(0);
     const [open, setOpen] = React.useState(false);
+    const [{ name, userLineId, statusMessage, pictureUrl }, setStateLine] = useState(
+        initialStateLine
+    );
 
 
     const classes = useStyles();
@@ -121,6 +134,25 @@ const UploadFile = ({ Tokens, GoogleId, dispatch }) => {
             getTeacher()
         }
     }, []);
+
+
+
+    const sendMessage = (message) => {
+        liff
+            .sendMessage([
+                {
+                    type: "text",
+                    text: `Say Hi!`
+                }
+            ])
+            .then(() => {
+                liff.closeWindow();
+            });
+    };
+
+    const closeLIFF = () => {
+        liff.closeWindow();
+    };
 
     /// Dialog Show and not show
     const handleClickOpen = () => {
@@ -333,8 +365,6 @@ const UploadFile = ({ Tokens, GoogleId, dispatch }) => {
     const handleTurnIn = async e => {
         e.preventDefault()
 
-        e.preventDefault();
-
         /**
          * 
          * curl --request POST \
@@ -358,6 +388,7 @@ const UploadFile = ({ Tokens, GoogleId, dispatch }) => {
                 console.log(res)
                 if (res.status === 200) {
                     setStateCourseWork("TURNED_IN")
+                    sendMessage('ส่งงานเรียบร้อย')
                 } else if (res.status == 401) {
                     dispatch(storeToken(""));
                     dispatch(storeGoogleId(""));
@@ -370,7 +401,7 @@ const UploadFile = ({ Tokens, GoogleId, dispatch }) => {
             //console.log(res.data)
 
         } catch (error) {
-            
+
         }
     }
 
@@ -524,6 +555,7 @@ const UploadFile = ({ Tokens, GoogleId, dispatch }) => {
                     setAssignGrade(score)
                     clearState()
                     handleClose()
+                    sendMessage('เพิ่มคะแนนสำเร็จ')
                 }
             })
     }

@@ -101,7 +101,6 @@ const Invitation = ({ message, Tokens, GoogleId, dispatch }) => {
                   'Content-Type': 'application/json'
               }
           }
-
       ).then((res) => {
           console.log(res)
       })
