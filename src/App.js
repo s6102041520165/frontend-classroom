@@ -196,9 +196,9 @@ function App({ message, Tokens, dispatch, props }) {
           <MenuList>
             <MenuItem onClick={(e) => {
               Axios.post(`https://accounts.google.com/o/oauth2/revoke?token=${Tokens}`, '{}').then((res) => {
-                dispatch(storeToken(null));
-                dispatch(storePermissions(null));
-                dispatch(storeGoogleId(null));
+                dispatch(storeToken(""));
+                dispatch(storePermissions(""));
+                dispatch(storeGoogleId(""));
               })
             }} component="a">
               Logout
