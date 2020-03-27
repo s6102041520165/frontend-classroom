@@ -142,7 +142,7 @@ const UploadFile = ({ Tokens, GoogleId, dispatch }) => {
             .sendMessage([
                 {
                     type: "text",
-                    text: `Say Hi!`
+                    text: message
                 }
             ])
             .then(() => {
