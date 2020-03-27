@@ -73,15 +73,12 @@ const Course = ({ component: Component, message, Tokens, Permissions, GoogleId, 
     );
     //const code = params.get('code');
     const [code, setCode] = useState("");
-    useEffect(async () => {
+    useEffect(() => {
         // You need to restrict it at some point
         // This is just dummy code and should be replaced by actual
-        if(userLineId===""){
-            getProfile();
-        }
 
         if (!code) {
-            await authenticate(userLineId)
+            authenticate()
         }
     }, []);
 
@@ -114,7 +111,7 @@ const Course = ({ component: Component, message, Tokens, Permissions, GoogleId, 
         liff.closeWindow();
     };
 
-    async function authenticate(lineId) {
+    async function authenticate() {
 
 
         await axios({
@@ -128,7 +125,9 @@ const Course = ({ component: Component, message, Tokens, Permissions, GoogleId, 
             console.log(response)
             dispatch(storeToken(response.data.access_token));
 
-            axios({
+            await getProfile();
+
+            await axios({
                 'method': 'GET',
                 'url': 'https://classroom.googleapis.com/v1/userProfiles/me',
                 'headers': {
@@ -136,7 +135,7 @@ const Course = ({ component: Component, message, Tokens, Permissions, GoogleId, 
                     'Accept': 'application/json'
                 }
             }).then(async (res) => {
-                console.log(res)
+                
                 await axios.post('/user/checkUser', JSON.stringify({
                     google_id: res.data.id,
                     line_id: lineId,
