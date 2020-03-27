@@ -71,4 +71,27 @@ app.post('/checkUser', urlencodedParser, function (req, res) {
     })*/
 })
 
+
+app.post('/updateUser', urlencodedParser, function (req, res) {
+    res.setHeader('Content-Type', 'application/json');
+
+    const update_data = {
+        line_id: (req.body.line_id) ? req.body.line_id : "",
+    };
+
+
+    try {
+        User.findOneAndUpdate({ google_id: req.body.google_id }, update_data, {
+            new: true
+        }).then((res) => {
+            console.log(res)
+        })
+        res.status(200).json({ msg: 'updated' })
+    } catch (error) {
+        res.send(error)
+    }
+
+
+})
+
 module.exports = app;
