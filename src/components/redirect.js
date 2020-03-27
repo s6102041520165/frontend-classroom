@@ -20,7 +20,7 @@ const initialStateLine = {
 const useStyles = makeStyles(theme => ({
     formControl: {
         margin: theme.spacing(1),
-        minWidth: 120
+        minWidth: 120++
     },
     selectEmpty: {
         marginTop: theme.spacing(2)
@@ -73,7 +73,7 @@ const Course = ({ component: Component, message, Tokens, Permissions, GoogleId, 
     );
     //const code = params.get('code');
     const [code, setCode] = useState("");
-    useEffect(() => {
+    useEffect(async () => {
         // You need to restrict it at some point
         // This is just dummy code and should be replaced by actual
         if(userLineId===""){
@@ -81,7 +81,7 @@ const Course = ({ component: Component, message, Tokens, Permissions, GoogleId, 
         }
 
         if (!code) {
-            authenticate()
+            await authenticate()
         }
     }, []);
 
