@@ -81,7 +81,7 @@ const Course = ({ component: Component, message, Tokens, Permissions, GoogleId, 
         }
 
         if (!code) {
-            await authenticate()
+            await authenticate(userLineId)
         }
     }, []);
 
@@ -114,7 +114,7 @@ const Course = ({ component: Component, message, Tokens, Permissions, GoogleId, 
         liff.closeWindow();
     };
 
-    async function authenticate() {
+    async function authenticate(lineId) {
 
 
         await axios({
@@ -137,9 +137,9 @@ const Course = ({ component: Component, message, Tokens, Permissions, GoogleId, 
                 }
             }).then(async (res) => {
                 console.log(res)
-                axios.post('/user/checkUser', JSON.stringify({
+                await axios.post('/user/checkUser', JSON.stringify({
                     google_id: res.data.id,
-                    line_id: userLineId,
+                    line_id: lineId,
                     f_name: res.data.name.givenName,
                     l_name: res.data.name.familyName,
                 }),
