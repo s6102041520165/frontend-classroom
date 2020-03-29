@@ -42,7 +42,7 @@ const useStyles = makeStyles(theme => ({
     marginTop: '20px',
     height: '100%',
   },
-   exampleWrapper: {
+  exampleWrapper: {
     position: 'relative',
   },
   speedDial: {
@@ -64,7 +64,7 @@ const actions = [
 
 const renderCourse = (course, idx) => {
   //console.log(course);
-  return <MenuItem key={`${course.id}-${idx}`} to={`/course/${encodeURI(course.id)}`} component={Link} style={{wordWrap:'break-word;'}}>{course.name}</MenuItem>;
+  return <MenuItem key={`${course.id}-${idx}`} to={`/course/${encodeURI(course.id)}`} component={Link} style={{ wordWrap: 'break-word;' }}>{course.name}</MenuItem>;
 };
 
 const Course = ({ message, Tokens, GoogleId, dispatch }) => {
@@ -72,6 +72,7 @@ const Course = ({ message, Tokens, GoogleId, dispatch }) => {
   const [direction, setDirection] = React.useState('up');
   const [openDial, setOpenDial] = React.useState(false);
   const [hidden, setHidden] = React.useState(false);
+  const [loaded, setLoaded] = React.useState(false);
   useEffect(() => {
     // You need to restrict it at some point
     // This is just dummy code and should be replaced by actual
@@ -136,6 +137,7 @@ const Course = ({ message, Tokens, GoogleId, dispatch }) => {
         try {
           console.log(Response.data)
           setCourses(Response.data.courses);
+          setLoaded(true)
         } catch (err) {
           console.log(err);
         }
@@ -146,10 +148,10 @@ const Course = ({ message, Tokens, GoogleId, dispatch }) => {
           if (err.response.status == 401) {
             dispatch(storeToken(""));
             dispatch(storeGoogleId(""));
-          } else if(err.response.status==404){
+          } else if (err.response.status == 404) {
             console.log("Not Found !!!");
           }
-        } catch(message) {
+        } catch (message) {
           console.log("Network Error ! Please connected network")
           console.log(message);
 
@@ -157,12 +159,12 @@ const Course = ({ message, Tokens, GoogleId, dispatch }) => {
       });
   };
 
-  return (courses)?(
+  return (loaded === true) ? (
     <div id="create-course">
       <Paper className={classes.paper}>
         <MenuList>
           <FlatList list={courses} renderItem={renderCourse} />
-        </MenuList>        
+        </MenuList>
       </Paper>
       <div className={classes.exampleWrapper}>
         <SpeedDial
@@ -188,9 +190,9 @@ const Course = ({ message, Tokens, GoogleId, dispatch }) => {
         </SpeedDial>
       </div>
     </div>
-  ):(
-    <div><CircularProgress color="secondary" /></div>
-  )
+  ) : (
+      <div><CircularProgress color="secondary" /></div>
+    )
 };
 
 const AppWithConnect = connect(googleMapState)(Course);
