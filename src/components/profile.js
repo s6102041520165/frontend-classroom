@@ -4,6 +4,7 @@ import TextField from "@material-ui/core/TextField";
 import axios from "axios";
 import { connect } from "react-redux";
 import googleMapState from "../map-state/google-map-state";
+import SendBot from "./SendBot";
 import FlatList from "flatlist-react";
 import Select from "react-select";
 import {
@@ -113,7 +114,8 @@ const Invitation = ({ message, Tokens, GoogleId, dispatch }) => {
 
   return (
     <div id="create-course">
-      {(userLineId)? userLineId: ""}
+      <SendBot userId="by"/>
+      {(userLineId)? <SendBot userId={userLineId}/>: ""}
       {
         (pictureUrl && pictureUrl != '')
           ?

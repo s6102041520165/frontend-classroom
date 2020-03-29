@@ -39,22 +39,7 @@ app.post('/checkUser', urlencodedParser, function (req, res) {
                 console.log(err)
                 res.status(500).json(err)
             })
-        } else {
-            try {
-                User.findOneAndUpdate({ google_id: req.body.google_id }, {
-                    line_id: req.body.line_id,
-                    f_name: req.body.f_name,
-                    l_name: req.body.l_name
-                }, {
-                    new: true
-                }).then((res) => {
-                    console.log(res)
-                })
-                res.status(200).json({ msg: 'updated' })
-            } catch (error) {
-                res.send(error)
-            }
-        }
+        } 
         res.status(200).json(data)
     })
     /*
