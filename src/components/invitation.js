@@ -30,13 +30,14 @@ const useStyles = makeStyles(theme => ({
     display: 'flex',
     '& > * + *': {
       marginLeft: theme.spacing(2),
-      
+
     },
   }
 }));
 
 const Invitation = ({ message, Tokens, GoogleId, dispatch }) => {
   const [courses, setCourses] = useState("");
+  const [loaded, setLoaded] = React.useState(false);
   useEffect(() => {
     // You need to restrict it at some point
     // This is just dummy code and should be replaced by actual
@@ -91,6 +92,7 @@ const Invitation = ({ message, Tokens, GoogleId, dispatch }) => {
       });
       console.log(itemCourse);
       setCourses(itemCourse);
+      setLoaded(true)
     });
   };
 
@@ -116,7 +118,7 @@ const Invitation = ({ message, Tokens, GoogleId, dispatch }) => {
     console.log(courseId);
   };
 
-  return (courses) ? (
+  return (loaded === true) ? (
     <div id="create-course">
       <h1>Invitation</h1>
 
