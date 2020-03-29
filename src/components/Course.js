@@ -71,6 +71,7 @@ const Course = ({ message, Tokens, GoogleId, dispatch }) => {
   const [direction, setDirection] = React.useState("up");
   const [openDial, setOpenDial] = React.useState(false);
   const [hidden, setHidden] = React.useState(false);
+  const [loaded, setLoaded] = React.useState(false);
   useEffect(() => {
     // You need to restrict it at some point
     // This is just dummy code and should be replaced by actual
@@ -89,7 +90,7 @@ const Course = ({ message, Tokens, GoogleId, dispatch }) => {
       icon: <AssignmentIcon />,
       name: "Assignment",
       uri: `/create-assignment/${id}`,
-    },{
+    }, {
       icon: <ListIcon />,
       name: "Topic",
       uri: `/create-topic/${id}`,
@@ -136,6 +137,7 @@ const Course = ({ message, Tokens, GoogleId, dispatch }) => {
       headers: header
     }).then(async Response => {
       setCourseWork(Response.data.courseWork);
+      setLoaded(true)
     });
   };
 
@@ -183,7 +185,7 @@ const Course = ({ message, Tokens, GoogleId, dispatch }) => {
               component={Link}
               variant="contained"
               color="primary"
-              style={{margin:'auto'}}
+              style={{ margin: 'auto' }}
             >
               Details
             </Button>
@@ -193,7 +195,7 @@ const Course = ({ message, Tokens, GoogleId, dispatch }) => {
     );
   };
 
-  return (courseWork)?(
+  return (loaded === true) ? (
     <div id="course">
       <Grid container spacing={3}>
         <FlatList list={courseWork} renderItem={renderCourse} />
@@ -222,9 +224,9 @@ const Course = ({ message, Tokens, GoogleId, dispatch }) => {
         </SpeedDial>
       </div>
     </div>
-  ): (
-    <div><CircularProgress color="secondary" /></div>
-  )
+  ) : (
+      <div><CircularProgress color="secondary" /></div>
+    )
 };
 
 const AppWithConnect = connect(googleMapState)(Course);
