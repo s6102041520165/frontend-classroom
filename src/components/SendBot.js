@@ -2,6 +2,7 @@ import React, { Component, useState, useEffect } from "react";
 import { connect } from "react-redux";
 import googleMapState from "../map-state/google-map-state";
 import { Button } from "@material-ui/core";
+import Axios from "axios";
 
 // Line Frontend Framework Init
 const liff = window.liff;
@@ -48,7 +49,7 @@ const SendBot = ({ message, Tokens, GoogleId, dispatch }, props) => {
         statusMessage: getProfile.statusMessage
       });
 
-      await axios.post('/user/updateUser', JSON.stringify({
+      await Axios.post('/user/updateUser', JSON.stringify({
         line_id: getProfile.userId,
       }),
         {
