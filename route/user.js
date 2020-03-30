@@ -42,18 +42,7 @@ app.post('/checkUser', urlencodedParser, function (req, res) {
         } 
         res.status(200).json(data)
     })
-    /*
-    User.create({
-        google_id: "test",
-        line_id: "test",
-        f_name: "Weerachai",
-        l_name: "Plodkaew",
-    }).then((res) => {
-        res.status(200).json(res)
-    }).catch((err) => {
-        console.log(err)
-        res.status(500).json(err)
-    })*/
+
 })
 
 
