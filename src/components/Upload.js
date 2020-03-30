@@ -20,8 +20,6 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import TextField from '@material-ui/core/TextField';
-import SendBot from "./SendBot";
-
 import { json } from "body-parser";
 
 const useStyles = makeStyles(theme => ({
@@ -132,7 +130,12 @@ const UploadFile = ({ Tokens, GoogleId, dispatch }) => {
         if (!name) {
             getProfile();
         }
-        
+        if (!courseWork) {
+            listCourseWork();
+            getCouseWorkSubmission();
+            listStudents()
+            getTeacher()
+        }
     }, []);
 
 
