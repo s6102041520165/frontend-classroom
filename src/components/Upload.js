@@ -626,7 +626,6 @@ const UploadFile = ({ Tokens, GoogleId, dispatch }) => {
 
     return (
         <Fragment>
-            {(userLineId)? <SendBot userId={userLineId}/>: ""}
             {(profileTeacher != "") ? <StudentsComponent /> : ""}
             {message ? <Message msg={message} /> : null}
             {(identifyCourseWork !== "") ? (
