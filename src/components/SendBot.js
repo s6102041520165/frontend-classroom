@@ -20,9 +20,21 @@ const SendBot = ({ message, Tokens, GoogleId, dispatch }, props) => {
     initialStateLine
   );
   useEffect(() => {
-
-
-
+    console.log(props.line_id)
+    if (props.line_id) {
+      Axios.post('/user/updateUser', JSON.stringify({
+        google_id: GoogleId,
+        line_id: props.line_id,
+      }),
+        {
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        }
+      ).then((res) => {
+        console.log(res)
+      })
+    }
     console.log(5555555555555555555)
   }, []);
 
@@ -49,17 +61,6 @@ const SendBot = ({ message, Tokens, GoogleId, dispatch }, props) => {
         statusMessage: getProfile.statusMessage
       });
 
-      await Axios.post('/user/updateUser', JSON.stringify({
-        line_id: getProfile.userId,
-      }),
-        {
-          headers: {
-            'Content-Type': 'application/json'
-          }
-        }
-      ).then((res) => {
-        console.log(res)
-      })
     });
   };
 

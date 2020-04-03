@@ -20,6 +20,8 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import TextField from '@material-ui/core/TextField';
+import SendBot from "./SendBot";
+
 import { json } from "body-parser";
 
 const useStyles = makeStyles(theme => ({
@@ -99,8 +101,8 @@ const initialStateLine = {
 };
 
 const UploadFile = ({ Tokens, GoogleId, dispatch }) => {
-    const { courseId } = useParams();//รหัสชั้นเรียน
-    const { id } = useParams();//รหัส Assignment
+    const { courseId } = useParams(); //รหัสชั้นเรียน
+    const { id } = useParams(); //รหัส Assignment
     const [file, setFile] = useState('');
     const [filename, setFilename] = useState('');
     const [identifyCourseWork, setIdentityCousrseWork] = useState("");
@@ -127,7 +129,7 @@ const UploadFile = ({ Tokens, GoogleId, dispatch }) => {
     useEffect(() => {
         // You need to restrict it at some point
         // This is just dummy code and should be replaced by actual
-        if (!name) {
+        if (!userLineId) {
             getProfile();
         }
         if (!courseWork) {
@@ -142,12 +144,10 @@ const UploadFile = ({ Tokens, GoogleId, dispatch }) => {
 
     const sendMessage = (message) => {
         liff
-            .sendMessages([
-                {
-                    type: "text",
-                    text: message
-                }
-            ])
+            .sendMessages([{
+                type: "text",
+                text: message
+            }])
             .then(() => {
                 liff.closeWindow();
             });
@@ -169,8 +169,11 @@ const UploadFile = ({ Tokens, GoogleId, dispatch }) => {
     //งานที่ส่ง Render เป็น JSX
     const renderAssignmentSubmission = (assignmentSubmission, idx) => {
         //console.log(assignmentSubmission);
-        return (
-            <MenuItem key={`${idx}`} component="a" href={assignmentSubmission.driveFile.alternateLink} style={{ wordWrap: 'break-word;' }}>{assignmentSubmission.driveFile.title}</MenuItem>
+        return (<MenuItem key={`${idx}`}
+            component="a"
+            href={assignmentSubmission.driveFile.alternateLink}
+            style={
+                { wordWrap: 'break-word;' }} > {assignmentSubmission.driveFile.title}></MenuItem>
         )
     };
 
@@ -219,14 +222,12 @@ const UploadFile = ({ Tokens, GoogleId, dispatch }) => {
         --compressed
          */
         try {
-            await axios.get(`https://classroom.googleapis.com/v1/courses/${courseId}/teachers/${GoogleId}`,
-                {
-                    headers: {
-                        "Authorization": `Bearer ${Tokens}`,
-                        "Accept": `application/json`
-                    }
+            await axios.get(`https://classroom.googleapis.com/v1/courses/${courseId}/teachers/${GoogleId}`, {
+                headers: {
+                    "Authorization": `Bearer ${Tokens}`,
+                    "Accept": `application/json`
                 }
-            ).then((response) => {
+            }).then((response) => {
                 if (response.status === 200)
                     setProfileTeacher(response.data)
                 else if (response.status == 401) {
@@ -254,14 +255,12 @@ const UploadFile = ({ Tokens, GoogleId, dispatch }) => {
          */
 
         try {
-            const res = await axios.get(`https://classroom.googleapis.com/v1/courses/${courseId}/students`,
-                {
-                    headers: {
-                        "Authorization": `Bearer ${Tokens}`,
-                        "Accept": `application/json`
-                    }
+            const res = await axios.get(`https://classroom.googleapis.com/v1/courses/${courseId}/students`, {
+                headers: {
+                    "Authorization": `Bearer ${Tokens}`,
+                    "Accept": `application/json`
                 }
-            ).then((response) => {
+            }).then((response) => {
                 if (response.status == 401) {
                     dispatch(storeToken(""));
                     dispatch(storeGoogleId(""));
@@ -290,13 +289,11 @@ const UploadFile = ({ Tokens, GoogleId, dispatch }) => {
 
             await axios.post('/user/updateUser', JSON.stringify({
                 line_id: getProfile.userId,
-            }),
-                {
-                    headers: {
-                        'Content-Type': 'application/json'
-                    }
+            }), {
+                headers: {
+                    'Content-Type': 'application/json'
                 }
-            ).then((res) => {
+            }).then((res) => {
                 console.log(res)
             })
         });
@@ -459,13 +456,11 @@ const UploadFile = ({ Tokens, GoogleId, dispatch }) => {
             }).then((res) => {
 
                 const jsonbody = {
-                    "addAttachments": [
-                        {
-                            "driveFile": {
-                                "id": res.data.id
-                            }
-                        },
-                    ]
+                    "addAttachments": [{
+                        "driveFile": {
+                            "id": res.data.id
+                        }
+                    },]
                 }
                 //console.log(jsonbody)
 
@@ -480,13 +475,11 @@ const UploadFile = ({ Tokens, GoogleId, dispatch }) => {
                             'Content-Type': 'application/json'
                         },
                         data: JSON.stringify({
-                            "addAttachments": [
-                                {
-                                    "driveFile": {
-                                        "id": res.data.id
-                                    }
-                                },
-                            ]
+                            "addAttachments": [{
+                                "driveFile": {
+                                    "id": res.data.id
+                                }
+                            },]
                         })
                     }).then(async (Response) => {
                         //console.log(Response)
@@ -569,22 +562,21 @@ const UploadFile = ({ Tokens, GoogleId, dispatch }) => {
         await axios.patch(`https://classroom.googleapis.com/v1/courses/${courseId}/courseWork/${id}/studentSubmissions/${identifyCourseWork}?updateMask=assignedGrade`,
             JSON.stringify({
                 assignedGrade: score
-            }),
-            {
-                headers: {
-                    'Authorization': `Bearer ${Tokens}`,
-                    'Accept': `application/json`,
-                    'Content-Type': `application/json`
-                },
-            }).then((response) => {
-                if (response.status === 200) {
-                    //console.log("Updated successfully!")
-                    setAssignGrade(score)
-                    clearState()
-                    handleClose()
-                    sendMessage('เพิ่มคะแนนสำเร็จ')
-                }
-            })
+            }), {
+            headers: {
+                'Authorization': `Bearer ${Tokens}`,
+                'Accept': `application/json`,
+                'Content-Type': `application/json`
+            },
+        }).then((response) => {
+            if (response.status === 200) {
+                //console.log("Updated successfully!")
+                setAssignGrade(score)
+                clearState()
+                handleClose()
+                sendMessage('เพิ่มคะแนนสำเร็จ')
+            }
+        })
     }
 
     //รับค่าคะแนน
@@ -603,141 +595,149 @@ const UploadFile = ({ Tokens, GoogleId, dispatch }) => {
         return (
 
             <MenuItem key={`${students.profile.id}}-${idx}`}
-                onClick={event => handleClick(event, students.userId)}>
-                <ListItem>
-                    <ListItemAvatar>
-                        <Avatar></Avatar>
+                onClick={event => handleClick(event, students.userId)} >
+                <ListItem >
+                    <ListItemAvatar >
+                        <Avatar> </Avatar>
                     </ListItemAvatar>
                     <ListItemText primary={students.profile.name.fullName} />
                 </ListItem>
+
             </MenuItem>
         )
     }
 
     //เมื่อผู้ใช้เป็นผู้สอนให้ทำการแสดงนักเรียนทุกคน
     const StudentsComponent = () => {
-        return (
-            <Paper className={classes.paper}>
-                <MenuList className={classes.root}>
-                    <FlatList list={students} renderItem={renderStudents} />
-                </MenuList>
-            </Paper>
-        )
+        return (<Paper className={classes.paper} >
+            <MenuList className={classes.root} >
+                <FlatList list={students}
+                    renderItem={renderStudents}
+                />
+            </MenuList>
+        </Paper>)
     }
 
     console.log(profileTeacher)
 
-    return (
-        <Fragment>
-            {(profileTeacher != "") ? <StudentsComponent /> : ""}
-            {message ? <Message msg={message} /> : null}
-            {(identifyCourseWork !== "") ? (
-                <h2>Student Submissions</h2>
-            ) : ""}
+    return (<Fragment> {
+        (userLineId) ? < SendBot line_id="test" /> : ""} {
+            (profileTeacher != "") ? < StudentsComponent /> : ""} {
+            message ? < Message msg={message}
+            /> : null} {
+            (identifyCourseWork !== "") ? (<h2 > Student Submissions </h2>
+            ) : ""
+        }
 
 
-            {(assignGrade) ? <b>Assigned Grade : {assignGrade}</b> : ""}
-            {(profileTeacher !== "" && identifyCourseWork !== "")
-                ?
+        {
+            (assignGrade) ? < b > Assigned Grade: {assignGrade} </b> : ""} {
+            (profileTeacher !== "" && identifyCourseWork !== "") ?
                 (<Button variant="contained"
-                    startIcon={<SaveAltOutlinedIcon />}
+                    startIcon={< SaveAltOutlinedIcon />}
                     onClick={handleClickOpen}
                     color="primary"
                     component="span"
-                    className={classes.button}>
-                    Assign Grade
-                </Button>) : ""
-            }
-            {/**Dialog Show */}
-            <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
-                <DialogTitle id="form-dialog-title">Assign Grade</DialogTitle>
-                <DialogContent>
-                    <DialogContentText>
-                        Please enter a score.
-                    </DialogContentText>
-                    <TextField
-                        name="score"
-                        onChange={handleChange}
-                        value={score}
-                    />
-                </DialogContent>
-                <DialogActions>
-                    <Button onClick={handleClose} color="primary">
-                        Cancel
-                    </Button>
-                    <Button onClick={handleAssignGrade} color="primary">
-                        Save
-                    </Button>
-                </DialogActions>
-            </Dialog>
+                    className={classes.button} >
+                    Assign Score </Button>) : ""
+        } { /**Dialog Show */} <Dialog open={open}
+            onClose={handleClose}
+            aria-labelledby="form-dialog-title" >
+            <DialogTitle id="form-dialog-title" > Assign Grade </DialogTitle>
+            <DialogContent>
+                <DialogContentText>
+                    Please enter a score. </DialogContentText> <
+                    TextField
+                    name="score"
+                    onChange={handleChange}
+                    value={score}
+                /> </DialogContent> <DialogActions>
+                <Button onClick={handleClose}
+                    color="primary" >
+                    Cancel </Button> <Button onClick={handleAssignGrade}
+                    color="primary" >
+                    Save </Button> </DialogActions> </Dialog>
 
-            {(identifyCourseWork !== "") ? (
-                <div>
-                    <Paper className={classes.paper}>
-                        <MenuList>
-                            <FlatList list={assignmentSubmission} renderItem={renderAssignmentSubmission} />
-                        </MenuList>
-                    </Paper>
-                    <br />
+        {
+            (identifyCourseWork !== "") ? (<div>
+                <Paper className={classes.paper} >
+                    <MenuList >
+                        <
+                            FlatList list={assignmentSubmission}
+                            renderItem={renderAssignmentSubmission}
+                        /> </MenuList> </Paper> <br />
 
-                    {(profileTeacher === "") ? (
-                        <form encType="multipart/form-data" onSubmit={handleUpload}
-                        >
-                            <div className='custom-file mb-4' style={{ padding: '5px', width: '100%', minHeight: '100px', backgroundColor: 'whitesmoke' }}>
+                {
+                    (profileTeacher === "") ? (<form encType="multipart/form-data"
+                        onSubmit={handleUpload} >
+                        <div className='custom-file mb-4'
+                            style={
+                                { padding: '5px', width: '100%', minHeight: '100px', backgroundColor: 'whitesmoke' }} >
 
-                                {/*<input
-                        type='file'
-                        className='contained-button-file'
-                        id="contained-button-file"
-                        multiple
-                        type="file"
-                        onChange={onChange}
-                    />*/}
-                                <input
-                                    accept="image/*"
-                                    className={classes.input}
-                                    id="contained-button-file"
-                                    type="file"
-                                    onChange={onChange}
-                                />
-                                <label htmlFor="contained-button-file">
+                            {
+                                /*<input
+                                                        type='file'
+                                                        className='contained-button-file'
+                                                        id="contained-button-file"
+                                                        multiple
+                                                        type="file"
+                                                        onChange={onChange}
+                                                    />*/
+                            } <input accept="image/*"
+                                className={classes.input}
+                                id="contained-button-file"
+                                type="file"
+                                onChange={onChange}
+                            /> <label htmlFor="contained-button-file" >
 
-                                    <Button variant="contained" color="secondary" startIcon={<AttachFileIcon />} component="span" className={classes.button} >
-                                        Choose File
-                        </Button><br />
-                                    {(filename != "") ? <h4>{filename}</h4> : ""}
-                                </label>
+                                <Button variant="contained"
+                                    color="secondary"
+                                    startIcon={< AttachFileIcon />}
+                                    component="span"
+                                    className={classes.button} >
+                                    Choose File </Button><br /> {
+                                    (filename != "") ? <h4> {filename} </h4> : ""} </label> </div>
+
+                        <Progress percentage={uploadPercentage} />
+
+                        <Button variant="contained"
+                            disabled={stateCourseWork == "TURNED_IN" ? true : ""}
+                            startIcon={< CloudUploadIcon />}
+                            onClick={handleUpload}
+                            color="warning"
+                            component="span"
+                            className={classes.button} > Upload File </Button>
+
+
+                        {
+                            (stateCourseWork == "TURNED_IN") ?
+                                (<Button variant="contained"
+                                    startIcon={< CancelIcon />}
+                                    onClick={heandleReclaim}
+                                    color="primary"
+                                    component="span"
+                                    className={classes.button} > Reclaim </Button>) : (<Button variant="contained"
+                                        startIcon={< TurnedInIcon />}
+                                        onClick={handleTurnIn}
+                                        color="primary"
+                                        component="span"
+                                        className={classes.button} > Turn In </Button>
+                                )
+                        } </form>) : ""} </div>) : ""
+        } {
+            /*fileId ? (
+                            <div className='row mt-5'>
+                                <div className='col-md-6 m-auto'>
+                                    <h3 className='text-center'>{uploadedFile.fileName}</h3>
+                                    <img style={{ width: '100%' }} src={uploadedFile.filePath} alt='' />
+                                </div>
                             </div>
-
-                            <Progress percentage={uploadPercentage} />
-
-                            <Button variant="contained" disabled={stateCourseWork == "TURNED_IN" ? true : ""} startIcon={<CloudUploadIcon />} onClick={handleUpload} color="warning" component="span" className={classes.button}>Upload File</Button>
+                        ) : null*/
+        }
 
 
-                            {(stateCourseWork == "TURNED_IN")
-                                ? (
-                                    <Button variant="contained"
-                                        startIcon={<CancelIcon />} onClick={heandleReclaim} color="primary" component="span" className={classes.button}>Reclaim</Button>)
-                                : (
-                                    <Button variant="contained"
-                                        startIcon={<TurnedInIcon />} onClick={handleTurnIn} color="primary" component="span" className={classes.button}>Turn In</Button>
-                                )}
-                        </form>) : ""}
-                </div>) : ""
-            }
-            {/*fileId ? (
-                <div className='row mt-5'>
-                    <div className='col-md-6 m-auto'>
-                        <h3 className='text-center'>{uploadedFile.fileName}</h3>
-                        <img style={{ width: '100%' }} src={uploadedFile.filePath} alt='' />
-                    </div>
-                </div>
-            ) : null*/}
-
-
-        </Fragment >
-    );
-};
+    </Fragment>)
+}
 
 const AppWithConnect = connect(googleMapState)(UploadFile);
 export default AppWithConnect;

@@ -114,7 +114,6 @@ const Invitation = ({ message, Tokens, GoogleId, dispatch }) => {
 
   return (
     <div id="create-course">
-      <SendBot userId="by"/>
       {(userLineId)? <SendBot userId={userLineId}/>: ""}
       {
         (pictureUrl && pictureUrl != '')
