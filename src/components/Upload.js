@@ -172,8 +172,7 @@ const UploadFile = ({ Tokens, GoogleId, dispatch }) => {
         return (<MenuItem key={`${idx}`}
             component="a"
             href={assignmentSubmission.driveFile.alternateLink}
-            style={
-                { wordWrap: 'break-word;' }} > {assignmentSubmission.driveFile.title}></MenuItem>
+            style={{ wordWrap: 'break-word;' }}> {assignmentSubmission.driveFile.title}</MenuItem>
         )
     };
 
@@ -554,7 +553,7 @@ const UploadFile = ({ Tokens, GoogleId, dispatch }) => {
         setScore({ ...initialState });
     };
 
-    //Handle Assign Grade
+    //Handle Assign Score
     //ให้คะแนนนักเรียน
     const handleAssignGrade = async (e) => {
         e.preventDefault()
@@ -643,7 +642,7 @@ const UploadFile = ({ Tokens, GoogleId, dispatch }) => {
         } { /**Dialog Show */} <Dialog open={open}
             onClose={handleClose}
             aria-labelledby="form-dialog-title" >
-            <DialogTitle id="form-dialog-title" > Assign Grade </DialogTitle>
+            <DialogTitle id="form-dialog-title" > Assign Score </DialogTitle>
             <DialogContent>
                 <DialogContentText>
                     Please enter a score. </DialogContentText> <
