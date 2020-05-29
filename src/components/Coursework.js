@@ -68,6 +68,7 @@ const Coursework = ({ message, Tokens, GoogleId, dispatch }) => {
     const { name, value } = e.target;
     //console.log({[name]:value});
     console.log(e.target);
+    
     setState(prevState => ({ ...prevState, [name]: value }));
   };
 

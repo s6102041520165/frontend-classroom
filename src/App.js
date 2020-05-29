@@ -1,5 +1,5 @@
 //Import modules
-import { Route, Router } from "react-router-dom";
+import { Route, Router, Redirect, Switch } from "react-router-dom";
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
@@ -25,8 +25,8 @@ import Person from "@material-ui/icons/Person";
 import InsertInvitation from "@material-ui/icons/InsertInvitation";
 import brown from '@material-ui/core/colors/brown';
 import { storeToken, storeGoogleId, storePermissions } from "./reducers/actions";
+import PageNotFound from "./pages/PageNotFound";
 import { createMuiTheme } from '@material-ui/core/styles';
-
 
 //Import screens
 import CreateCourse from "./components/CreateCourse";
@@ -115,6 +115,7 @@ const useStyles = makeStyles(theme => ({
 //Key menu
 const navbar = ["/", "/create-course", "/invitation", "/profile"];
 const icons = [<Home />, <PlusOne />, <InsertInvitation />, <Person />];
+
 
 function App({ message, Tokens, dispatch, props }) {
   const classes = useStyles();
@@ -218,21 +219,23 @@ function App({ message, Tokens, dispatch, props }) {
               textAlign: "center"
             }}
           >
-
-            <PrivateRoute exact path="/" component={courses} />
-            <PrivateRoute path="/create-course" component={CreateCourse} />
-            <PrivateRoute path="/create-assignment/:courseId" component={CreateCourseWork} />
-            <PrivateRoute path="/create-topic/:courseId" component={CreateTopic} />
-            <PrivateRoute path="/update-course" component={UpdateCourse} />
-            <PrivateRoute path="/invitation" component={invitation} />
-            <PrivateRoute path="/student" component={student} />
-            <PrivateRoute path="/courses" component={courses} />
-            <PrivateRoute path="/course-work/:courseId/details/:id" component={Upload} />
-            <PrivateRoute path="/course/:id" component={getCourse} />
-            <Authorization path="/logged" component={redirect} />
-            <Authorization path="/login" component={Login} />
-            <PrivateRoute path="/profile" component={profile} />
-
+            <Switch>
+              <PrivateRoute exact path="/" component={courses} />
+              <PrivateRoute path="/create-course" component={CreateCourse} />
+              <PrivateRoute path="/create-assignment/:courseId" component={CreateCourseWork} />
+              <PrivateRoute path="/create-topic/:courseId" component={CreateTopic} />
+              <PrivateRoute path="/update-course" component={UpdateCourse} />
+              <PrivateRoute path="/invitation" component={invitation} />
+              <PrivateRoute path="/student" component={student} />
+              <PrivateRoute path="/courses" component={courses} />
+              <PrivateRoute path="/course-work/:courseId/details/:id" component={Upload} />
+              <PrivateRoute path="/course/:id" component={getCourse} />
+              <Authorization path="/logged" component={redirect} />
+              <Authorization path="/login" component={Login} />
+              <PrivateRoute path="/profile" component={profile} />
+              <Route path="/page-not-found" component={PageNotFound}/>
+              <Redirect to="/page-not-found"/>
+            </Switch>
           </div>
         </main>
       </div>
