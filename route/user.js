@@ -40,7 +40,7 @@ app.post('/checkUser', urlencodedParser, function (req, res) {
                 console.log(err)
                 res.status(500).json(err)
             })
-        } 
+        }
         res.status(200).json(data)
     })
 
@@ -56,11 +56,19 @@ app.post('/updateUser', urlencodedParser, function (req, res) {
 
 
     try {
-        console.log('Line Id : '+req.body.line_id)
-        User.findOneAndUpdate({ google_id: req.body.google_id }, update_data, {
-            new: true
-        }).then((res) => {
-            console.log(res)
+        console.log('Line Id : ' + req.body.line_id)
+        //res.json(req.body)
+        User.findOne({ google_id: req.body.google_id }).select('google_id line_id').exec(async function (err, data) {
+            console.log(data)
+            if (data === null) {
+                User.create(insert_data).then((res) => {
+                    res.status(200).json(res)
+                }).catch((err) => {
+                    console.log(err)
+                    res.status(500).json(err)
+                })
+            }
+            res.status(200).json(data)
         })
         res.status(200).json({ msg: 'updated' })
     } catch (error) {
