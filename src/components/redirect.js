@@ -95,7 +95,7 @@ const Course = ({ component: Component, message, Tokens, Permissions, GoogleId, 
             });
     };
 
-    const getProfile = () => {
+    const getProfile = async () => {
         let getProfile = null;
         liff.init(async () => {
             getProfile = await liff.getProfile();
@@ -106,7 +106,7 @@ const Course = ({ component: Component, message, Tokens, Permissions, GoogleId, 
                 statusMessage: getProfile.statusMessage
             });
         });
-        return getProfile
+        return getProfile.userId
     };
 
     const closeLIFF = () => {
@@ -127,38 +127,40 @@ const Course = ({ component: Component, message, Tokens, Permissions, GoogleId, 
             console.log(response)
             dispatch(storeToken(response.data.access_token));
 
-            const getLineProfile = await getProfile();
+            getProfile().then((userId) => {
 
-            await axios({
-                'method': 'GET',
-                'url': 'https://classroom.googleapis.com/v1/userProfiles/me',
-                'headers': {
-                    'Authorization': `Bearer ${response.data.access_token}`,
-                    'Accept': 'application/json'
-                }
-            }).then(async (res) => {
-
-                await axios.post('/user/checkUser', JSON.stringify({
-                    google_id: res.data.id,
-                    line_id: getLineProfile.userId,
-                    f_name: res.data.name.givenName,
-                    l_name: res.data.name.familyName,
-                }),
-                    {
-                        headers: {
-                            'Content-Type': 'application/json'
-                        }
+                await axios({
+                    'method': 'GET',
+                    'url': 'https://classroom.googleapis.com/v1/userProfiles/me',
+                    'headers': {
+                        'Authorization': `Bearer ${response.data.access_token}`,
+                        'Accept': 'application/json'
                     }
+                }).then(async (res) => {
 
-                ).then((res) => {
-                    console.log(res)
+                    await axios.post('/user/checkUser', JSON.stringify({
+                        google_id: res.data.id,
+                        line_id: userId,
+                        f_name: res.data.name.givenName,
+                        l_name: res.data.name.familyName,
+                    }),
+                        {
+                            headers: {
+                                'Content-Type': 'application/json'
+                            }
+                        }
+
+                    ).then((res) => {
+                        closeLIFF()
+                    })
+                    await dispatch(storeGoogleId(res.data.id));
+                    //ไปเก็บในตัวแปร Redux State
+                    if (res.data.permissions != null) {
+                        dispatch(storePermissions(res.data.permissions))
+                    }
                 })
-                await dispatch(storeGoogleId(res.data.id));
-                //ไปเก็บในตัวแปร Redux State
-                if (res.data.permissions != null) {
-                    dispatch(storePermissions(res.data.permissions))
-                }
-            })
+            });
+
 
         })
 
