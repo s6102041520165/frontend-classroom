@@ -50,13 +50,15 @@ app.post('/checkUser', urlencodedParser, function (req, res) {
 app.post('/updateUser', urlencodedParser, function (req, res) {
     res.setHeader('Content-Type', 'application/json');
 
-    const update_data = {
-        line_id: (req.body.line_id) ? req.body.line_id : "",
-    };
-
-
+    
     try {
         console.log('Line Id : ' + req.body.line_id)
+        const insert_data = {
+            google_id: req.body.google_id,
+            line_id: (req.body.line_id) ? req.body.line_id : "",
+            f_name: (req.body.f_name) ? req.body.f_name : "",
+            l_name: (req.body.l_name) ? req.body.l_name : "",
+        };
         //res.json(req.body)
         User.findOne({ google_id: req.body.google_id }).select('google_id line_id').exec(async function (err, data) {
             console.log(data)
