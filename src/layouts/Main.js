@@ -173,9 +173,9 @@ function Main(props) {
                     <MenuList>
                         <MenuItem onClick={(e) => {
                             Axios.post(`https://accounts.google.com/o/oauth2/revoke?token=${props.token}`, '{}').then((res) => {
-                                    /* dispatch(storeToken(""));
+                                    dispatch(storeToken(""));
                                     dispatch(storePermissions(""));
-                                    dispatch(storeGoogleId("")); */
+                                    dispatch(storeGoogleId(""));
                                 })
                             }} component="a">
                             Logout
