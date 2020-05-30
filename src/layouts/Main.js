@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { connect } from "react-redux"
-import { Link } from "react-router-dom"
+import { Link, Redirect, Route } from "react-router-dom"
 import clsx from "clsx";
 import { makeStyles, useTheme, ThemeProvider } from "@material-ui/core/styles";
 import Drawer from "@material-ui/core/Drawer";
@@ -26,6 +26,7 @@ import { storeToken, storeGoogleId, storePermissions } from "../reducers/actions
 import googleMapState from "../map-state/google-map-state";
 import { MenuList, MenuItem } from '@material-ui/core';
 import Axios from 'axios'
+import { render } from '@testing-library/react';
 
 
 // Line Frontend Framework Init
@@ -96,13 +97,11 @@ const useStyles = makeStyles(theme => ({
 const navbar = ["/", "/create-course", "/invitation", "/profile"];
 const icons = [<Home />, <PlusOne />, <InsertInvitation />, <Person />];
 
-function Main(props) {
+const Main = ({ component: Component, message, Tokens, dispatch, ...rest }) => {
     const classes = useStyles();
     const theme = useTheme();
     const [open, setOpen] = React.useState(false);
-    useEffect(()=>{
-        console.log(props.token)
-    },[])
+
     const handleDrawerOpen = () => {
         setOpen(true);
     };
@@ -134,7 +133,7 @@ function Main(props) {
                         </IconButton>
                         <Typography variant="h6" noWrap>
                             Line Classroom
-                        </Typography>
+                            </Typography>
                     </Toolbar>
                 </AppBar>
                 <Drawer
@@ -172,14 +171,17 @@ function Main(props) {
                     <Divider />
                     <MenuList>
                         <MenuItem onClick={(e) => {
-                            Axios.post(`https://accounts.google.com/o/oauth2/revoke?token=${props.token}`, '{}').then((res) => {
+                            Axios.post(`https://accounts.google.com/o/oauth2/revoke?token=${rest.token}`, '{}').then((res) => {
+                                if (res.status === 200) {
+                                    console.log('Logged out')
                                     dispatch(storeToken(""));
                                     dispatch(storePermissions(""));
                                     dispatch(storeGoogleId(""));
-                                })
-                            }} component="a">
+                                }
+                            })
+                        }} component="a">
                             Logout
-                        </MenuItem>
+                            </MenuItem>
                     </MenuList>
                 </Drawer>
                 <main
@@ -195,14 +197,14 @@ function Main(props) {
                             textAlign: "center"
                         }}
                     >
-                        {props.children}
+                        {rest.children}
                     </div>
                 </main>
             </div>
         </ThemeProvider >
-
     )
+
 }
 
-//const AppWithConnect = connect(googleMapState)(Main);
-export default Main;
+const AppWithConnect = connect(googleMapState)(Main);
+export default AppWithConnect;
