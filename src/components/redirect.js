@@ -11,10 +11,10 @@ const liff = window.liff;
 
 //Initial state
 const initialStateLine = {
-  name: "",
-  userLineId: "",
-  statusMessage: "",
-  pictureUrl: ""
+    name: "",
+    userLineId: "",
+    statusMessage: "",
+    pictureUrl: ""
 };
 
 const useStyles = makeStyles(theme => ({
@@ -96,8 +96,9 @@ const Course = ({ component: Component, message, Tokens, Permissions, GoogleId, 
     };
 
     const getProfile = () => {
+        let getProfile = null;
         liff.init(async () => {
-            let getProfile = await liff.getProfile();
+            getProfile = await liff.getProfile();
             setStateLine({
                 name: getProfile.displayName,
                 userLineId: getProfile.userId,
@@ -105,6 +106,7 @@ const Course = ({ component: Component, message, Tokens, Permissions, GoogleId, 
                 statusMessage: getProfile.statusMessage
             });
         });
+        return getProfile
     };
 
     const closeLIFF = () => {
@@ -125,7 +127,7 @@ const Course = ({ component: Component, message, Tokens, Permissions, GoogleId, 
             console.log(response)
             dispatch(storeToken(response.data.access_token));
 
-            await getProfile();
+            const getLineProfile = await getProfile();
 
             await axios({
                 'method': 'GET',
@@ -135,10 +137,10 @@ const Course = ({ component: Component, message, Tokens, Permissions, GoogleId, 
                     'Accept': 'application/json'
                 }
             }).then(async (res) => {
-                
+
                 await axios.post('/user/checkUser', JSON.stringify({
                     google_id: res.data.id,
-                    line_id: userLineId,
+                    line_id: getLineProfile.userId,
                     f_name: res.data.name.givenName,
                     l_name: res.data.name.familyName,
                 }),
