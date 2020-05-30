@@ -100,7 +100,9 @@ function Main(props) {
     const classes = useStyles();
     const theme = useTheme();
     const [open, setOpen] = React.useState(false);
-
+    useEffect(()=>{
+        console.log(props.token)
+    },[])
     const handleDrawerOpen = () => {
         setOpen(true);
     };
