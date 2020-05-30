@@ -96,10 +96,14 @@ const useStyles = makeStyles(theme => ({
 const navbar = ["/", "/create-course", "/invitation", "/profile"];
 const icons = [<Home />, <PlusOne />, <InsertInvitation />, <Person />];
 
-function Main(props, { message, Tokens, dispatch }) {
+function Main(props) {
     const classes = useStyles();
     const theme = useTheme();
     const [open, setOpen] = React.useState(false);
+
+    useEffect(()=>{
+        console.log(props.token)
+    },[])
 
     const handleDrawerOpen = () => {
         setOpen(true);
@@ -170,10 +174,10 @@ function Main(props, { message, Tokens, dispatch }) {
                     <Divider />
                     <MenuList>
                         <MenuItem onClick={(e) => {
-                            Axios.post(`https://accounts.google.com/o/oauth2/revoke?token=${Tokens}`, '{}').then((res) => {
-                                    dispatch(storeToken(""));
+                            Axios.post(`https://accounts.google.com/o/oauth2/revoke?token=${props.token}`, '{}').then((res) => {
+                                    /* dispatch(storeToken(""));
                                     dispatch(storePermissions(""));
-                                    dispatch(storeGoogleId(""));
+                                    dispatch(storeGoogleId("")); */
                                 })
                             }} component="a">
                             Logout
@@ -202,5 +206,5 @@ function Main(props, { message, Tokens, dispatch }) {
     )
 }
 
-const AppWithConnect = connect(googleMapState)(Main);
-export default AppWithConnect;
+//const AppWithConnect = connect(googleMapState)(Main);
+export default Main;

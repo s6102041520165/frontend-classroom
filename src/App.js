@@ -22,12 +22,13 @@ import getCourse from "./components/Course";
 import Upload from "./components/Upload";
 import Authorization from "./components/Authorization";
 import redirect from "./components/redirect";
+import { storeToken, storeGoogleId, storePermissions } from "./reducers/actions";
 
 
 function App({ message, Tokens, dispatch, props }) {
   
   return (
-    <Layout>
+    <Layout token={Tokens}>
       <Switch>
         <PrivateRoute exact path="/" component={courses} />
         <PrivateRoute path="/create-course" component={CreateCourse} />
@@ -48,8 +49,6 @@ function App({ message, Tokens, dispatch, props }) {
     </Layout>
   );
 }
-
-
 
 const AppWithConnect = connect(googleMapState)(App);
 export default AppWithConnect;
