@@ -26,7 +26,6 @@ import { storeToken, storeGoogleId, storePermissions } from "./reducers/actions"
 
 
 function App({ message, Tokens, dispatch, props }) {
-  
   return (
     <Layout token={Tokens}>
       <Switch>
@@ -48,7 +47,7 @@ function App({ message, Tokens, dispatch, props }) {
       </Switch>
     </Layout>
   );
-}
+}   
 
 const AppWithConnect = connect(googleMapState)(App);
 export default AppWithConnect;
