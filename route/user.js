@@ -32,6 +32,7 @@ app.post('/checkUser', urlencodedParser, function (req, res) {
 
     //res.json(req.body)
     User.findOne({ google_id: req.body.google_id }).select('google_id line_id').exec(async function (err, data) {
+        console.log(data)
         if (data === null) {
             User.create(insert_data).then((res) => {
                 res.status(200).json(res)

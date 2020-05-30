@@ -125,6 +125,7 @@ const Course = ({ component: Component, message, Tokens, Permissions, GoogleId, 
             }
         }).then(async (response) => {
             console.log(response)
+            dispatch(storeToken(response.data.access_token));
 
             getProfile().then( async userId => {
 
@@ -136,6 +137,7 @@ const Course = ({ component: Component, message, Tokens, Permissions, GoogleId, 
                         'Accept': 'application/json'
                     }
                 }).then(async (res) => {
+                    await dispatch(storeGoogleId(res.data.id));
 
                     await axios.post('/user/checkUser', JSON.stringify({
                         google_id: res.data.id,
@@ -152,14 +154,11 @@ const Course = ({ component: Component, message, Tokens, Permissions, GoogleId, 
                     ).then((res) => {
                         closeLIFF()
                     })
-                    await dispatch(storeGoogleId(res.data.id));
                     //ไปเก็บในตัวแปร Redux State
                     if (res.data.permissions != null) {
                         dispatch(storePermissions(res.data.permissions))
                     }
                 })
-            }).finally(()=>{
-                dispatch(storeToken(response.data.access_token));
             });
 
 
