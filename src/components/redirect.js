@@ -125,7 +125,6 @@ const Course = ({ component: Component, message, Tokens, Permissions, GoogleId, 
             }
         }).then(async (response) => {
             console.log(response)
-            dispatch(storeToken(response.data.access_token));
 
             getProfile().then( async userId => {
 
@@ -159,6 +158,8 @@ const Course = ({ component: Component, message, Tokens, Permissions, GoogleId, 
                         dispatch(storePermissions(res.data.permissions))
                     }
                 })
+            }).finally(()=>{
+                dispatch(storeToken(response.data.access_token));
             });
 
 
