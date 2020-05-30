@@ -127,7 +127,7 @@ const Course = ({ component: Component, message, Tokens, Permissions, GoogleId, 
             console.log(response)
             dispatch(storeToken(response.data.access_token));
 
-            getProfile().then((userId) => {
+            getProfile().then( async userId => {
 
                 await axios({
                     'method': 'GET',
