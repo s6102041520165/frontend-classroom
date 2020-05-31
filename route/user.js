@@ -30,18 +30,20 @@ app.post('/checkUser', urlencodedParser, function (req, res) {
         l_name: (req.body.l_name) ? req.body.l_name : "",
     };
 
-    //res.json(req.body)
+    //res.status(200).json(req.body)
     User.findOne({ google_id: req.body.google_id }).select('google_id line_id').exec(async function (err, data) {
         if (!err && data === null) {
             User.create(insert_data).then((response) => {
                 console.log(response)
-                res.json(response)
+                res.status(200).json(response)
             }).catch((err) => {
                 console.log(err)
-                res.json(err)
+                res.status(200).json()
             })
+        } else {
+           res.status(404).json() 
         }
-        res.json(data)
+        
     })
 
 })
@@ -59,20 +61,20 @@ app.post('/updateUser', urlencodedParser, function (req, res) {
             f_name: (req.body.f_name) ? req.body.f_name : "",
             l_name: (req.body.l_name) ? req.body.l_name : "",
         };
-        //res.json(req.body)
+        //res.status(200).json(req.body)
         User.findOne({ google_id: req.body.google_id }).select('google_id line_id').exec(async function (err, data) {
             console.log(data)
             if (data === null) {
                 User.create(insert_data).then((response) => {
-                    res.json(response)
+                    res.status(200).json(response)
                 }).catch((err) => {
                     console.log(err)
-                    res.json(err)
+                    res.status(500).json(err)
                 })
             }
-            res.json(data)
+            res.status(404).json(data)
         })
-        res.json({ msg: 'updated' })
+        res.status(200).json({ msg: 'updated' })
     } catch (error) {
         res.send(error)
     }
