@@ -64,7 +64,7 @@ app.post('/updateUser', urlencodedParser, function (req, res) {
             console.log(data)
             if (data === null) {
                 User.create(insert_data).then((response) => {
-                    res.json(res)
+                    res.json(response)
                 }).catch((err) => {
                     console.log(err)
                     res.json(err)
