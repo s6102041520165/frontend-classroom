@@ -38,7 +38,7 @@ app.get('/', (req, res) => {
 
 app.post('/setCredential', function (req, res) {
     const accessToken = req.body;
-    console.log(accessToken)
+    //console.log(accessToken)
 
     if (oAuth2Client.setCredentials(accessToken)) {
         console.log('Set Success');
@@ -70,25 +70,9 @@ app.get('/redirect', function (req, res) {
 
 app.post('/getToken', async function (req, res) {
 
-    /*const drive = google.drive({
-        version: 'v3',
-        auth: oAuth2Client
-    });
-
-    const response = await drive.files.create({
-        requestBody: {
-            name: 'Test',
-            mimeType: 'text/plain'
-        },
-        media: {
-            mimeType: 'text/plain',
-            body: 'Hello World'
-        }
-    });*/
     try {
 
         const tokenInfo = await oAuth2Client.credentials
-        console.log(tokenInfo)
         res.json(tokenInfo)
     } catch (err) {
         res.status(401).json({ message: 'Cannot Login With Google' })
