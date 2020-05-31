@@ -85,7 +85,7 @@ const Invitation = ({ message, Tokens, GoogleId, dispatch }) => {
   };
 
   const getProfile = () => {
-    liff.init(async () => {
+    liff.init({liffId: '1603224534-qKKA3AoL'},async () => {
       let getProfile = await liff.getProfile();
       setStateLine({
         name: getProfile.displayName,
