@@ -34,14 +34,18 @@ app.post('/checkUser', urlencodedParser, function (req, res) {
     User.findOne({ google_id: req.body.google_id }).select('google_id line_id').exec(async function (err, data) {
         if (!err && data === null) {
             User.create(insert_data).then((response) => {
-                console.log(response)
+                console.log(`Created user data.`)
+                //console.log(response)
                 res.status(200).json(response)
             }).catch((err) => {
                 console.log(err)
                 res.status(200).json()
             })
         } else {
-           res.status(404).json() 
+           User.findByIdAndUpdate(data._id,{line_id: req.body.line_id}).then((response) => {
+               console.log(response)
+               res.status(200).json(response)
+           })
         }
         
     })
