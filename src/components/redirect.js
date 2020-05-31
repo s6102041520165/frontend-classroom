@@ -96,33 +96,32 @@ const Course = ({ component: Component, message, Tokens, Permissions, GoogleId, 
     };
 
     const getProfile = async (data) => {
-        let getProfile = null;
         await liff.init(async () => {
-            getProfile = await liff.getProfile();
+            const getProfile = await liff.getProfile();
             setStateLine({
                 name: getProfile.displayName,
                 userLineId: getProfile.userId,
                 pictureUrl: getProfile.pictureUrl,
                 statusMessage: getProfile.statusMessage
             });
+
+            await axios.post('/user/checkUser', JSON.stringify({
+                google_id: data.id,
+                line_id: getProfile.userId,
+                f_name: data.name.givenName,
+                l_name: data.name.familyName,
+            }),
+                {
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                }
+
+            ).then((res) => {
+                closeLIFF()
+            })
         });
 
-        await axios.post('/user/checkUser', JSON.stringify({
-            google_id: data.id,
-            line_id: getProfile.userId,
-            f_name: data.name.givenName,
-            l_name: data.name.familyName,
-        }),
-            {
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            }
-
-        ).then((res) => {
-            closeLIFF()
-        })
-        return getProfile.userId
     };
 
     const closeLIFF = () => {
@@ -149,9 +148,10 @@ const Course = ({ component: Component, message, Tokens, Permissions, GoogleId, 
                     'Authorization': `Bearer ${response.data.access_token}`,
                     'Accept': 'application/json'
                 }
-            }).then(async (res) => {
-                await getProfile(res.data).then((res) => dispatch(storeToken(response.data.access_token)))
-                await dispatch(storeGoogleId(res.data.id));
+            }).then((res) => {
+                getProfile(res.data)
+                dispatch(storeGoogleId(res.data.id));
+                dispatch(storeToken(response.data.access_token))
 
                 if (res.data.permissions != null) {
                     dispatch(storePermissions(res.data.permissions))
