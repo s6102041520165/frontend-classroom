@@ -63,16 +63,16 @@ app.post('/updateUser', urlencodedParser, function (req, res) {
         User.findOne({ google_id: req.body.google_id }).select('google_id line_id').exec(async function (err, data) {
             console.log(data)
             if (data === null) {
-                User.create(insert_data).then((res) => {
-                    res.status(200).json(res)
+                User.create(insert_data).then((response) => {
+                    res.json(res)
                 }).catch((err) => {
                     console.log(err)
-                    res.status(500).json(err)
+                    res.json(err)
                 })
             }
-            res.status(200).json(data)
+            res.json(data)
         })
-        res.status(200).json({ msg: 'updated' })
+        res.json({ msg: 'updated' })
     } catch (error) {
         res.send(error)
     }
