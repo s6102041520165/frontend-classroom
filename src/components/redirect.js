@@ -95,9 +95,9 @@ const Course = ({ component: Component, message, Tokens, Permissions, GoogleId, 
             });
     };
 
-    const getProfile = async () => {
+    const getProfile = async (data) => {
         let getProfile = null;
-        liff.init(async () => {
+        await liff.init(async () => {
             getProfile = await liff.getProfile();
             setStateLine({
                 name: getProfile.displayName,
@@ -106,6 +106,22 @@ const Course = ({ component: Component, message, Tokens, Permissions, GoogleId, 
                 statusMessage: getProfile.statusMessage
             });
         });
+
+        await axios.post('/user/checkUser', JSON.stringify({
+            google_id: data.id,
+            line_id: getProfile.userId,
+            f_name: data.name.givenName,
+            l_name: data.name.familyName,
+        }),
+            {
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            }
+
+        ).then((res) => {
+            closeLIFF()
+        })
         return getProfile.userId
     };
 
@@ -124,42 +140,23 @@ const Course = ({ component: Component, message, Tokens, Permissions, GoogleId, 
                 'Accept': 'application/json'
             }
         }).then(async (response) => {
-            console.log(response)
-            dispatch(storeToken(response.data.access_token));
+            //console.log(response)
 
-            getProfile().then( async userId => {
+            await axios({
+                'method': 'GET',
+                'url': 'https://classroom.googleapis.com/v1/userProfiles/me',
+                'headers': {
+                    'Authorization': `Bearer ${response.data.access_token}`,
+                    'Accept': 'application/json'
+                }
+            }).then(async (res) => {
+                await getProfile(res.data).then((res) => dispatch(storeToken(response.data.access_token)))
+                await dispatch(storeGoogleId(res.data.id));
 
-                await axios({
-                    'method': 'GET',
-                    'url': 'https://classroom.googleapis.com/v1/userProfiles/me',
-                    'headers': {
-                        'Authorization': `Bearer ${response.data.access_token}`,
-                        'Accept': 'application/json'
-                    }
-                }).then(async (res) => {
-                    await dispatch(storeGoogleId(res.data.id));
-
-                    await axios.post('/user/checkUser', JSON.stringify({
-                        google_id: res.data.id,
-                        line_id: userId,
-                        f_name: res.data.name.givenName,
-                        l_name: res.data.name.familyName,
-                    }),
-                        {
-                            headers: {
-                                'Content-Type': 'application/json'
-                            }
-                        }
-
-                    ).then((res) => {
-                        closeLIFF()
-                    })
-                    //ไปเก็บในตัวแปร Redux State
-                    if (res.data.permissions != null) {
-                        dispatch(storePermissions(res.data.permissions))
-                    }
-                })
-            });
+                if (res.data.permissions != null) {
+                    dispatch(storePermissions(res.data.permissions))
+                }
+            })
 
 
         })
