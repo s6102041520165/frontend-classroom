@@ -83,7 +83,7 @@ const Course = ({ component: Component, message, Tokens, Permissions, GoogleId, 
     }, []);
 
     const getProfile = async (data) => {
-        await liff.init({ liffId: '1603224534-VGPrnrMm' }, async () => {
+        await liff.init({ liffId: '1603224534-GpB9z9b4' }, async () => {
             const getProfile = await liff.getProfile();
             setStateLine({
                 name: getProfile.displayName,
