@@ -1,21 +1,11 @@
 import React, { Component, useState, useEffect } from "react";
-import Button from "@material-ui/core/Button";
-import TextField from "@material-ui/core/TextField";
 import axios from "axios";
 import { connect } from "react-redux";
 import googleMapState from "../map-state/google-map-state";
 import SendBot from "./SendBot";
-import FlatList from "flatlist-react";
-import Select from "react-select";
 import {
-  FormControl,
-  InputLabel,
   MenuItem,
   makeStyles,
-  ListItem,
-  List,
-  ListItemText,
-  Divider
 } from "@material-ui/core";
 
 // Line Frontend Framework Init
