@@ -82,19 +82,6 @@ const Course = ({ component: Component, message, Tokens, Permissions, GoogleId, 
         }
     }, []);
 
-    const sendMessage = () => {
-        liff
-            .sendMessage([
-                {
-                    type: "text",
-                    text: `Say Hi!`
-                }
-            ])
-            .then(() => {
-                liff.closeWindow();
-            });
-    };
-
     const getProfile = async (data) => {
         await liff.init(async () => {
             const getProfile = await liff.getProfile();

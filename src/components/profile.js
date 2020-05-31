@@ -96,6 +96,9 @@ const Invitation = ({ message, Tokens, GoogleId, dispatch }) => {
 
       await axios.post('/user/updateUser', JSON.stringify({
         line_id: getProfile.userId,
+        google_id: GoogleId,
+        f_name: 'Test',
+        l_name: 'Ha Ha!'
       }),
           {
               headers: {
