@@ -163,7 +163,7 @@ const Course = ({ component: Component, message, Tokens, Permissions, GoogleId, 
 
     }
 
-    return <div>Direct Fail</div>;
+    return <div>{(userLineId) ? userLineId : 'Not ID'}</div>;
 
 };
 
